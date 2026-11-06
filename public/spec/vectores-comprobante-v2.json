@@ -1,0 +1,158 @@
+{
+  "esquema": "galcoa.stellar.comprobante.v2",
+  "nota": "Generado por scripts/generar-vectores-v2.py (implementaci\u00f3n independiente en Python).",
+  "manifiestos": [
+    {
+      "nombre": "completo",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Yerba mate 1 kg",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02",
+          "evidenciaHash": "abababababababababababababababababababababababababababababababab",
+          "observacion": "Sin novedades"
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "dbf887c78e80a37fb5dcc620e727ab5dab43f97fb6ad6ec28f6e81b06eb8e027"
+    },
+    {
+      "nombre": "sin_opcionales",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Yerba mate 1 kg",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02"
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "df50cd8bb9fb39ba26884ced3b6b085af22b233608442517abf586bb74102d51"
+    },
+    {
+      "nombre": "observacion_vacia_no_es_ausente",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Yerba mate 1 kg",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02",
+          "observacion": ""
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "eb1d3c0f75adfda30a722f0ff774c8b9b3cdf8cdb53ecdfa73fa8acd29c76c5c"
+    },
+    {
+      "nombre": "nfc_precompuesto",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Caf\u00e9 molido",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02"
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "4b43c72352fec253c574d59e20c47fe7ac3aadaf851db90a16a35247592d21c0"
+    },
+    {
+      "nombre": "nfc_descompuesto",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Cafe\u0301 molido",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02"
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "4b43c72352fec253c574d59e20c47fe7ac3aadaf851db90a16a35247592d21c0"
+    },
+    {
+      "nombre": "unicode_fuera_del_plano_basico",
+      "manifiesto": {
+        "documento": {
+          "remito": "R-0001",
+          "producto": "Yerba mate 1 kg",
+          "unidad": "caja",
+          "cantidadPedida": 10,
+          "cantidadRecibida": 10,
+          "fechaEntrega": "2026-11-02",
+          "fechaRegistro": "2026-11-03",
+          "cargadoPor": "op-01",
+          "confirmadoPor": "sup-02",
+          "observacion": "Entrega \ud83d\udce6 ok"
+        },
+        "reglasVersion": "reglas-demo-0.2",
+        "reglasIds": [
+          "ALC-COM-01",
+          "ALC-LEG-01"
+        ],
+        "veredicto": "verde"
+      },
+      "manifestHash": "bf7fc824b57d002e09e1769daa3ba2e1482a1695979e8a7b54368e134fed7a5f"
+    }
+  ],
+  "lote": {
+    "orden": [
+      "completo",
+      "sin_opcionales",
+      "observacion_vacia_no_es_ausente"
+    ],
+    "raiz": "95dec37af04cd9e87615cfe69a775ab6211653ebacdb4580c591eaf9cdd31aee",
+    "cantidadHojas": 3,
+    "memo": "7cdc7385b245e40a5b90204bb8c85975abd0392df6be16eb92c7164fa3b595ce"
+  }
+}

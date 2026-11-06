@@ -1,0 +1,11 @@
+{
+  "total": "c20469f5b4b9d84252ca442f60bf8d4cb7c1d658327fe63855ab0c8302918a16",
+  "componentes": {
+    "reglas": "0d81aee796161575659ecce020da6ff45c7c3f844884bdecc8d98f593fcf3b0d",
+    "casos": "faebff07f7725075ef475a883296beaf1b99ebdd13ef26317ae4a8bbda0217dd",
+    "medicion": "f113a2cac6a903a366d104e824dbda7d191b8fc966731b245451c303f2a0c266"
+  },
+  "aprobadaPor": "Claude (propuesta inicial, falta revisión de una persona del equipo)",
+  "motivo": "Examen inicial de las reglas: 30 casos, ajuste y reserva, sensibilidad y especificidad 100 %",
+  "fecha": "2026-11-06T03:20:10.535Z"
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "galcoa.stellar.comprobante.v2",
+  "red": "stellar:testnet",
+  "txHash": "f33407d7bbed6a8e0ca376b42a474c810c7b6364521c677d53712196f9d0a2d4",
+  "manifiesto": {
+    "documento": {
+      "remito": "CE-8435d44b-1-0",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 10,
+      "cantidadRecibida": 10,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "04db61c453ffa1d588ba90340721fb009027abe27cf77ca2e4f1979f8cf7f2ef"
+    },
+    "reglasVersion": "reglas-demo-0.2",
+    "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+    ],
+    "veredicto": "verde"
+  },
+  "manifestHash": "c4c9634d53de78ee57b5b36de0a50c62ea1d6634c766d87623f8b8c941a1df97",
+  "indice": 0,
+  "cantidadHojas": 3,
+  "camino": [
+    {
+      "lado": "R",
+      "hash": "7198fb5d158a1a115373f5851d4d94463740c8b174c03b570d92a0fc06e524de"
+    },
+    {
+      "lado": "R",
+      "hash": "4d613dc9553785f1b5ca6f82e861e03499296f7a923010e8f881cc4f1d6bc404"
+    }
+  ],
+  "raiz": "987ac27231272a3b5686a439360fd0aaeb9ef7e96db5b2c658449da47fd303af"
+}

@@ -1,0 +1,20 @@
+# Vigilante de afuera (idea tomada de arm-whatsapp): consulta /api/health cada 15 minutos.
+# Si falla, GitHub avisa por mail a quien modificó este horario por última vez.
+# Solo corre si el repositorio tiene la variable URL_SALUD (Settings > Variables), por ejemplo https://mi-sitio.example/api/health.
+# Mientras la app no esté publicada, este flujo no hace nada. GitHub apaga los horarios tras 60 días sin actividad.
+name: Vigilancia
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+permissions: {}
+jobs:
+  salud:
+    if: ${{ vars.URL_SALUD != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: La app responde y puede escribir sus registros
+        env:
+          URL_SALUD: ${{ vars.URL_SALUD }}
+        run: curl --silent --show-error --fail-with-body --retry 2 --retry-delay 60 --retry-all-errors --max-time 30 "$URL_SALUD"

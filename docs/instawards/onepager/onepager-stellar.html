@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es" style="background:#F7F8F6">
+<head>
+<meta charset="utf-8">
+<title>GALCOA+ en Stellar · One-pager</title>
+<style>
+  :root { --navy:#1E3A5F; --green:#176A57; --yellow:#FFDA47; --white:#F7F8F6; --ink:#0B1220; --muted:#475569; --line:#CBD5E1; --soft:#EAF3F0; --red:#B42318; --amber:#A15C00; }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif; color: var(--ink); background: var(--white); font-size: 8.3pt; line-height: 1.26; }
+  .page { width: 210mm; height: 297mm; overflow: hidden; padding: 7mm 11mm 5mm; display: flex; flex-direction: column; gap: 1.9mm; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 8mm; padding-bottom: 3.5mm; border-bottom: 3px solid var(--yellow); }
+  .mark { font-size: 18pt; font-weight: 800; color: var(--navy); letter-spacing: -.01em; }
+  .mark span { color: var(--green); }
+  .chips { display: flex; gap: 3mm; align-items: center; }
+  .chip { font-family: Consolas, "Courier New", monospace; font-size: 7.8pt; text-transform: uppercase; letter-spacing: .04em; color: var(--navy); border: 1px solid var(--navy); padding: 1.5mm 2.5mm; }
+  .chip.fill { background: var(--navy); color: #fff; }
+  .tagline { font-size: 14pt; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .sub { font-size: 11pt; color: var(--green); font-weight: 600; margin-top: .8mm; }
+  .meta { font-size: 9pt; color: var(--muted); }
+  .quote { background: var(--navy); color: #fff; padding: 2.8mm 4mm; font-size: 9.4pt; }
+  .quote strong { color: var(--yellow); }
+  h2 { font-size: 10.2pt; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 1mm; }
+  section p + p { margin-top: 1.2mm; }
+  ol, ul { padding-left: 4.8mm; display: grid; gap: 1mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .box { background: var(--soft); border-left: 3px solid var(--green); padding: 2.5mm 4mm; }
+  .todo { background: var(--yellow); padding: 0 1mm; }
+  .proof li { list-style: none; }
+  .proof li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+  svg { width: 100%; max-height: 34mm; display: block; margin-bottom: 1mm; }
+  footer { margin-top: auto; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.2pt; color: var(--muted); display: flex; flex-wrap: wrap; gap: 1mm 5mm; }
+  footer strong { color: var(--ink); }
+  .small { font-size: 8pt; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="mark">GALCOA<span>+</span></div>
+    <div class="chips">
+      <span class="chip fill">Stellar · testnet</span>
+      <span class="chip">3er puesto<br>NEA Tech · Corrientes 2026</span>
+    </div>
+  </header>
+
+  <div>
+    <p class="tagline">Solo lo verificado deja una prueba pública.</p>
+    <p class="sub">Registros que se pueden comprobar, no solo creer.</p>
+  </div>
+
+  <p class="meta"><strong>Equipo:</strong> <span class="todo">[completar con las personas que participan y su rol]</span></p>
+
+  <p class="quote"><strong>Prototipo funcionando en Stellar testnet</strong> (red de prueba, sin dinero real): varios documentos verificados se sellan en <strong>una sola transacción</strong> y cada uno se comprueba solo. Lo que requiere revisión no llega nunca a la red.</p>
+
+  <section>
+    <h2>El problema</h2>
+    <p>Las empresas registran sus operaciones en papel, planillas y WhatsApp. Cuando algo sale mal —un pedido de 200 cajas que llegó como 198— nadie puede demostrar qué pasó. Empezamos por las distribuidoras pymes de alimentos y bebidas del NEA: trabajan bien durante años pero no lo pueden demostrar, y una marca difícilmente las elige sin un historial que se pueda comprobar.</p>
+    <p>La industria de alimentos y bebidas agrupa a más de 14.700 empresas, el 95 % pymes (COPAL). En Argentina hay unos 10.000 mayoristas que abastecen a 140.000 almacenes (CADAM); en el NEA estimamos unas 900 distribuidoras y 13.000 almacenes <span class="small">(estimación propia)</span>.</p>
+  </section>
+
+  <section>
+    <h2>Cómo funciona</h2>
+    <svg viewBox="0 0 720 150" role="img" aria-label="Flujo: documentos, reglas, lote, una transacción en Stellar, comprobante">
+      <defs><marker id="f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1E3A5F"/></marker></defs>
+      <g font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#0B1220">
+        <rect x="4" y="30" width="108" height="70" rx="8" fill="#fff" stroke="#CBD5E1"/>
+        <text x="58" y="56" text-anchor="middle" font-weight="700">Documentos</text><text x="58" y="72" text-anchor="middle">de entrega</text><text x="58" y="88" text-anchor="middle" font-size="9.5" fill="#475569">remito, cantidades</text>
+        <line x1="114" y1="65" x2="146" y2="65" stroke="#1E3A5F" stroke-width="2" marker-end="url(#f)"/>
+        <rect x="148" y="14" width="150" height="104" rx="8" fill="#fff" stroke="#CBD5E1"/>
+        <text x="223" y="34" text-anchor="middle" font-weight="700">Reglas ALCOA+</text><text x="223" y="48" text-anchor="middle" font-size="9.5" fill="#475569">código, no IA</text>
+        <rect x="162" y="58" width="122" height="16" rx="8" fill="#E7F4EC" stroke="#17803D"/><text x="223" y="70" text-anchor="middle" font-size="10" fill="#17803D">verde → se ancla</text>
+        <rect x="162" y="78" width="122" height="16" rx="8" fill="#FFF4DB" stroke="#A15C00"/><text x="223" y="90" text-anchor="middle" font-size="10" fill="#A15C00">amarillo → marcado</text>
+        <rect x="162" y="98" width="122" height="16" rx="8" fill="#FDECEA" stroke="#B42318"/><text x="223" y="110" text-anchor="middle" font-size="10" fill="#B42318">rojo → una persona</text>
+        <line x1="300" y1="65" x2="332" y2="65" stroke="#1E3A5F" stroke-width="2" marker-end="url(#f)"/>
+        <rect x="334" y="22" width="130" height="86" rx="8" fill="#fff" stroke="#CBD5E1"/>
+        <text x="399" y="40" text-anchor="middle" font-weight="700">Lote</text><text x="399" y="53" text-anchor="middle" font-size="9.5" fill="#475569">árbol de Merkle</text>
+        <g fill="#176A57"><circle cx="399" cy="66" r="5"/><circle cx="374" cy="84" r="4"/><circle cx="424" cy="84" r="4"/><circle cx="361" cy="100" r="3.2"/><circle cx="387" cy="100" r="3.2"/><circle cx="411" cy="100" r="3.2"/><circle cx="437" cy="100" r="3.2"/></g>
+        <g stroke="#176A57" stroke-width="1.2"><line x1="399" y1="66" x2="374" y2="84"/><line x1="399" y1="66" x2="424" y2="84"/><line x1="374" y1="84" x2="361" y2="100"/><line x1="374" y1="84" x2="387" y2="100"/><line x1="424" y1="84" x2="411" y2="100"/><line x1="424" y1="84" x2="437" y2="100"/></g>
+        <line x1="466" y1="65" x2="498" y2="65" stroke="#1E3A5F" stroke-width="2" marker-end="url(#f)"/>
+        <rect x="500" y="30" width="108" height="70" rx="8" fill="#1E3A5F"/>
+        <text x="554" y="54" text-anchor="middle" font-weight="700" fill="#fff">1 transacción</text><text x="554" y="70" text-anchor="middle" fill="#fff">en Stellar</text><text x="554" y="86" text-anchor="middle" font-size="9.5" fill="#FFDA47">memo de 32 bytes</text>
+        <line x1="610" y1="65" x2="636" y2="65" stroke="#1E3A5F" stroke-width="2" marker-end="url(#f)"/>
+        <rect x="638" y="30" width="78" height="70" rx="8" fill="#fff" stroke="#176A57" stroke-width="1.6"/>
+        <text x="677" y="54" text-anchor="middle" font-weight="700">Comprobante</text><text x="677" y="70" text-anchor="middle" font-size="9.5">por documento</text><text x="677" y="86" text-anchor="middle" font-size="9.5" fill="#176A57">se verifica solo</text>
+      </g>
+    </svg>
+    <ol>
+      <li>Se carga la operación (hoy como datos estructurados; el chat con IA y la foto del remito son parte del producto completo).</li>
+      <li>Reglas deterministas revisan cada dato con la lógica de integridad <strong>ALCOA+</strong>: completo, legible, atribuible (quien carga no confirma), consistente, a tiempo, con original y exacto. <strong>La IA no decide el veredicto.</strong></li>
+      <li>Solo lo verde y lo amarillo entra al lote. <strong>Lo rojo no se ancla jamás</strong> y va a una persona.</li>
+      <li>Se ancla <strong>una sola huella</strong> del lote en Stellar. Nunca viajan datos personales. Cada documento recibe un comprobante que cualquiera puede verificar contra la red.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Lo que ya funciona (probado)</h2>
+    <div class="grid2">
+      <ul class="proof">
+        <li>Lote de <strong>50 documentos en una sola transacción</strong> en Stellar testnet: <strong>5 s y 0,00001 XLM</strong>, contra unos 249 s y 0,0005 XLM uno por uno (−98 %, 3 corridas).</li>
+        <li><strong>Aprobación de dos personas exigida por la red:</strong> con una sola firma el sello se rechaza; con dos, se registra.</li>
+        <li>Los documentos rojos quedan afuera; un documento alterado se detecta.</li>
+        <li><strong>Contrato inteligente de registro</strong> (testnet): guarda quién cargó y quién aprobó cada lote; la red exige las dos autorizaciones (unos 0,013 XLM por registro).</li>
+      </ul>
+      <ul class="proof">
+        <li>Verificación pública que lee la transacción de la red y la compara con el comprobante.</li>
+        <li>69 pruebas automáticas, modelo de amenazas y especificación abierta del comprobante; el código es privado.</li>
+      </ul>
+    </div>
+    <p class="small" style="margin-top:1.5mm">Las reglas de esta demo son un subconjunto del motor completo, diseñado para poder validarse bajo GAMP 5. La testnet se reinicia periódicamente.</p>
+  </section>
+
+  <section>
+    <h2>Qué haremos en un sprint de 30 días</h2>
+    <div class="grid2">
+      <ul>
+        <li>Aprobación <strong>2 de 2 dentro de la app</strong>, con comisión pagada por el servicio y quién cargó y quién aprobó en cada lote.</li>
+        <li><strong>Piloto con una distribuidora</strong>: 50 remitos, minutos de conciliación por remito y una persona ajena que sigue la guía desde cero.</li>
+      </ul>
+      <ul>
+        <li>Comprobante abierto y paquete reutilizable, para que otro proyecto verifique sin usar nuestra app.</li>
+        <li>Modelo de amenazas y plan de monitoreo de la cuenta de sellado.</li>
+      </ul>
+    </div>
+    <div class="box" style="margin-top:2.5mm"><strong>No incluye:</strong> dinero real, red principal, custodia de fondos ni emisión de activos. Cualquier paso en esa dirección requiere consulta legal previa.</div>
+  </section>
+
+  <section>
+    <h2>Escenario proyectado <span class="small">(hipótesis a validar)</span></h2>
+    <div class="grid2">
+      <ul>
+        <li><strong>Quién paga:</strong> la distribuidora que quiere ser representante de una marca y demostrar trazabilidad. Suscripción mensual desde USD 30 (propuesta).</li>
+        <li><strong>Qué gana:</strong> nuevas marcas, menos reclamos perdidos y un historial verificable.</li>
+      </ul>
+      <ul>
+        <li><strong>Dónde:</strong> piloto con distribuidoras del NEA y luego cámaras de distribuidores. Mercados secundarios: farma, agro y objetos de alto valor.</li>
+        <li><strong>Hacia dónde crece:</strong> verificar datos del mundo real es la base para quien financia o emite activos sobre esas operaciones; hoy fuera de alcance y sujeto a consulta legal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span><strong>Demo:</strong> <span class="todo">[enlace de la demo, cuando esté desplegada]</span></span>
+    <span><strong>Transacción de prueba:</strong> stellar.expert/explorer/testnet/tx/0c30765b3228b9cf33b8ee467555dd4c1dd05fdd27ae452aeb8d084589bf8b65</span>
+    <span><strong>Video:</strong> <span class="todo">[enlace]</span></span>
+    <span><strong>Contacto:</strong> <span class="todo">[correo]</span></span>
+  </footer>
+</div>
+</body>
+</html>
