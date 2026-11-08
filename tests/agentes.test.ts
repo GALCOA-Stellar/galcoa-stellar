@@ -88,8 +88,10 @@ describe("flujo completo", () => {
     expect(confirmarPropuestas(r.propuestas, r.hallazgos, "ana", "luis", HOY).documentos).toHaveLength(1);
   });
   it("si falla el verificador, el dato no se da por verificado", async () => {
-    const cfg: ConfigAgentes = { ...config({ entregas: [conCitas(buena, "Llegaron 10 cajas")] }, {}), verificador: async () => { throw new Error("caído"); } };
-    const r = await procesarMensaje(cfg, "Llegaron 10 cajas", "ana", HOY);
+    // El mensaje trae todos los datos y la cita es el mensaje entero: así ALC-PRO-01 no agrega nada y se mide solo la caída del verificador.
+    const msj = "Remito R-1: llegaron 10 cajas de Aceite 900 ml, pedidas 10, el 5/11";
+    const cfg: ConfigAgentes = { ...config({ entregas: [conCitas(buena, msj)] }, {}), verificador: async () => { throw new Error("caído"); } };
+    const r = await procesarMensaje(cfg, msj, "ana", HOY);
     expect(r.hallazgos).toBeNull();
     expect(r.vistas[0].evaluacion.veredicto).not.toBe("verde");
   });

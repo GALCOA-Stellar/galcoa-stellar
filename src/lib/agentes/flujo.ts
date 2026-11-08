@@ -38,6 +38,10 @@ export type Resultado = {
   vistas: Vista[];
   independientes: boolean;
   modelos: ConfigAgentes["modelos"];
+  /** Qué modelo respondió de verdad a cada agente (de la lista con respaldo); null si no respondió ninguno. */
+  modelosUsados: { registrador: string | null; verificador: string | null };
+  /** El segundo agente no respondió. Se informa aparte porque los avisos del código (inyección, cantidades, procedencia) convierten el null en una lista. */
+  verificadorCaido: boolean;
 };
 
 function vistasDe(propuestas: Propuesta[], hallazgos: Hallazgo[] | null, cargadoPor: string, confirmadoPor: string, hoy: string, pendiente: boolean, evidenciaHash?: string): Vista[] {
@@ -54,9 +58,10 @@ export async function procesarMensaje(config: ConfigAgentes, mensaje: string, ca
   // Plazo total del pedido (la función de Vercel corta a los 60 s): el registrador tiene hasta 30 s y el verificador lo que reste.
   // Si el verificador no llega a tiempo queda como "no verificado" (null), nunca como "sin hallazgos".
   const inicio = Date.now();
-  const { propuestas, citas } = await conPlazo(registrarConCitas(config.registrador, mensaje, hoy), 30_000, () => { throw new Error("El Agente 1 tardó demasiado: probá de nuevo"); });
+  const modelosUsados: Resultado["modelosUsados"] = { registrador: null, verificador: null };
+  const { propuestas, citas } = await conPlazo(registrarConCitas(config.registrador, mensaje, hoy, { alResponder: (m) => { modelosUsados.registrador = m; } }), 30_000, () => { throw new Error("El Agente 1 tardó demasiado: probá de nuevo"); });
   const resto = Math.max(1_000, PLAZO_TOTAL_MS - (Date.now() - inicio));
-  const delVerificador = propuestas.length > 0 ? await conPlazo(verificar(config.verificador, mensaje, propuestas, hoy), resto, () => null) : [];
+  const delVerificador = propuestas.length > 0 ? await conPlazo(verificar(config.verificador, mensaje, propuestas, hoy, { alResponder: (m) => { modelosUsados.verificador = m; } }), resto, () => null) : [];
   // ALC-INY-01: red de seguridad en código. Si el texto parece una orden para la IA, cada entrega propuesta queda retenida, haya opinado o no el verificador.
   const motivos = detectarInyeccion(mensaje);
   // Chequeo cruzado: una cantidad que no aparece en el mensaje no se acepta, diga lo que diga el verificador.
@@ -64,14 +69,22 @@ export async function procesarMensaje(config: ConfigAgentes, mensaje: string, ca
   // Procedencia (ALC-PRO-01): cada dato propuesto tiene que traer una cita textual que esté de verdad en el mensaje.
   const sinProcedencia = faltasDeProcedencia(mensaje, propuestas as Record<string, unknown>[], citas).map((f) => ({
     indice: f.indice, campo: f.campo,
-    severidad: f.motivo === "cita-inexistente" ? ("critica" as const) : ("advertencia" as const),
-    mensaje: f.motivo === "cita-inexistente" ? `${REGLA_PROCEDENCIA}: la cita de ${f.campo} no aparece en el mensaje` : `${REGLA_PROCEDENCIA}: ${f.campo} no trae cita textual del mensaje`,
+    // Sin cita: amarillo (declarado). Cita inventada, o cita real que no respalda el valor: rojo. La observación se escribe con
+    // palabras del modelo más seguido, así que una observación que no calza con su cita baja a amarillo y no a rojo.
+    severidad: f.motivo === "sin-cita" || (f.motivo === "cita-no-respalda" && f.campo === "observacion") ? ("advertencia" as const) : ("critica" as const),
+    mensaje:
+      f.motivo === "cita-inexistente" ? `${REGLA_PROCEDENCIA}: la cita de ${f.campo} no aparece en el mensaje`
+      : f.motivo === "cita-no-respalda" ? `${REGLA_PROCEDENCIA}: la cita de ${f.campo} está en el mensaje pero no respalda el valor propuesto`
+      : `${REGLA_PROCEDENCIA}: ${f.campo} no trae cita textual del mensaje`,
   }));
   const extra = [...sinRespaldo, ...sinProcedencia];
   const delVerificadorMas = extra.length === 0 ? delVerificador : [...(delVerificador ?? []), ...extra];
   // Aunque el verificador se haya caído (null), la inyección detectada en código siempre retiene la entrega.
-  const hallazgos = motivos.length === 0 ? delVerificadorMas : [...(delVerificadorMas ?? []), ...propuestas.map((_, indice) => ({ indice, campo: "mensaje", severidad: "critica" as const, mensaje: `${REGLA_INYECCION}: el texto parece dar órdenes a la IA (${motivos.join("; ")}). Una persona tiene que revisarlo.` }))];
-  return { propuestas, hallazgos, vistas: vistasDe(propuestas, hallazgos, cargadoPor, PENDIENTE, hoy, true, evidenciaHash), independientes: config.independientes, modelos: config.modelos };
+  const conCodigo = motivos.length === 0 ? delVerificadorMas : [...(delVerificadorMas ?? []), ...propuestas.map((_, indice) => ({ indice, campo: "mensaje", severidad: "critica" as const, mensaje: `${REGLA_INYECCION}: el texto parece dar órdenes a la IA (${motivos.join("; ")}). Una persona tiene que revisarlo.` }))];
+  // Si el verificador se cayó y el código agregó avisos, la caída no puede quedar escondida detrás de ellos: se agrega a cada entrega.
+  const verificadorCaido = delVerificador === null && propuestas.length > 0;
+  const hallazgos = verificadorCaido && conCodigo !== null ? [...conCodigo, ...propuestas.map((_, indice) => ({ indice, campo: "verificador", severidad: "advertencia" as const, mensaje: "No se pudo verificar con el segundo agente: el dato queda declarado, no verificado" }))] : conCodigo;
+  return { propuestas, hallazgos, vistas: vistasDe(propuestas, hallazgos, cargadoPor, PENDIENTE, hoy, true, evidenciaHash), independientes: config.independientes, modelos: config.modelos, modelosUsados, verificadorCaido };
 }
 
 /** Segunda persona confirma: sin IA, solo reglas. Devuelve los documentos listos para sellar (los rojos quedan fuera). */

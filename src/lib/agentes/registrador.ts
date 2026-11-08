@@ -1,7 +1,7 @@
 import "server-only";
 import { limpiarCitas, type Citas } from "../dominio/procedencia";
 import { AVISO_FUENTES, delimitarFuente } from "./fuentes";
-import { jsonDeRespuesta, type Proveedor } from "./proveedor";
+import { jsonDeRespuesta, type Pedido, type Proveedor } from "./proveedor";
 
 export const PROMPT_REGISTRADOR_VERSION = "registrador-v4";
 export const MAX_ENTREGAS = 20;
@@ -60,8 +60,8 @@ export function validarPropuestas(crudo: unknown): Propuesta[] {
 }
 
 /** Igual que `registrar`, pero devuelve también las citas que dio el modelo (el código las comprueba contra el mensaje). */
-export async function registrarConCitas(proveedor: Proveedor, mensaje: string, hoy: string): Promise<{ propuestas: Propuesta[]; citas: Citas[] }> {
-  const salida = await proveedor({ sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy })}
+export async function registrarConCitas(proveedor: Proveedor, mensaje: string, hoy: string, opciones: Pick<Pedido, "alResponder"> = {}): Promise<{ propuestas: Propuesta[]; citas: Citas[] }> {
+  const salida = await proveedor({ ...opciones, sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy })}
 ${delimitarFuente("mensaje", mensaje.slice(0, MAX_MENSAJE))}` });
   const crudo = jsonDeRespuesta(salida);
   const propuestas = validarPropuestas(crudo);
@@ -70,7 +70,8 @@ ${delimitarFuente("mensaje", mensaje.slice(0, MAX_MENSAJE))}` });
   return { propuestas, citas };
 }
 
-export async function registrar(proveedor: Proveedor, mensaje: string, hoy: string): Promise<Propuesta[]> {
-  const salida = await proveedor({ sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy })}\n${delimitarFuente("mensaje", mensaje.slice(0, MAX_MENSAJE))}` });
+export async function registrar(proveedor: Proveedor, mensaje: string, hoy: string, opciones: Pick<Pedido, "alResponder"> = {}): Promise<Propuesta[]> {
+  const salida = await proveedor({ ...opciones, sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy })}
+${delimitarFuente("mensaje", mensaje.slice(0, MAX_MENSAJE))}` });
   return validarPropuestas(jsonDeRespuesta(salida));
 }

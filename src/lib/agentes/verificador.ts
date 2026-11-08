@@ -1,7 +1,7 @@
 import "server-only";
 import { evaluar, type Evaluacion } from "../dominio/rules";
 import { AVISO_FUENTES, delimitarFuente } from "./fuentes";
-import { jsonDeRespuesta, type Proveedor } from "./proveedor";
+import { jsonDeRespuesta, type Pedido, type Proveedor } from "./proveedor";
 import type { Propuesta } from "./registrador";
 
 export const PROMPT_VERIFICADOR_VERSION = "verificador-v3";
@@ -46,9 +46,9 @@ function severidadDe(v: unknown): "critica" | "advertencia" {
 }
 
 /** null si el verificador falló o no respondió algo válido: el flujo lo trata como "no verificado", nunca como "sin hallazgos". */
-export async function verificar(proveedor: Proveedor, mensaje: string, propuestas: Propuesta[], hoy: string): Promise<Hallazgo[] | null> {
+export async function verificar(proveedor: Proveedor, mensaje: string, propuestas: Propuesta[], hoy: string, opciones: Pick<Pedido, "alResponder"> = {}): Promise<Hallazgo[] | null> {
   try {
-    const salida = await proveedor({ sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy, propuestas })}\n${delimitarFuente("mensaje", mensaje.slice(0, 1500))}` });
+    const salida = await proveedor({ ...opciones, sistema: INSTRUCCIONES, usuario: `${JSON.stringify({ hoy, propuestas })}\n${delimitarFuente("mensaje", mensaje.slice(0, 1500))}` });
     return validarHallazgos(jsonDeRespuesta(salida), propuestas.length);
   } catch {
     return null;

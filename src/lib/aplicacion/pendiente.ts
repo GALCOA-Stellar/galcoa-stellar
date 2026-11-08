@@ -4,7 +4,9 @@ import { estadoDeTx, ConfirmacionPendiente } from "../stellar/stellar";
 import type { Prueba } from "./lote";
 
 type Consultar = typeof estadoDeTx;
-export type Reanudacion = { tipo: "ninguno" } | { tipo: "espera" } | { tipo: "exito"; tx: { txHash: string; ledger: number; prueba: Prueba } };
+export type Reanudacion = { tipo: "ninguno" } | { tipo: "espera" } | { tipo: "indisponible" } | { tipo: "exito"; tx: { txHash: string; ledger: number; prueba: Prueba } };
+
+export const MENSAJE_RED_INDISPONIBLE = "No pudimos consultar la red para saber si el envío anterior de este lote entró. No se envía otra transacción: probá de nuevo en unos minutos.";
 
 /** Margen para que una transacción enviada sin respuesta todavía pueda entrar a la red (60 s en una firma, 10 min en 2 de 2). */
 export const VENTANA_MS = { "una-firma": 90_000, "2de2": 11 * 60_000 } as const;
@@ -17,6 +19,8 @@ export async function revisarPendiente(memo: string, ahora = Date.now(), consult
   const p = await leerPendiente(memo);
   if (!p) return { tipo: "ninguno" };
   const e = await consultar(p.txHash);
+  // Sin poder preguntarle a la red no se sabe si el envío anterior entró: nunca se arma otro (sería un sello doble).
+  if (e.estado === "indisponible") return { tipo: "indisponible" };
   if (e.estado === "exito") { await borrarPendiente(memo); return { tipo: "exito", tx: { txHash: p.txHash, ledger: e.ledger, prueba: e.prueba } }; }
   if (e.estado === "fallo" || (e.estado === "no-encontrada" && ahora > p.vigenteHasta)) {
     await borrarPendiente(memo);

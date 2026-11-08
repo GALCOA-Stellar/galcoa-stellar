@@ -8,7 +8,7 @@ import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { operacionPorMemo, registrarOperacion } from "@/lib/datos/historial";
 import { liberar, reclamar } from "@/lib/datos/almacen";
-import { anotarSiQuedoPendiente, revisarPendiente } from "@/lib/aplicacion/pendiente";
+import { anotarSiQuedoPendiente, MENSAJE_RED_INDISPONIBLE, revisarPendiente } from "@/lib/aplicacion/pendiente";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     // Un intento anterior pudo haber quedado sin confirmar (la red tardó): si ese hash ya entró se completa el registro sin enviar nada.
     const rev = await revisarPendiente(vista.memo);
     if (rev.tipo === "espera") return NextResponse.json({ error: "Un envío anterior de este lote todavía no se confirmó en la red. Esperá un minuto y volvé a intentar: no se envía otra transacción mientras tanto." }, { status: 409 });
+    if (rev.tipo === "indisponible") return NextResponse.json({ error: MENSAJE_RED_INDISPONIBLE }, { status: 503 });
     if (rev.tipo === "ninguno" && !(await reclamar("sellos", clave, "enviando", 10 * 60_000))) return NextResponse.json({ error: "Ya hay un envío en curso para este lote. Esperá unos segundos y revisá el historial." }, { status: 409 });
 
     let comisionPagadaPor: string | null = null;

@@ -38,19 +38,25 @@ export function detectarInyeccion(texto: string): string[] {
 
 const PALABRAS: Record<string, number> = { un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15, veinte: 20, treinta: 30, cuarenta: 40, cincuenta: 50, sesenta: 60, setenta: 70, ochenta: 80, noventa: 90, cien: 100, ciento: 100, docena: 12, media: 6 };
 
-/**
- * Chequeo cruzado en código (no depende de ningún modelo): cada cantidad que propone el registrador tiene que aparecer en el mensaje,
- * con cifras o con palabras. Si no aparece, el modelo la inventó o la calculó: la entrega se retiene para que una persona la mire.
- * Devuelve la posición de cada entrega con una cantidad sin respaldo.
- */
-export function cantidadesSinRespaldo(mensaje: string, propuestas: { cantidadPedida?: number; cantidadRecibida?: number }[]): { indice: number; campo: string; valor: number }[] {
-  const t = mensaje.normalize("NFC").toLowerCase();
+/** Todas las cantidades que aparecen en un texto, en cifras ("1.200", "8") o en palabras ("ocho", "docena"). */
+export function numerosEn(texto: string): Set<number> {
+  const t = texto.normalize("NFC").toLowerCase();
   const presentes = new Set<number>();
   for (const m of t.matchAll(/\d[\d.,]*/g)) {
     const limpio = m[0].replace(/[.,]$/, "");
     for (const n of [Number(limpio.replace(/[.,]/g, "")), Number(limpio.replace(",", "."))]) if (Number.isFinite(n)) presentes.add(n);
   }
   for (const m of t.matchAll(/[a-záéíóúñ]+/g)) if (m[0] in PALABRAS) presentes.add(PALABRAS[m[0]]);
+  return presentes;
+}
+
+/**
+ * Chequeo cruzado en código (no depende de ningún modelo): cada cantidad que propone el registrador tiene que aparecer en el mensaje,
+ * con cifras o con palabras. Si no aparece, el modelo la inventó o la calculó: la entrega se retiene para que una persona la mire.
+ * Devuelve la posición de cada entrega con una cantidad sin respaldo.
+ */
+export function cantidadesSinRespaldo(mensaje: string, propuestas: { cantidadPedida?: number; cantidadRecibida?: number }[]): { indice: number; campo: string; valor: number }[] {
+  const presentes = numerosEn(mensaje);
   const faltan: { indice: number; campo: string; valor: number }[] = [];
   propuestas.forEach((p, indice) => {
     for (const campo of ["cantidadPedida", "cantidadRecibida"] as const) {

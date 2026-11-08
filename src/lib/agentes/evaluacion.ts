@@ -13,7 +13,10 @@ export type Etiquetas = Record<string, Etiqueta>;
 
 export const huellaDeEtiquetas = (textoJson: string) => createHash("sha256").update(textoJson.replace(/\r\n/g, "\n")).digest("hex");
 
-export type ResultadoCaso = { id: string; categoria: Etiqueta["categoria"]; falloTecnico: boolean; omisiones: number; erroresDeDato: number; frenado: boolean; debeFrenar: boolean; firma: string; verificadorCaido?: boolean };
+export type ResultadoCaso = { id: string; categoria: Etiqueta["categoria"]; falloTecnico: boolean; omisiones: number; erroresDeDato: number; frenado: boolean; debeFrenar: boolean; firma: string; verificadorCaido?: boolean;
+  /** Qué modelo respondió de verdad a cada agente: el resultado puede venir de un respaldo y no del principal. */
+  modelosUsados?: { registrador: string | null; verificador: string | null };
+};
 
 /** Corre un caso una vez. Si un agente se cae, es un fallo técnico y NO cuenta como error de la IA. */
 export async function correrCaso(config: ConfigAgentes, caso: Caso, etiqueta: Etiqueta, hoy: string): Promise<ResultadoCaso> {
@@ -22,7 +25,7 @@ export async function correrCaso(config: ConfigAgentes, caso: Caso, etiqueta: Et
   try {
     const r = await procesarMensaje(config, caso.mensaje, "evaluacion", hoy);
     // Un verificador caído NO se excluye: en producción deja la entrega declarada (amarilla), o sea "no frenada". Se cuenta y se informa aparte.
-    const verificadorCaido = r.hallazgos === null && r.propuestas.length > 0;
+    const verificadorCaido = r.verificadorCaido;
     let omisiones = 0;
     let erroresDeDato = 0;
     for (const esp of etiqueta.entregas) {
@@ -32,7 +35,7 @@ export async function correrCaso(config: ConfigAgentes, caso: Caso, etiqueta: Et
     }
     const frenado = r.vistas.some((v) => v.evaluacion.veredicto === "rojo") || (r.hallazgos ?? []).some((h) => h.severidad === "critica");
     const firma = JSON.stringify([r.propuestas.map((p) => [p.remito, p.cantidadRecibida]).sort(), frenado, verificadorCaido]);
-    return { ...base, falloTecnico: false, omisiones, erroresDeDato, frenado, firma, verificadorCaido };
+    return { ...base, falloTecnico: false, omisiones, erroresDeDato, frenado, firma, verificadorCaido, modelosUsados: r.modelosUsados };
   } catch {
     return caida;
   }
@@ -44,6 +47,8 @@ export type Metricas = {
   evaluados: number;
   /** Casos evaluados donde el verificador no respondió (cuentan como "no frenado" si debían frenarse). */
   verificadorCaido: number;
+  /** Cuántas veces respondió cada modelo, por agente (de la lista con respaldo). */
+  modelosUsados: { registrador: Record<string, number>; verificador: Record<string, number> };
   /** De los casos que debían frenarse, cuántos se frenaron. null si no había ninguno. */
   deteccion: number | null;
   /** De los casos que no debían frenarse, cuántos se frenaron sin motivo. */
@@ -74,7 +79,14 @@ export function calcularMetricas(corridas: ResultadoCaso[][]): Metricas {
   }
   const porCategoria: Metricas["porCategoria"] = {};
   for (const [k, c] of Object.entries(cuentas)) porCategoria[k] = { casos: c.casos, acuerdo: razon(c.ok, c.casos) };
+  const modelosUsados: Metricas["modelosUsados"] = { registrador: {}, verificador: {} };
+  for (const r of corridas.flat())
+    for (const agente of ["registrador", "verificador"] as const) {
+      const m = r.modelosUsados?.[agente];
+      if (m) modelosUsados[agente][m] = (modelosUsados[agente][m] ?? 0) + 1;
+    }
   return {
+    modelosUsados,
     casos: primeras.length,
     fallosTecnicos: primeras.length - validas.length,
     evaluados: validas.length,
@@ -107,12 +119,14 @@ export async function correrEvaluacion(config: ConfigAgentes, casos: Caso[], eti
 }
 
 const pct = (n: number | null) => (n === null ? "sin datos" : `${Math.round(n * 100)} %`);
+const conteo = (c: Record<string, number>) => (Object.keys(c).length === 0 ? "sin datos" : Object.entries(c).map(([m, n]) => `${m} ×${n}`).join(", "));
 
 /** Informe en texto simple, con sus límites a la vista. */
 export function informe(m: Metricas, modelos: ConfigAgentes["modelos"]): string {
   return [
     `Evaluación de agentes (modelos: ${modelos.registrador} / ${modelos.verificador})`,
     `Casos: ${m.casos}. Evaluados: ${m.evaluados}. Fallos técnicos del registrador (excluidos): ${m.fallosTecnicos}. Verificador caído (incluidos, cuentan como no frenados): ${m.verificadorCaido}.`,
+    `Modelos que respondieron de verdad: registrador ${conteo(m.modelosUsados.registrador)}; verificador ${conteo(m.modelosUsados.verificador)}.`,
     `Detección de lo que debía frenarse: ${pct(m.deteccion)}. Falsos positivos sobre casos limpios: ${pct(m.falsosPositivos)}.`,
     `Entregas omitidas: ${m.omisiones}. Datos mal pasados: ${m.erroresDeDato}. Acuerdo de estado: ${pct(m.acuerdoDeEstado)}. Variación entre repeticiones: ${pct(m.variacion)}.`,
     "Límites: pocos casos sembrados por nosotros, no una muestra real; sirve para comparar versiones del prompt y detectar regresiones, no para prometer una tasa de acierto.",

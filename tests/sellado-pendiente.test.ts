@@ -31,7 +31,14 @@ describe("sellado que la red tarda en confirmar", () => {
     const memo = "4".repeat(64);
     await anotarSiQuedoPendiente(new ConfirmacionPendiente("c".repeat(64)), memo, "una-firma", 0);
     expect((await revisarPendiente(memo, 1000, async () => ({ estado: "no-encontrada" }))).tipo).toBe("espera");
-    expect((await revisarPendiente(memo, 1000, async () => ({ estado: "indisponible" }))).tipo).toBe("espera");
+  });
+
+  it("si no se puede consultar la red, no se arma otra transacción aunque haya pasado la ventana", async () => {
+    const memo = "6".repeat(64);
+    await anotarSiQuedoPendiente(new ConfirmacionPendiente("e".repeat(64)), memo, "una-firma", 0);
+    expect((await revisarPendiente(memo, 1000, async () => ({ estado: "indisponible" }))).tipo).toBe("indisponible");
+    expect((await revisarPendiente(memo, VENTANA_MS["una-firma"] + 1, async () => ({ estado: "indisponible" }))).tipo).toBe("indisponible");
+    expect(await leerPendiente(memo)).not.toBeNull();
   });
 
   it("solo cuando ya no puede entrar o falló se permite un intento nuevo", async () => {
@@ -43,7 +50,7 @@ describe("sellado que la red tarda en confirmar", () => {
   });
 
   it("sin intento previo no hay nada pendiente", async () => {
-    expect((await revisarPendiente("6".repeat(64))).tipo).toBe("ninguno");
+    expect((await revisarPendiente("f".repeat(64), 1000, async () => ({ estado: "indisponible" }))).tipo).toBe("ninguno");
   });
 });
 
