@@ -24,7 +24,7 @@ Todo corre en **Testnet** con activos de prueba, sin auditoría externa ni diner
 | **Validación de los pedidos de la API con Zod** y errores públicos tipados | `src/lib/dominio/esquemas.ts`, `src/lib/servidor/guardas.ts` |
 | **Examen de reglas congelado por huella**: cambiar una regla exige la aprobación de una persona | `evals/reglas/`, `npm run aprobar-reglas` |
 | **Arquitectura en capas vigilada por un test**; archivos del servidor marcados `server-only` | `tests/limites-de-arquitectura.test.ts` |
-| **Pruebas:** 382 automáticas, 80,2 % de las líneas cubiertas, pruebas de propiedades de la huella e integración continua | [`COBERTURA.md`](COBERTURA.md), `tests/` |
+| **Pruebas:** 408 automáticas, 80,6 % de las líneas cubiertas, pruebas de propiedades de la huella e integración continua | [`COBERTURA.md`](COBERTURA.md), `tests/` |
 | **Extensión de navegador (esqueleto en construcción):** en una página de `localhost` marca cada campo de una entrega en verde, amarillo o rojo con el mismo motor de reglas. No tiene permisos ni pedidos de red, y todavía no es una versión terminada ni está publicada | `extension/`, `tests/extension-campos.test.ts` |
 | **Cosmos Pay (experimental, apagado sin clave):** adaptador para crear cobros SEP-7 y verificar webhooks firmados, probado con firmas reales; es una pieza de la ruta a mainnet, no parte del flujo actual | `src/lib/stellar/cosmospay.ts`, `tests/cosmospay.test.ts`, [`RUTA-A-MAINNET`](../producto/RUTA-A-MAINNET.md) |
 | **Interfaz en español e inglés**, tema claro y oscuro, ícono e imagen para compartir | `src/app/`, `src/lib/i18n/` |

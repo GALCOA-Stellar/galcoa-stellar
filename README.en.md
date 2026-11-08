@@ -25,7 +25,7 @@ It does not prove goods physically exist or that data is true in the world: it c
 | Two Soroban contracts on Testnet: a **registry** (three signatures, one from an approver different from the loader) and a test **escrow** that pays only if the registry says the batch is valid | External audit, real money or mainnet |
 | Rules with IDs (`ALC-…`), agents with tested instructions, defense against hidden instructions in text | A complete rules engine: the rules are **demonstration rules** |
 | Public verifier that fails closed: if the network does not answer, it never says "verified" | Real users or proven demand |
-| 382 automated tests and continuous integration; measured logic coverage: 80.2% of lines ([details](docs/evidencia/COBERTURA.md)) | Signing tested from a real phone |
+| 408 automated tests and continuous integration; measured logic coverage: 80.6% of lines ([details](docs/evidencia/COBERTURA.md)) | Signing tested from a real phone |
 
 ## What we learned
 - We talked to roles at distributors: the pain of badly loaded delivery notes exists, but it was **stated interest, not validation**.

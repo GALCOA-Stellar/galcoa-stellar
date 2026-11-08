@@ -27,7 +27,7 @@ No prueba que la mercadería exista ni que un dato sea verdadero en el mundo: ve
 | Dos contratos Soroban en Testnet: un **registro** (exige tres firmas, una de ellas de un aprobador distinto de quien cargó) y una **custodia** de prueba que paga solo si el registro dice que el lote vale | Auditoría externa, dinero real o red principal |
 | Reglas con identificador (`ALC-…`), agentes con instrucciones probadas, defensa contra órdenes escondidas en el texto | Un motor de reglas completo: las reglas son **de demostración** |
 | Verificador público que falla cerrado: si la red no responde, no dice "verificado" | Usuarios reales ni demanda comprobada |
-| 382 pruebas automáticas e integración continua; cobertura medida de la lógica: 80,2 % de las líneas ([detalle](docs/evidencia/COBERTURA.md)) | Firma probada desde un celular real |
+| 408 pruebas automáticas e integración continua; cobertura medida de la lógica: 80,6 % de las líneas ([detalle](docs/evidencia/COBERTURA.md)) | Firma probada desde un celular real |
 
 ## Lo que aprendimos
 - Hablamos con roles de distribuidoras: el dolor de los remitos mal cargados existe, pero fue **interés declarado, no una validación**.

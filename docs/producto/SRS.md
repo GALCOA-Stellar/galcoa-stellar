@@ -178,8 +178,6 @@ flowchart LR
 **Módulo Robustez de la verificación y de los agentes** *(patrones portados del proyecto anterior del equipo)*
 - RF-36 El verificador público no deberá mostrar "todavía no figura en la red" cuando no pudo consultarla: solo un 404 prueba ausencia; una caída o un tiempo agotado deberá informarse como "no pudimos consultar la red". Prueba: `tests/ausencia-vs-caida.test.ts`.
 - RF-37 El mensaje de la persona que se envía a los modelos deberá ir entre marcas con un código aleatorio por llamada, y los prompts deberán indicar que ese contenido es un dato y no una orden. Prueba: `tests/fuentes.test.ts`.
-- RF-38 Todo dato que proponga el registrador deberá venir con una cita textual del mensaje (regla `ALC-PRO-01`); el código deberá comprobar que la cita aparezca en la fuente y que contenga el valor propuesto (la cantidad, en cifras o en palabras, o el texto). Una cita inexistente o que no respalde el valor deberá retener la entrega (rojo, salvo la observación, que queda en amarillo) y un dato sin cita no deberá quedar verde.
-- RF-39 Los pedidos de la API que cargan, previsualizan o sellan lotes, y los que crean confirmaciones y rondas, deberán validarse con un esquema (Zod) antes de usarse; los mensajes de rechazo estarán en castellano y no mostrarán detalles internos.
 - RF-38 Si el texto de la persona parece dar órdenes a la IA (ignorar reglas, no reportar nada, aprobar sin controlar, hacerse pasar por el sistema), el sistema deberá retener cada entrega propuesta con un hallazgo crítico `ALC-INY-01`, decidido en código y sin depender de ningún modelo. Prueba: `tests/inyeccion.test.ts`.
 - RF-39 Si la misma huella de evidencia respalda más de una entrega dentro de un lote, el sistema deberá marcar todas esas entregas en rojo (regla ALC-EVI-01) y no sellarlas. Es una detección determinista de reutilización, no una prueba de autenticidad; no compara contra lotes anteriores. Prueba: tests/evidencia.test.ts.
 - RF-40 Si se adjunta una foto de evidencia, el sistema deberá comparar la fecha de toma de sus metadatos con las fechas de la entrega y marcar fotos sin fecha (amarillo), de otro día o posteriores al registro (rojo) y pasadas por programas de edición (amarillo) con la regla ALC-FOT-01. Es una revisión de metadatos, no una prueba de autenticidad. Estado: módulo de dominio probado (tests/foto.test.ts); falta conectarlo a la carga de archivos.
@@ -191,6 +189,8 @@ flowchart LR
 - RF-46 El sistema deberá anotar la comisión realmente cobrada por la red en cada sello y mostrar en el historial un contador de comisiones que sume solo lo anotado e informe cuántos sellos no tienen el dato. Prueba: tests/comisiones.test.ts.
 - RF-47 El verificador solo dará "verificado" si la transacción la originó una cuenta selladora conocida o el contrato de registro tiene el lote vigente; la prueba guardada nunca dará "verificado". Prueba: tests/verificar-origen.test.ts.
 - RF-48 Si la red tarda en confirmar un sello, el sistema guardará el hash antes de esperar y un reintento lo consultará antes de armar otra transacción. Prueba: tests/sellado-pendiente.test.ts.
+- RF-49 Todo dato que proponga el registrador deberá venir con una cita textual del mensaje (regla `ALC-PRO-01`); el código deberá comprobar que la cita aparezca en la fuente y que contenga el valor propuesto (la cantidad, en cifras o en palabras, o el texto). Una cita inexistente o que no respalde el valor deberá retener la entrega (rojo, salvo la observación, que queda en amarillo) y un dato sin cita no deberá quedar verde.
+- RF-50 Los pedidos de la API que cargan, previsualizan o sellan lotes, y los que crean confirmaciones y rondas, deberán validarse con un esquema (Zod) antes de usarse; los mensajes de rechazo estarán en castellano y no mostrarán detalles internos.
 
 ### 3.5 Requisitos no funcionales
 | ID | Categoría | Requisito |
@@ -225,8 +225,8 @@ Pruebas en `tests/nucleo.test.ts`.
 | RF-09 | `verificarComprobante`, `merkle.ts` `verificarCamino` | "un documento alterado no verifica"; "una raíz alterada no verifica"; "un comprobante con el contenido alterado se detecta" |
 | RF-10, RF-18 | `src/lib/stellar/firma.ts` `emitirDesafio`, `verificarAcceso` | "una cuenta autorizada con firma válida pasa"; "en producción sin lista de cuentas nadie puede sellar"; "una cuenta que no está en la lista no pasa, aunque firme bien"; "un mensaje inventado (sin marca del servidor) no pasa"; "una firma de otra cuenta sobre el mensaje no pasa"; "el mensaje vence y no se puede reutilizar"; "sin firma o sin nada para sellar no pasa" |
 | RF-18 (formato SEP-53) | `firma.ts` `hashSep53`, `verificarFirmaSep53` | "la firma sigue el formato SEP-53 (prefijo + SHA-256) y detecta cambios" |
-| RF-38 | `src/lib/dominio/procedencia.ts`; `flujo.ts` | `tests/procedencia.test.ts` |
-| RF-39 | `src/lib/dominio/esquemas.ts`; `leerCuerpo` en `guardas.ts` | `tests/esquemas.test.ts` |
+| RF-49 | `src/lib/dominio/procedencia.ts`; `flujo.ts` | `tests/procedencia.test.ts` |
+| RF-50 | `src/lib/dominio/esquemas.ts`; `leerCuerpo` en `guardas.ts` | `tests/esquemas.test.ts` |
 | RF-19 | `/api/sellar-lote` (recalcula con `previsualizarLote`) | "la firma de un lote no sirve para otro lote" |
 | RF-16 | `lote.ts` `previsualizarLote`; `/api/previsualizar` | "anticipa exactamente la raíz y el memo que después se sellan, sin llamar a la red"; "si todo es rojo no hay raíz ni memo"; "rechaza lotes vacíos o demasiado grandes" |
 | RF-17, RF-11, RNF-04 | `src/lib/servidor/guardas.ts` `limitar`, `leerJson`; `next.config` | Sin prueba automática; revisión de código |

@@ -2,14 +2,14 @@
 
 Medida el 08/11/2026 con `npm run cobertura` (Vitest con cobertura V8) sobre la lógica de `src/lib`. Las pantallas (`src/app`) se prueban de punta a punta con Playwright (`npm run e2e`) y no entran en este número.
 
-**Resultado:** 382 pruebas pasan (1 omitida) en 44 archivos.
+**Resultado:** 408 pruebas pasan (1 omitida) en 46 archivos.
 
 | Medida | Resultado |
 |---|---|
-| Líneas | 80,2 % (1221 de 1522) |
-| Sentencias | 77,3 % (1663 de 2150) |
-| Ramas | 75,7 % (1153 de 1523) |
-| Funciones | 84,7 % (364 de 430) |
+| Líneas | 80,6 % (1261 de 1564) |
+| Sentencias | 78,0 % (1728 de 2215) |
+| Ramas | 76,4 % (1212 de 1587) |
+| Funciones | 85,2 % (380 de 446) |
 
 ## Por capa
 
