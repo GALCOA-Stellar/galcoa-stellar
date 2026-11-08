@@ -4,7 +4,7 @@ import { ipDe, limitar } from "./guardas";
 import { cabeceraClave, remotoActivo } from "../datos/almacen-remoto";
 
 /**
- * Límite de pedidos en dos capas (patrón portado del proyecto de Hedera):
+ * Límite de pedidos en dos capas:
  * 1) en memoria, como siempre (rápido, "mejor esfuerzo" en un servidor sin estado);
  * 2) si hay base de datos configurada, un contador durable compartido entre instancias.
  * De la IP solo se guarda un resumen (hash), nunca la dirección. Si el contador durable falla, por defecto se FALLA CERRADO:

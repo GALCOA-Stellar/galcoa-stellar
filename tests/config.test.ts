@@ -12,7 +12,7 @@ describe("identificadores canónicos de Testnet", () => {
     expect(SERVICIO_ID).toMatch(/^G[A-Z2-7]{55}$/);
     expect(LOTE_EJEMPLO).toMatch(/^[0-9a-f]{64}$/);
   });
-  it.each(["README.md", "README.en.md", "docs/arquitectura/DESPLIEGUE.md", "docs/instawards/GUIA-DEMO-LAB.md"])(
+  it.each(["README.md", "README.en.md", "docs/arquitectura/DESPLIEGUE.md", "docs/demo/GUIA-DEMO-LAB.md"])(
     "%s nombra los mismos identificadores que el código",
     (archivo) => {
       const t = leer(archivo);

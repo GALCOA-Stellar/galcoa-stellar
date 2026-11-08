@@ -8,7 +8,7 @@
 3. **Four eyes:** a different person confirms. Whoever loaded cannot confirm.
 4. **Seal:** the batch fingerprint is anchored on Stellar. Show the transaction.
 5. **Verify without us:** in Stellar Lab Contract Explorer call `existe` (true) and open `getEvents` to see `lote_registrado`.
-6. **Escrow:** the escrow consults the registry before paying. See [`../instawards/GUIA-DEMO-LAB.md`](../instawards/GUIA-DEMO-LAB.md) for the exact steps.
+6. **Escrow:** the escrow consults the registry before paying. See [`../demo/GUIA-DEMO-LAB.md`](../demo/GUIA-DEMO-LAB.md) for the exact steps.
 
 ## Negative path
 1. A message whose numbers do not match: the verifier agent flags it and the entry is held (red, never sealed).

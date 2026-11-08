@@ -6,8 +6,7 @@ import { DATOS_PUBLICOS } from "./sello-comercio";
 
 /**
  * Ronda de confirmación por terceros: cada participante confirma por SU enlace privado el MISMO documento congelado.
- * Patrón portado del proyecto anterior del equipo (GALCOA sobre Hedera: invitaciones con token, estado agregado),
- * adaptado a esta app y sin tocar la confirmación simple del comercio (`confirmacion.ts`), que sigue igual.
+ * Invitaciones con token y estado agregado, sin tocar la confirmación simple del comercio (`confirmacion.ts`), que sigue igual.
  *
  * Qué prueba: que quien tenía cada enlace declaró "lo recibí así" o "no coincide", en esa fecha y hora del servidor.
  * Qué NO prueba: quién es cada persona ni que sean personas distintas (alguien podría reenviar un enlace). Por eso el

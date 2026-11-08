@@ -3,7 +3,7 @@ import { procesarMensaje } from "./flujo";
 import type { ConfigAgentes } from "./proveedor";
 
 /**
- * Evaluación de los dos agentes contra casos con respuesta conocida (patrón portado del proyecto de Hedera).
+ * Evaluación de los dos agentes contra casos con respuesta conocida.
  * Mide cuánto se equivoca la IA; NO decide nada de producción. Las etiquetas están congeladas con una huella.
  */
 export type Caso = { id: string; mensaje: string };

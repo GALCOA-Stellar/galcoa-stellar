@@ -46,4 +46,4 @@ GALCOA+ is a Stellar Testnet prototype that models lot validity as verifiable on
 Full model: [`../arquitectura/AMENAZAS.md`](../arquitectura/AMENAZAS.md).
 
 ## Fallback demo without the app
-Open Stellar Lab Contract Explorer on Testnet, load the canonical registry ID from [`../arquitectura/DESPLIEGUE.md`](../arquitectura/DESPLIEGUE.md), call `existe` and `obtener`, then `getEvents`. Step by step: [`../instawards/GUIA-DEMO-LAB.md`](../instawards/GUIA-DEMO-LAB.md).
+Open Stellar Lab Contract Explorer on Testnet, load the canonical registry ID from [`../arquitectura/DESPLIEGUE.md`](../arquitectura/DESPLIEGUE.md), call `existe` and `obtener`, then `getEvents`. Step by step: [`../demo/GUIA-DEMO-LAB.md`](../demo/GUIA-DEMO-LAB.md).

@@ -10,7 +10,7 @@ Red: **Testnet** (activos de prueba). Nada de esto es producción.
 | Cuenta del servicio y administradora | `GCRTRAAGPQJSP444J5QSIBM5MILRUI4XKL36Z4UW7OEE43TAC6X3EI3Y` |
 
 ## Fuente de verdad
-El estado y los eventos de estos contratos en la red. La web es una comodidad; cualquiera puede comprobar lo mismo en Stellar Lab (Contract Explorer y `getEvents`), ver [`docs/instawards/GUIA-DEMO-LAB.md`](../instawards/GUIA-DEMO-LAB.md).
+El estado y los eventos de estos contratos en la red. La web es una comodidad; cualquiera puede comprobar lo mismo en Stellar Lab (Contract Explorer y `getEvents`), ver [`docs/demo/GUIA-DEMO-LAB.md`](../demo/GUIA-DEMO-LAB.md).
 
 ## Dónde se configuran los identificadores
 Los IDs viven solo en `src/lib/config/contratos.ts`. La variable de entorno `CONTRATO_REGISTRO_ID` activa las funciones que firman contra el registro; `ESCROW_ID` ya no se usa (una variable vieja pisaba a la constante y dejaba vacío el historial de `/custodia`: se borra del hosting si existe). Si se redespliega, actualizar también el README, la página `/spec` y la evidencia.

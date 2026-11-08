@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-/** Pruebas que vigilan qué carpeta puede importar a cuál (patrón portado del proyecto de Hedera). Si alguien rompe un límite, falla acá. */
+/** Pruebas que vigilan qué carpeta puede importar a cuál. Si alguien rompe un límite, falla acá. */
 const archivos = (d: string): string[] => readdirSync(d).flatMap((n) => { const r = join(d, n); return statSync(r).isDirectory() ? archivos(r) : /\.(ts|tsx)$/.test(n) ? [r] : []; });
 const importes = (f: string) => [...readFileSync(f, "utf8").matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((m) => m[1]);
 // Solo cuentan los imports que existen al correr: los "import type" desaparecen al compilar y no acoplan capas.

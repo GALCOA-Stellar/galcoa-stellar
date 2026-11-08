@@ -43,7 +43,7 @@ It does not prove goods physically exist or that data is true in the world: it c
 | `escrow-entrega` (escrow) | `CDLP7XWLU6QU6JA6O4RCYPGKRA5UHQTHAAM7PYRGM5EWWJNLCK4T5GAX` |
 | Service / admin account | `GCRTRAAGPQJSP444J5QSIBM5MILRUI4XKL36Z4UW7OEE43TAC6X3EI3Y` |
 
-Previous deployments are deprecated. Testnet resets periodically, so these may stop existing. Details: [`docs/arquitectura/DESPLIEGUE.md`](docs/arquitectura/DESPLIEGUE.md). You can inspect both contracts in [Stellar Lab Contract Explorer](https://lab.stellar.org/smart-contracts/contract-explorer) (choose Testnet): see [`docs/instawards/GUIA-DEMO-LAB.md`](docs/instawards/GUIA-DEMO-LAB.md).
+Previous deployments are deprecated. Testnet resets periodically, so these may stop existing. Details: [`docs/arquitectura/DESPLIEGUE.md`](docs/arquitectura/DESPLIEGUE.md). You can inspect both contracts in [Stellar Lab Contract Explorer](https://lab.stellar.org/smart-contracts/contract-explorer) (choose Testnet): see [`docs/demo/GUIA-DEMO-LAB.md`](docs/demo/GUIA-DEMO-LAB.md).
 
 `existe(fingerprint)` means "registered and active"; a revoked fingerprint remains in the history but `existe` returns false.
 

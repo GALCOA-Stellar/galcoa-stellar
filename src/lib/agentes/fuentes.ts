@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 
 /**
  * Delimitación del texto de terceros que se le manda a un modelo.
- * Idea portada del proyecto anterior del equipo (GALCOA sobre Hedera, `untrusted-sources.ts`), adaptada a Stellar:
+ * Defensa contra órdenes escondidas en el texto:
  * el texto va entre marcas con un código aleatorio distinto en cada llamada, así lo que escribe la persona
  * no puede cerrar la marca ni hacerse pasar por instrucciones del sistema.
  */
