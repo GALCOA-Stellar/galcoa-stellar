@@ -18,7 +18,9 @@
     "e2e-2de2": "node scripts/e2e-2de2.mjs",
     "aprobar-reglas": "node scripts/aprobar-reglas.mjs",
     "intrusion": "node scripts/intrusion.mjs",
-    "sellar-etiquetas": "node scripts/sellar-etiquetas.mjs"
+    "sellar-etiquetas": "node scripts/sellar-etiquetas.mjs",
+    "extension:construir": "node scripts/construir-extension.mjs",
+    "extension:demo": "node scripts/servir-demo-extension.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",

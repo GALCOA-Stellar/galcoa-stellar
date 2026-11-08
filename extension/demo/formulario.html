@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página de demostración de la extensión (esqueleto)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 34rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.4; }
+    label { display: block; margin-top: .7rem; font-size: .9rem; }
+    input, textarea { width: 100%; padding: .4rem; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <h1>Entrega: página de demostración</h1>
+  <p>Con el esqueleto de la extensión instalado, cada campo se marca en verde, amarillo o rojo según las reglas. Datos de ejemplo, sin nombres reales.</p>
+  <form onsubmit="return false">
+    <label>Remito <input name="remito" value="R-0001"></label>
+    <label>Producto <input name="producto" value="Caja de insumos"></label>
+    <label>Unidad <input name="unidad" value="caja"></label>
+    <label>Cantidad pedida <input name="cantidadPedida" value="10"></label>
+    <label>Cantidad recibida <input name="cantidadRecibida" value="8"></label>
+    <label>Fecha de entrega (AAAA-MM-DD) <input name="fechaEntrega" value="2026-11-02"></label>
+    <label>Fecha de registro (AAAA-MM-DD) <input name="fechaRegistro" value="2026-11-03"></label>
+    <label>Cargó <input name="cargadoPor" value="persona-1"></label>
+    <label>Confirmó <input name="confirmadoPor" value="persona-1"></label>
+    <label>Huella SHA-256 del original (64 caracteres) <input name="evidenciaHash" value=""></label>
+    <label>Observación <textarea name="observacion" rows="2"></textarea></label>
+  </form>
+  <p><small>Valores iniciales pensados para mostrar rojo (cuatro ojos y diferencia sin observación) y amarillo (sin huella del original).</small></p>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "GALCOA+ (esqueleto en construcción)",
+  "version": "0.0.1",
+  "description": "Esqueleto de la extensión que va a revisar con reglas en código los datos cargados a mano. En construcción: no es una versión terminada.",
+  "content_scripts": [
+    {
+      "matches": ["http://localhost/*", "http://127.0.0.1/*"],
+      "js": ["dist/contenido.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

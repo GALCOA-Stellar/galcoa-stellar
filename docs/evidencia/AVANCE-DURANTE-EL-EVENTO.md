@@ -25,6 +25,7 @@ Todo corre en **Testnet** con activos de prueba, sin auditoría externa ni diner
 | **Examen de reglas congelado por huella**: cambiar una regla exige la aprobación de una persona | `evals/reglas/`, `npm run aprobar-reglas` |
 | **Arquitectura en capas vigilada por un test**; archivos del servidor marcados `server-only` | `tests/limites-de-arquitectura.test.ts` |
 | **Pruebas:** 382 automáticas, 80,2 % de las líneas cubiertas, pruebas de propiedades de la huella e integración continua | [`COBERTURA.md`](COBERTURA.md), `tests/` |
+| **Extensión de navegador (esqueleto en construcción):** en una página de `localhost` marca cada campo de una entrega en verde, amarillo o rojo con el mismo motor de reglas. No tiene permisos ni pedidos de red, y todavía no es una versión terminada ni está publicada | `extension/`, `tests/extension-campos.test.ts` |
 | **Interfaz en español e inglés**, tema claro y oscuro, ícono e imagen para compartir | `src/app/`, `src/lib/i18n/` |
 | **Licencia Apache-2.0** y guías para quien colabore (`AGENTS.md`, `design.md`) | `LICENSE`, [ADR 0011](../adr/0011-licencia-apache-2.md) |
 | **Tres entrevistas** con permiso para citar con nombre | [`INTERVIEWS-SUMMARY.md`](INTERVIEWS-SUMMARY.md) |

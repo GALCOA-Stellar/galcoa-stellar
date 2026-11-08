@@ -14,3 +14,6 @@ playwright-report/
 # Coordinador: marca local de la última consulta de cada uno
 .equipo/.local/
 coverage/
+
+# extensión (se genera con npm run extension:construir)
+extension/dist/
