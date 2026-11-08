@@ -1,6 +1,8 @@
-# Interview summary (English)
+# Customer discovery: interviews with three Argentine distributors
 
-Three interviews carried out by the team (the first two on 20/10/2026, the third afterwards), with an earlier version of GALCOA+ as context. The same three questions were asked to each person. The interviewees agreed to be quoted with their name and company (confirmed by the team). Contact details are not stored in this repository. Quotes are translated from Spanish; the Spanish originals are in `ENTREVISTAS-RESUMEN.md`.
+**What this is.** Early customer-discovery evidence for GALCOA+ on Stellar: three short interviews with distributors in Argentina about how they record deliveries, whether they have been unable to prove a delivery, and what brands ask from them to build trust. The first two interviews took place on 20/10/2026 and the third shortly after. The same three questions were asked to each person.
+
+**How to read it.** The interviewees agreed to be quoted by name and company; contact details are not stored in this repository. Quotes are translated from Spanish (originals in [`ENTREVISTAS-RESUMEN.md`](ENTREVISTAS-RESUMEN.md)). These are conversations with people the team knows, not a statistical sample, and they show declared interest, not contracts or payments.
 
 ## Interviewee 1: Rodrigo Olmedo, Cleanshop Rcia (cleaning-supplies distributor, NEA)
 Instagram: instagram.com/cleanshop.rcia
