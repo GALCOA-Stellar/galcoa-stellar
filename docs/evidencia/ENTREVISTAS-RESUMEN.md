@@ -23,7 +23,6 @@ Habló en primera persona: él mismo hace los repartos.
 ## Qué muestran (y qué no)
 - Los tres cuentan el mismo dolor: papel o planilla que se pierde, llega ilegible o depende de una persona, y **alguien termina pagando el costo** de lo que no se puede probar (la distribuidora o la marca).
 - Las marcas piden **comprobar historial y capacidad** a quien quiere representarlas. Para el entrevistado 3, mostrar que se usa tecnología y que se guardan los datos ayuda a conseguir mercadería a concesión o una relación a largo plazo.
-- Un entrevistado dijo que pediría el sistema a sus distribuidores: es **interés declarado**, no un contrato ni un pago.
+- Un entrevistado dijo que pediría el sistema a sus distribuidores, y el entrevistado 3 dijo que participaría de un piloto con su distribuidora: es **interés declarado**, no un contrato ni un pago.
 - **No hablan de demora de cobro ni de pagos con plazo.** El pago condicionado sigue siendo una hipótesis a probar en el sprint.
-- El entrevistado 3 no dijo si participaría de un piloto.
 - Son 3 entrevistas, no una muestra estadística.

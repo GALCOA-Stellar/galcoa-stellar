@@ -23,7 +23,6 @@ He spoke in the first person: he makes the deliveries himself.
 ## What they show (and what they do not)
 - All three describe the same pain: a paper delivery note that gets lost or comes back illegible, and **someone ends up paying the cost** of what cannot be proven (the distributor or the brand).
 - Brands ask would-be representatives to **prove history and capacity**. For interviewee 3, showing that you use technology and keep your data helps to get goods on consignment or a long-term relationship.
-- One interviewee said he would ask his distributors for the system: this is **declared interest**, not a contract or a payment.
+- One interviewee said he would ask his distributors for the system, and interviewee 3 said he would take part in a pilot with his distributor: this is **declared interest**, not a contract or a payment.
 - **They do not mention payment delays or deferred payment terms.** Payment against confirmation remains a hypothesis to test in the sprint.
-- Interviewee 3 did not say whether he would join a pilot.
 - Three interviews are not a statistical sample.
