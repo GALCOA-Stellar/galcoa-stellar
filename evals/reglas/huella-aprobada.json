@@ -1,0 +1,11 @@
+{
+  "total": "80b54e897d5e3b73656a86bb3d4b30db8a0733c36b472740f4bde248a94b15b7",
+  "componentes": {
+    "reglas": "0d81aee796161575659ecce020da6ff45c7c3f844884bdecc8d98f593fcf3b0d",
+    "casos": "faebff07f7725075ef475a883296beaf1b99ebdd13ef26317ae4a8bbda0217dd",
+    "medicion": "0175015ee94b5dcb52d6d94f02e757ba43346e6682f33185430eb3ee870ffcf0"
+  },
+  "aprobadaPor": "Claude (reorganización mecánica; falta revisión de una persona del equipo)",
+  "motivo": "Reorganización en capas: rules.ts se movió a src/lib/dominio y medir.ts cambió un import; las reglas y los casos son idénticos.",
+  "fecha": "2026-11-07T10:07:13.108Z"
+}

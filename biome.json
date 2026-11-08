@@ -1,0 +1,44 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
+	"files": {
+		"includes": [
+			"src/**",
+			"tests/**",
+			"*.ts",
+			"*.mts"
+		]
+	},
+	"formatter": {
+		"enabled": false
+	},
+	"assist": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"style": {
+				"noNonNullAssertion": "off",
+				"useImportType": "off",
+				"noParameterAssign": "off",
+				"useTemplate": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "error",
+				"noAssignInExpressions": "warn",
+				"useIterableCallbackReturn": "warn",
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "off",
+				"useButtonType": "warn",
+				"useAriaPropsSupportedByRole": "warn",
+				"useValidAnchor": "warn"
+			},
+			"performance": {
+				"noImgElement": "warn"
+			}
+		}
+	}
+}

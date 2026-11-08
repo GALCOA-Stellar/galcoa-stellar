@@ -1,0 +1,11 @@
+{
+  "name": "galcoa-comprobante",
+  "version": "0.2.0",
+  "description": "Arma y verifica lotes de comprobantes con árbol de Merkle (galcoa.stellar.comprobante.v2, verifica también v1). Sin dependencias.",
+  "type": "module",
+  "main": "index.js",
+  "exports": "./index.js",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "files": ["index.js", "README.md", "LICENSE"]
+}

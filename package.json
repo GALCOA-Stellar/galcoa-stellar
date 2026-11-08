@@ -1,0 +1,46 @@
+{
+  "name": "galcoa-stellar",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
+    "dev": "next dev -p 4180",
+    "build": "next build",
+    "start": "next start -p 4180",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint . --diagnostic-level=error",
+    "crear-cuenta": "node scripts/crear-cuenta-testnet.mjs",
+    "configurar-2de2": "node scripts/configurar-2de2.mjs",
+    "e2e-2de2": "node scripts/e2e-2de2.mjs",
+    "aprobar-reglas": "node scripts/aprobar-reglas.mjs",
+    "intrusion": "node scripts/intrusion.mjs",
+    "sellar-etiquetas": "node scripts/sellar-etiquetas.mjs"
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^4.9.0",
+    "@reown/appkit": "^1.8.24",
+    "@stellar/stellar-sdk": "^17.4.0",
+    "@stellar/varial-sdk": "^7.0.0",
+    "@vercel/speed-insights": "^2.1.0",
+    "@walletconnect/universal-provider": "^2.26.0",
+    "next": "^16.4.5",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.6",
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  },
+  "overrides": {
+    "zod": "^4.6.7"
+  }
+}

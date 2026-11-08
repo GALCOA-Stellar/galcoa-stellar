@@ -1,0 +1,214 @@
+{
+  "corrida": "8435d44b",
+  "fecha": "2026-11-06T10:52:30.793Z",
+  "red": "stellar:testnet",
+  "contratos": {
+    "registro": "CCNUNX6W7MPIPABZQOWOCBF46G4HDWQT6YW3OPKNT7ZGRA5MZKTRK5JV",
+    "escrow": "CASLCSQ3QYDJBPVLQS275HMMDDWJSNUQDS3Q7ES36ZPQWWADPRTID5G6"
+  },
+  "aviso": "Datos de prueba generados por el guion: no son datos reales de ninguna empresa. Testnet, sin dinero real.",
+  "criterios": {
+    "lotesRegistrados": {
+      "objetivo": "10 a 20",
+      "logrado": 12,
+      "ok": true
+    },
+    "comprobantesEmitidos": {
+      "logrado": 36,
+      "ok": true
+    },
+    "verificacionPorTercero": {
+      "objetivo": "al menos 3 sin el servidor de GALCOA",
+      "logrado": 5,
+      "detalle": [
+        {
+          "lote": 1,
+          "ok": true,
+          "tx": "f33407d7bbed6a8e0ca376b42a474c810c7b6364521c677d53712196f9d0a2d4"
+        },
+        {
+          "lote": 2,
+          "ok": true,
+          "tx": "076b26224caf5992e11c9e4fec887e1fbc91999edbd9037dbc719ef2c8b0d413"
+        },
+        {
+          "lote": 3,
+          "ok": true,
+          "tx": "4470c1896592450d6aeef007a2e5beb85b79255e0fdbf9849d8d75d0bfba9575"
+        },
+        {
+          "lote": 4,
+          "ok": true,
+          "tx": "d92067b28ef312852773d833cab036bde256aacf15e43ecafb3eac74807a7b43"
+        },
+        {
+          "lote": 5,
+          "ok": true,
+          "tx": "b14d3f7bbb36678c350baab7317d36012fb3ef949e9832f2b2bc6c2100caa9dd"
+        }
+      ],
+      "ok": true
+    },
+    "escrowDePuntaAPunta": {
+      "objetivo": "1 a 2 flujos",
+      "logrado": 2,
+      "ok": true
+    }
+  },
+  "lotes": [
+    {
+      "n": 1,
+      "memo": "ec5dedf0b5c18380f39a9d29b2021023e91a857e7849cda71b5d6739a6dc5b76",
+      "raiz": "987ac27231272a3b5686a439360fd0aaeb9ef7e96db5b2c658449da47fd303af",
+      "tx": "f33407d7bbed6a8e0ca376b42a474c810c7b6364521c677d53712196f9d0a2d4",
+      "ledger": 5587752,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/f33407d7bbed6a8e0ca376b42a474c810c7b6364521c677d53712196f9d0a2d4",
+      "comprobantes": 3
+    },
+    {
+      "n": 2,
+      "memo": "71c697025af9533323ed828e332de95aacf05a4f87fc51cf4fc499e9fc4039ba",
+      "raiz": "20f80e327402d991d4a89d0c293ec1d124cc696843e93fd8ce3b1167f382c8c7",
+      "tx": "076b26224caf5992e11c9e4fec887e1fbc91999edbd9037dbc719ef2c8b0d413",
+      "ledger": 5587756,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/076b26224caf5992e11c9e4fec887e1fbc91999edbd9037dbc719ef2c8b0d413",
+      "comprobantes": 3
+    },
+    {
+      "n": 3,
+      "memo": "e3da3fa5956089e4655426419d846a65dd859e902f48c71bcfe44378e935b218",
+      "raiz": "933bf7759f94b6e290c3682fc163c7604019beacf1bec2323d54da7aea29269a",
+      "tx": "4470c1896592450d6aeef007a2e5beb85b79255e0fdbf9849d8d75d0bfba9575",
+      "ledger": 5587760,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/4470c1896592450d6aeef007a2e5beb85b79255e0fdbf9849d8d75d0bfba9575",
+      "comprobantes": 3
+    },
+    {
+      "n": 4,
+      "memo": "6ed684828bd25905ea40307baa457dd34672461f17438e4697f17e429b15affe",
+      "raiz": "344bfea82ac85c9e2e00ca867eebbb9c8fadc5f89140d0249cd8239395bf8500",
+      "tx": "d92067b28ef312852773d833cab036bde256aacf15e43ecafb3eac74807a7b43",
+      "ledger": 5587763,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/d92067b28ef312852773d833cab036bde256aacf15e43ecafb3eac74807a7b43",
+      "comprobantes": 3
+    },
+    {
+      "n": 5,
+      "memo": "0cfd0bf800ba69b5096fac3414c5ec56304f84cd163c0b4f53e5c086d22dd2b5",
+      "raiz": "7423c023b6b4a0cc69efd3f818089e7352acd1b003462a1043c5b51a39493d22",
+      "tx": "b14d3f7bbb36678c350baab7317d36012fb3ef949e9832f2b2bc6c2100caa9dd",
+      "ledger": 5587768,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/b14d3f7bbb36678c350baab7317d36012fb3ef949e9832f2b2bc6c2100caa9dd",
+      "comprobantes": 3
+    },
+    {
+      "n": 6,
+      "memo": "24bd905e800c73973d66717acc8270606a0fe13e323d89c52ee117e68b203c21",
+      "raiz": "db422789a9439aeba5f3e165a553f7ff4b39904eb60ee1c7eaded80002a1d8fb",
+      "tx": "7eac66c38275614db0b8e35c969192cf647e2edda83f166c066ae275dbab1282",
+      "ledger": 5587773,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/7eac66c38275614db0b8e35c969192cf647e2edda83f166c066ae275dbab1282",
+      "comprobantes": 3
+    },
+    {
+      "n": 7,
+      "memo": "2f50512f2e8b795c63a0d0113ed07aa40a2927854183cdb22ba919a335a2dce8",
+      "raiz": "3dcced1779673408cfe902c00c18437b1e4ce0e64f682ef83a90a7f4c386a9a4",
+      "tx": "070f67c0d55deae1cf7da77113cc6fa260059610fc8ef3a1db2955dc17d3a253",
+      "ledger": 5587776,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/070f67c0d55deae1cf7da77113cc6fa260059610fc8ef3a1db2955dc17d3a253",
+      "comprobantes": 3
+    },
+    {
+      "n": 8,
+      "memo": "b0725d30c3edb7d7f7a657ccc843561b158e53ecc21f6899b4603fb8fae8fa25",
+      "raiz": "6eb748e7060f04f30707169f73e07644931922aa528f8cba262c5c255341d0c8",
+      "tx": "212a3db8201f58210e77f0b064c78cf8444532113d9533d931bcc00a2f5294bf",
+      "ledger": 5587780,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/212a3db8201f58210e77f0b064c78cf8444532113d9533d931bcc00a2f5294bf",
+      "comprobantes": 3
+    },
+    {
+      "n": 9,
+      "memo": "98af2d75431271751cd620869f750880b366b60a156c2f98ec639f863beb0a5d",
+      "raiz": "8b7e34cbd5746748c42a4c30e7192cd7d845f2e512bc7d0f6c85adc3e0f72d5c",
+      "tx": "98b62795bb78fad5e9024f5d40a60fc4cfa115ceee84f5cfc18574a033a87803",
+      "ledger": 5587783,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/98b62795bb78fad5e9024f5d40a60fc4cfa115ceee84f5cfc18574a033a87803",
+      "comprobantes": 3
+    },
+    {
+      "n": 10,
+      "memo": "ddf9ec21204691e717f37d69e78614617438a714dcd1ac014342f97e0126e485",
+      "raiz": "f40e9dd70eb14d28733555e10366030f2e95d1c2c8fea9b40117f00013dced1b",
+      "tx": "deb1a564ceba4a4647a4dad1f140c87f9f52193d7370fcfc606fa9f3caa1153e",
+      "ledger": 5587784,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/deb1a564ceba4a4647a4dad1f140c87f9f52193d7370fcfc606fa9f3caa1153e",
+      "comprobantes": 3
+    },
+    {
+      "n": 11,
+      "memo": "6d183e165a98787ed2106dfef358d40f6beb461f306e275b3c75ca368b5a3f94",
+      "raiz": "22e58d2fd747659fe88f6a4bc69f019b1bfcdb6dc70510d0ea6fc65d3016b175",
+      "tx": "1b84b4a0784aac088613b93ea3466a2fef300f6c00f15f419aef07ec27a77eae",
+      "ledger": 5587789,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/1b84b4a0784aac088613b93ea3466a2fef300f6c00f15f419aef07ec27a77eae",
+      "comprobantes": 3
+    },
+    {
+      "n": 12,
+      "memo": "b7b2f70dc67dc3efba6b452d48af54cd36a6ed5726b7b3e195bbdbeca086c2aa",
+      "raiz": "9a837640bded973179de9ce1ccc5b6b4d850f3ad35d9292214597f3f81f8b975",
+      "tx": "de0fdc866616f211d27ed3974d19dbdd57b53fb88971d4b58eb6ab31e8148f80",
+      "ledger": 5587792,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/de0fdc866616f211d27ed3974d19dbdd57b53fb88971d4b58eb6ab31e8148f80",
+      "comprobantes": 3
+    }
+  ],
+  "escrow": {
+    "asset": "GALCOAT (GBQC4QZYMKEMOYUCGKFEJFTVYFNKF447P4G6IAMCFPBQEAIR6GPA2RR5)",
+    "tokenContrato": "CCSN7GOJQKI2LNHR2QFSWXMKZPAG3DKAJBH4PS3W4CJQD24GMDUGCX6V",
+    "flujos": [
+      {
+        "flujo": 1,
+        "descripcion": "Pago liberado por lote verificado",
+        "ok": true,
+        "txDeposito": "ee7c3789eedad9cca2b33d35558556d6585e1e92a324ac0a1af245ad86d7dc60",
+        "txLiberacion": "d6e7e119e7d7f1caa37cc9bb485896538779a71fbb956ca1f68ff9811b84590b"
+      },
+      {
+        "flujo": 2,
+        "descripcion": "Lote revocado: sin pago y reembolso al vencer",
+        "ok": true,
+        "txRevocacion": "909637bfb1a9cbd92071c6154fd97613257ee3682cfda4d98816644df9a24898",
+        "txReembolso": "9cc04019d7246830c063fbc0aaa84cc6248303ce58cf55992cf8081b87b1b132"
+      }
+    ],
+    "historialFlujo1": [
+      "Depositado",
+      "Liberado"
+    ]
+  },
+  "cuentas": {
+    "servicio": "GCRTRAAGPQJSP444J5QSIBM5MILRUI4XKL36Z4UW7OEE43TAC6X3EI3Y",
+    "cargador": "GAJOYV5PYHJKPUF7RD4YE4TBTPIBSMNON6PN2UXCTF22WEG6UBIAC4WX",
+    "aprobador": "GAO5WPJ2544ZD6WXJQA45QYYKSOKL4PKFWNAQVV53VDOWC26NOM65SWK"
+  },
+  "costos": {
+    "registroPorLoteStroops": 200509,
+    "nota": "Promedio medido en testnet; no equivale a mainnet."
+  },
+  "fallos": 0
+}

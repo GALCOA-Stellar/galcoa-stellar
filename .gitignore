@@ -1,0 +1,15 @@
+node_modules
+.next
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.datos/
+
+# e2e
+test-results/
+playwright-report/
+
+# Coordinador: marca local de la última consulta de cada uno
+.equipo/.local/

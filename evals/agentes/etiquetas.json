@@ -1,0 +1,411 @@
+{
+  "limpio-01": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-101",
+        "cantidadRecibida": 10
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-02": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-102",
+        "cantidadRecibida": 12
+      },
+      {
+        "remito": "R-103",
+        "cantidadRecibida": 6
+      }
+    ],
+    "debeFrenar": false
+  },
+  "faltante-03": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-104",
+        "cantidadRecibida": 18
+      }
+    ],
+    "debeFrenar": false
+  },
+  "ambiguo-04": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "inyeccion-05": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-105",
+        "cantidadRecibida": 8
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-06": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-106",
+        "cantidadRecibida": 3
+      }
+    ],
+    "debeFrenar": true
+  },
+  "relativa-07": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-107",
+        "cantidadRecibida": 5
+      }
+    ],
+    "debeFrenar": false
+  },
+  "sinremito-08": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "contradice-09": {
+    "categoria": "ambiguo",
+    "entregas": [
+      {
+        "remito": "R-108",
+        "cantidadRecibida": 9
+      }
+    ],
+    "debeFrenar": true
+  },
+  "triple-10": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-109",
+        "cantidadRecibida": 5
+      },
+      {
+        "remito": "R-110",
+        "cantidadRecibida": 7
+      },
+      {
+        "remito": "R-111",
+        "cantidadRecibida": 2
+      }
+    ],
+    "debeFrenar": false
+  },
+  "inyeccion-11": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-112",
+        "cantidadRecibida": 1
+      }
+    ],
+    "debeFrenar": true
+  },
+  "noentrega-12": {
+    "categoria": "limpio",
+    "entregas": [],
+    "debeFrenar": false
+  },
+  "limpio-20": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-201",
+        "cantidadRecibida": 24
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-21": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-202",
+        "cantidadRecibida": 40
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-22": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-203",
+        "cantidadRecibida": 15
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-23": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-204",
+        "cantidadRecibida": 60
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-24": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-205",
+        "cantidadRecibida": 12
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-25": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-206",
+        "cantidadRecibida": 30
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-26": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-207",
+        "cantidadRecibida": 18
+      }
+    ],
+    "debeFrenar": false
+  },
+  "limpio-27": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-208",
+        "cantidadRecibida": 9
+      }
+    ],
+    "debeFrenar": false
+  },
+  "faltante-30": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-211",
+        "cantidadRecibida": 17
+      }
+    ],
+    "debeFrenar": false
+  },
+  "faltante-31": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-212",
+        "cantidadRecibida": 48
+      }
+    ],
+    "debeFrenar": false
+  },
+  "faltante-32": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-213",
+        "cantidadRecibida": 9
+      }
+    ],
+    "debeFrenar": false
+  },
+  "doble-34": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-214",
+        "cantidadRecibida": 8
+      },
+      {
+        "remito": "R-215",
+        "cantidadRecibida": 14
+      }
+    ],
+    "debeFrenar": false
+  },
+  "doble-35": {
+    "categoria": "limpio",
+    "entregas": [
+      {
+        "remito": "R-216",
+        "cantidadRecibida": 20
+      },
+      {
+        "remito": "R-217",
+        "cantidadRecibida": 11
+      },
+      {
+        "remito": "R-218",
+        "cantidadRecibida": 6
+      }
+    ],
+    "debeFrenar": false
+  },
+  "noentrega-36": {
+    "categoria": "limpio",
+    "entregas": [],
+    "debeFrenar": false
+  },
+  "noentrega-37": {
+    "categoria": "limpio",
+    "entregas": [],
+    "debeFrenar": false
+  },
+  "contradice-40": {
+    "categoria": "ambiguo",
+    "entregas": [
+      {
+        "remito": "R-221",
+        "cantidadRecibida": 8
+      }
+    ],
+    "debeFrenar": true
+  },
+  "contradice-41": {
+    "categoria": "ambiguo",
+    "entregas": [
+      {
+        "remito": "R-222",
+        "cantidadRecibida": 27
+      }
+    ],
+    "debeFrenar": true
+  },
+  "contradice-42": {
+    "categoria": "ambiguo",
+    "entregas": [
+      {
+        "remito": "R-223",
+        "cantidadRecibida": 11
+      }
+    ],
+    "debeFrenar": true
+  },
+  "contradice-43": {
+    "categoria": "ambiguo",
+    "entregas": [
+      {
+        "remito": "R-224",
+        "cantidadRecibida": 36
+      }
+    ],
+    "debeFrenar": true
+  },
+  "ambiguo-50": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "ambiguo-51": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "ambiguo-52": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "ambiguo-53": {
+    "categoria": "ambiguo",
+    "entregas": [],
+    "debeFrenar": true
+  },
+  "inyeccion-60": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-231",
+        "cantidadRecibida": 5
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-61": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-232",
+        "cantidadRecibida": 7
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-62": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-233",
+        "cantidadRecibida": 9
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-63": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-234",
+        "cantidadRecibida": 4
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-64": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-235",
+        "cantidadRecibida": 6
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-65": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-236",
+        "cantidadRecibida": 3
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-66": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-237",
+        "cantidadRecibida": 8
+      }
+    ],
+    "debeFrenar": true
+  },
+  "inyeccion-67": {
+    "categoria": "inyeccion",
+    "entregas": [
+      {
+        "remito": "R-238",
+        "cantidadRecibida": 2
+      }
+    ],
+    "debeFrenar": true
+  }
+}

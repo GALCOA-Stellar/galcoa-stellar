@@ -1,0 +1,115 @@
+/* Identidad de GALCOA+ (design.md del original): azul noche, amarillo para la acción principal, verde de marca, esquinas rectas. Sin selector de tema. */
+:root { --bg:#0c1a2e; --card:#13263f; --ink:#f7f8f6; --muted:#b5c3d6; --line:#2b4566; --ctl:#8fa3bd; --ok:#5fd0a8; --warn:#ffda47; --bad:#ffb3ad; --accent:#ffda47; --on-accent:#1e3a5f; --brand-green:#176a57; --mono:var(--font-plex-mono), ui-monospace, Consolas, monospace; }
+* { box-sizing: border-box; border-radius: 0 !important; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif; }
+.logo-img { height:44px; width:auto; }
+h1, h2 { letter-spacing:-.02em; }
+.card { border-top:3px solid var(--accent); }
+main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.6rem; margin: 0 0 4px; } h2 { font-size: 1.15rem; margin: 0 0 8px; }
+.sub { color: var(--muted); margin: 0 0 20px; }
+.card { background: var(--card); border:1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+textarea { width:100%; min-height: 220px; font: 13px/1.4 var(--mono); background: var(--bg); color: var(--ink); border:1px solid var(--ctl); border-radius: 8px; padding: 10px; }
+button { background: var(--accent); color:var(--on-accent); border:0; padding: 10px 16px; font-size: 1rem; font-weight:700; cursor: pointer; }
+button:disabled { opacity:.6; cursor: progress; }
+table { width:100%; border-collapse: collapse; font-size: .92rem; } td, th { text-align:left; padding: 6px 4px; border-bottom:1px solid var(--line); vertical-align: top; }
+.pill { border-radius: 999px; padding: 1px 10px; font-size: .8rem; font-weight: 600; border:1px solid currentColor; }
+.verde { color: var(--ok); } .amarillo { color: var(--warn); } .rojo { color: var(--bad); }
+code { font: 12.5px var(--mono); word-break: break-all; }
+.pasos li, .etiqueta-red, .pill { font-family: var(--mono); }
+.aviso { color: var(--muted); font-size: .88rem; } a { color: var(--accent); }
+.error { color: var(--bad); font-weight: 600; border:1px solid var(--bad); border-radius:8px; padding:8px 12px; background:color-mix(in srgb, var(--bad) 10%, transparent); }
+
+/* Marca y pasos */
+.marca { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom: 16px; }
+.logo { display:inline-grid; place-items:center; width:44px; height:44px; border-radius:12px; background:var(--accent); color:#fff; font-weight:800; letter-spacing:-.5px; }
+.lema { margin:0; color:var(--muted); }
+.etiqueta-red { margin-left:auto; font-size:.8rem; border:1px solid var(--line); border-radius:999px; padding:2px 10px; color:var(--muted); }
+.pasos { list-style:none; display:flex; gap:8px; padding:0; margin:0 0 16px; flex-wrap:wrap; }
+.pasos li { display:flex; align-items:center; gap:8px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:.92rem; background:var(--card); }
+.pasos li.actual { border-color:var(--accent); color:var(--ink); font-weight:600; }
+.pasos li.hecho { color:var(--ok); }
+.pasos .num { display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; border:1px solid currentColor; font-size:.78rem; }
+/* Mensajes y botones */
+.info { background:color-mix(in srgb, var(--accent) 12%, transparent); border:1px solid var(--accent); border-radius:8px; padding:8px 12px; }
+button.sec { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible, textarea:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+summary { cursor:pointer; margin:8px 0; color:var(--accent); }
+input[type=text], input:not([type]) { background:var(--bg); color:var(--ink); border:1px solid var(--ctl); border-radius:8px; padding:8px; max-width:100%; }
+/* Cifras, firmas y demostración */
+.cifras { display:flex; gap:12px; flex-wrap:wrap; margin:8px 0 12px; }
+.cifras div { flex:1 1 180px; border:1px solid var(--line); border-radius:10px; padding:10px 14px; display:flex; flex-direction:column; }
+.cifras b { font-size:1.8rem; line-height:1.1; } .cifras span { color:var(--muted); font-size:.88rem; }
+.firmas { display:flex; gap:12px; flex-wrap:wrap; margin:8px 0 12px; }
+.firma { flex:1 1 220px; border:1px dashed var(--line); border-radius:10px; padding:10px 14px; color:var(--muted); display:flex; gap:10px; align-items:center; }
+.firma span { display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; border:1px solid currentColor; }
+.firma.ok { border-style:solid; border-color:var(--ok); color:var(--ok); }
+.demo { border:1px dashed var(--warn); border-radius:10px; padding:10px 14px; background:color-mix(in srgb, var(--warn) 8%, transparent); }
+.gran { font-size:1.2rem; font-weight:600; }
+.ok-card { border-color:var(--ok); }
+.pie { margin-top:24px; }
+.puntos { list-style:none; padding:0; margin:8px 0; } .puntos li { padding:4px 0; }
+.enlace-cab { font-family:var(--mono); font-size:.85rem; border:1px solid var(--line); padding:2px 10px; text-decoration:none; }
+/* Carga y celular */
+.trabajando { display:flex; align-items:center; gap:10px; border:1px solid var(--accent); border-radius:8px; padding:8px 12px; background:color-mix(in srgb, var(--accent) 10%, transparent); }
+.spinner { width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--accent); border-radius:50%; animation:giro .8s linear infinite; flex:none; }
+@keyframes giro { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration:3s; } }
+button.chico { padding:2px 10px; font-size:.85rem; margin-left:8px; }
+button, summary { min-height:44px; }
+input:not([type]), input[type=text] { min-height:44px; font-size:16px; } /* 16px evita el zoom automático en iPhone */
+input[size] { width:100%; }
+table { display:block; overflow-x:auto; }
+@media (max-width: 560px) {
+  .etiqueta-red { margin-left:0; } main { padding: 16px 12px 48px; } td, th { padding: 6px 4px; }
+  button { width:100%; margin:4px 0; } button.chico { width:auto; }
+  .pasos li { font-size:.82rem; padding:4px 10px; } h1 { font-size:1.35rem; }
+  textarea { min-height:160px; } .card { padding:12px; }
+}
+
+/* Portada */
+.portada-cab { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 16px; border-bottom:1px solid var(--line); background:var(--card); }
+.portada-marcas { display:flex; align-items:center; gap:14px; }
+.portada-marcas .logo-img { height:32px; }
+.logo-stellar { height:18px; width:18px; vertical-align:-3px; }
+.sello-red { font-family:var(--mono); font-size:.85rem; border:1px solid var(--line); padding:3px 10px; color:var(--ink); }
+.portada-ingresar { background:var(--accent); color:var(--on-accent); font-weight:700; text-decoration:none; padding:10px 18px; min-height:44px; display:inline-flex; align-items:center; }
+.portada { max-width: 760px; margin:0 auto; padding: 32px 16px 64px; }
+.heroe h1 { font-size: clamp(2rem, 7vw, 3rem); line-height:1.08; margin: 8px 0 16px; }
+.heroe .sub { font-size:1.1rem; }
+.acciones { display:flex; flex-direction:column; gap:12px; margin:20px 0 8px; }
+@media (min-width:600px) { .acciones { flex-direction:row; } }
+.boton { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:12px 20px; background:var(--accent); color:var(--on-accent); font-weight:700; text-decoration:none; text-align:center; }
+.boton.sec { background:transparent; color:var(--ink); border:1px solid var(--ctl); }
+.boton.sec:hover { border-color:var(--ink); }
+.bloque { margin-top:40px; padding-top:8px; border-top:1px solid var(--line); }
+.pasos-portada { list-style:none; padding:0; margin:12px 0; display:grid; gap:12px; }
+.pasos-portada li { background:var(--card); border:1px solid var(--line); border-top:3px solid var(--accent); padding:14px 16px; display:flex; flex-direction:column; gap:4px; }
+.pasos-portada span { color:var(--muted); }
+
+/* De un vistazo y estado en la red */
+.vistazo { display:grid; gap:10px; margin:0 0 16px; }
+.vistazo div { border-left:3px solid var(--accent); padding:4px 14px; display:flex; flex-direction:column; gap:4px; }
+.vistazo span { color:var(--muted); font-size:.92rem; }
+.estado-red { border:1px solid var(--line); padding:10px 14px; margin:12px 0; background:var(--bg); }
+.estado-red h3 { margin:0 0 6px; font-size:1rem; }
+.estado-red dl { margin:0; display:grid; grid-template-columns:max-content 1fr; gap:4px 14px; }
+.estado-red dt { color:var(--muted); font-size:.88rem; } .estado-red dd { margin:0; }
+@media (max-width:600px) { .estado-red dl { grid-template-columns:1fr; } }
+
+.barra-nav { position:sticky; top:0; z-index:20; display:flex; gap:4px; overflow-x:auto; padding:8px 12px; background:var(--bg); border-bottom:1px solid var(--line); -webkit-overflow-scrolling:touch; }
+.barra-nav a { flex:0 0 auto; padding:10px 14px; min-height:44px; display:inline-flex; align-items:center; color:var(--muted); text-decoration:none; font-weight:600; border-bottom:2px solid transparent; }
+.barra-nav a:hover { color:var(--ink); }
+.barra-nav a[aria-current="page"] { color:var(--ink); border-bottom-color:var(--accent); }
+.paso-siguiente { max-width:900px; margin:32px auto 48px; padding:0 16px; }
+.paso-siguiente .boton { width:100%; }
+
+/* Tema claro opcional: el sitio arranca oscuro (identidad de la marca) y la persona puede cambiar con el botón. */
+:root[data-tema="claro"] { --bg:#f7f8f6; --card:#ffffff; --ink:#0c1a2e; --muted:#44546a; --line:#c5d0de; --ctl:#5a6f88; --ok:#176a57; --warn:#7a4f00; --bad:#a3261d; --accent:#1e3a5f; --on-accent:#ffffff; }
+:root[data-tema="claro"] .marca { background:#0c1a2e; padding:10px 14px; --muted:#b5c3d6; --ink:#f7f8f6; --accent:#ffda47; color:var(--ink); }
+.boton-tema { position:fixed; right:12px; bottom:12px; z-index:50; padding:6px 12px; font-size:.85rem; background:var(--card); color:var(--ink); border:1px solid var(--ctl); }
+
+/* Salto de navegación: visible solo al enfocarlo con el teclado. */
+.salto { position:absolute; left:8px; top:-48px; z-index:100; padding:8px 12px; background:var(--ink); color:var(--bg); border-radius:6px; }
+.salto:focus { top:8px; }
+#contenido:focus { outline:none; }

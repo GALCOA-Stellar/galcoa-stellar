@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  contratos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pruebas del contrato de registro
+        run: cargo test --manifest-path contracts/registro-lotes/Cargo.toml
+      - name: Pruebas del contrato de custodia
+        run: cargo test --manifest-path contracts/escrow-entrega/Cargo.toml
+      - name: Compilar la custodia (wasm) y mostrar su huella
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rustup target add wasm32v1-none
+          # La descarga desde github.com a veces devuelve 504: se reintenta y, si sigue, se baja por la API de GitHub.
+          ARCHIVO=stellar-cli-30.0.1-x86_64-unknown-linux-gnu.tar.gz
+          curl -fsSL --retry 5 --retry-all-errors --retry-delay 15 -o "$ARCHIVO" "https://github.com/stellar/stellar-cli/releases/download/v30.0.1/$ARCHIVO"             || gh release download v30.0.1 --repo stellar/stellar-cli --pattern "$ARCHIVO" --clobber
+          tar -xzf "$ARCHIVO" -C /usr/local/bin stellar
+          stellar --version
+          stellar contract build --manifest-path contracts/escrow-entrega/Cargo.toml
+          sha256sum contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: escrow-entrega-wasm
+          path: contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=moderate
+      - name: Buscar claves secretas de Stellar en archivos rastreados
+        run: |
+          if git grep -nE "\bS[A-Z2-7]{55}\b" -- . ':!package-lock.json'; then echo "Hay una clave secreta en el repositorio"; exit 1; fi
