@@ -3,7 +3,7 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { enviarRegistro, type DatosRegistro } from "@/lib/stellar/contrato";
 import { marcaDeTextoValida } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { registrarError, registrarEvento } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
@@ -24,8 +24,7 @@ export async function POST(req: Request) {
     registrarEvento({ flujo: datos.memo, paso: "registro-enviado", ...reg }); // la huella es el identificador común del flujo
     return NextResponse.json({ memo: datos.memo, cargador: datos.cargador, aprobador: datos.aprobador, ...reg });
   } catch (e) {
-    const permitido = ["El contrato rechazó", "Stellar rechazó", "La red no confirmó", "Falta la firma", "La firma de", "Mandá al menos", "Máximo", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"];
     registrarError("contrato/enviar", e);
-    return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo registrar" }, { status: 400 });
+    return NextResponse.json({ error: mensajePublico(e, ["El contrato rechazó", "Stellar rechazó", "La red no confirmó", "Falta la firma", "La firma de", "Mandá al menos", "Máximo"], "No se pudo registrar") }, { status: 400 });
   }
 }

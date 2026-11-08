@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { huellaDe } from "@/lib/aplicacion/evidencia";
 import { MIMES_AUDIO } from "@/lib/agentes/perito";
 import { limitarPedido } from "@/lib/servidor/limite";
-import { verificarOrigen } from "@/lib/servidor/guardas";
+import { verificarOrigen, mensajePublico } from "@/lib/servidor/guardas";
 import { cuentaAutorizada, emitirDesafioEvidencia } from "@/lib/stellar/firma";
 
 export const runtime = "nodejs";
@@ -23,7 +23,8 @@ export async function POST(req: Request) {
     const huella = huellaDe(new Uint8Array(await archivo.arrayBuffer()));
     return NextResponse.json({ ...emitirDesafioEvidencia(cuenta, huella), huella });
   } catch (e) {
-    const ok = e instanceof Error && ["Cuenta inválida", "Pedido de otro sitio", "Falta configurar"].some((p) => e.message.startsWith(p));
-    return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo emitir el mensaje a firmar" }, { status: 400 });
+    const publico = mensajePublico(e, ["Cuenta inválida", "Falta configurar"], "");
+    const ok = publico !== "";
+    return NextResponse.json({ error: ok ? publico : "No se pudo emitir el mensaje a firmar" }, { status: 400 });
   }
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { leerInvitacion, responderInvitacion } from "@/lib/datos/ronda";
 import { registrarError } from "@/lib/servidor/registro";
 
@@ -26,8 +26,9 @@ export async function POST(req: Request, { params }: Ctx) {
     const r = await responderInvitacion(token, c.respuesta, c.nombre, c.nota);
     return NextResponse.json(r, { headers: SIN_CACHE });
   } catch (e) {
-    const ok = e instanceof Error && ["Este enlace", "Respuesta no válida", "Escribí tu nombre", "Los datos de esta ronda", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"].some((p) => e.message.startsWith(p));
+    const publico = mensajePublico(e, ["Este enlace", "Respuesta no válida", "Escribí tu nombre", "Los datos de esta ronda"], "");
+    const ok = publico !== "";
     if (!ok) registrarError("invitacion/responder", e);
-    return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo registrar la respuesta" }, { status: 400, headers: SIN_CACHE });
+    return NextResponse.json({ error: ok ? publico : "No se pudo registrar la respuesta" }, { status: 400, headers: SIN_CACHE });
   }
 }

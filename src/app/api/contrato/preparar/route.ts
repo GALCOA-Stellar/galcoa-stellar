@@ -3,7 +3,7 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { cargadoresDelLote, previsualizarLote } from "@/lib/aplicacion/lote";
 import { prepararRegistro } from "@/lib/stellar/contrato";
 import { cuentasAutorizadas, identidadDe, marcarTexto } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
@@ -27,8 +27,7 @@ export async function POST(req: Request) {
     const texto = JSON.stringify(datos);
     return NextResponse.json({ datos: texto, marca: marcarTexto(texto), porFirmar, memo: vista.memo });
   } catch (e) {
-    const permitido = ["El contrato rechazó", "Hacen falta", "Falta configurar", "Mandá al menos", "Máximo", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"];
     registrarError("contrato/preparar", e);
-    return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo preparar el registro" }, { status: 400 });
+    return NextResponse.json({ error: mensajePublico(e, ["El contrato rechazó", "Hacen falta", "Falta configurar", "Mandá al menos", "Máximo"], "No se pudo preparar el registro") }, { status: 400 });
   }
 }

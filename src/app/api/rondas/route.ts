@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { crearRonda } from "@/lib/datos/ronda";
-import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
+import { leerCuerpo, mensajePublico } from "@/lib/servidor/guardas";
 import { pedidoRonda } from "@/lib/dominio/esquemas";
 import { puedeVerHistorial } from "@/lib/datos/historial";
 import { limpiarSiToca } from "@/lib/datos/privacidad";
@@ -20,8 +20,9 @@ export async function POST(req: Request) {
     const enlaces = Object.fromEntries(Object.entries(tokens).map(([rol, t]) => [rol, `/invitacion/${t}`]));
     return NextResponse.json({ id: ronda.id, enlaces, vence: ronda.vence, huella: ronda.huella }, { headers: { "cache-control": "no-store" } });
   } catch (e) {
-    const ok = e instanceof ErrorDeForma || e instanceof Error && ["Los datos del documento", "Los participantes", "Tienen que confirmar", "Elegí quiénes", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"].some((p) => e.message.startsWith(p));
+    const publico = mensajePublico(e, ["Los datos del documento", "Los participantes", "Tienen que confirmar", "Elegí quiénes"], "");
+    const ok = publico !== "";
     if (!ok) registrarError("rondas/crear", e);
-    return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo crear la ronda" }, { status: 400 });
+    return NextResponse.json({ error: ok ? publico : "No se pudo crear la ronda" }, { status: 400 });
   }
 }

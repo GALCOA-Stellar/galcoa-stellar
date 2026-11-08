@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { analizarFoto } from "@/lib/aplicacion/evidencia";
 import { MIMES_FOTO, peritarFoto } from "@/lib/agentes/perito";
 import { limitarPedido } from "@/lib/servidor/limite";
-import { verificarOrigen } from "@/lib/servidor/guardas";
+import { verificarOrigen, mensajePublico } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -29,6 +29,6 @@ export async function POST(req: Request) {
     const informe = await peritarFoto(bytes, archivo.type);
     return NextResponse.json(analizarFoto({ bytes, informe, fechaEntrega, fechaRegistro }));
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error && e.message.startsWith("Pedido de otro sitio") ? e.message : "No se pudo analizar la foto" }, { status: 400 });
+    return NextResponse.json({ error: mensajePublico(e, [], "No se pudo analizar la foto") }, { status: 400 });
   }
 }
