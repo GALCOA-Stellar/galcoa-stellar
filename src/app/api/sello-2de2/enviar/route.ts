@@ -4,7 +4,7 @@ import { armarArchivo, cargadoresDelLote, previsualizarLote, sellarLote } from "
 import { evaluarSello } from "@/lib/stellar/multifirma";
 import { comisionCobrada, cuentaSelladora2de2, enviarSelloFirmado, urlExplorador } from "@/lib/stellar/stellar";
 import { cuentasAutorizadas, identidadDe } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { operacionPorMemo, registrarOperacion } from "@/lib/datos/historial";
 import { liberar, reclamar } from "@/lib/datos/almacen";
@@ -71,8 +71,7 @@ export async function POST(req: Request) {
       archivo,
     });
   } catch (e) {
-    const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio", "Stellar rechazó"];
-    const msg = e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo completar el sellado";
+        const msg = mensajePublico(e, ["Mandá al menos un documento", "Máximo", "Stellar rechazó"], "No se pudo completar el sellado");
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

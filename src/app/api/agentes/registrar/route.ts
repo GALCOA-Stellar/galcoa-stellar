@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { marcarTexto } from "@/lib/stellar/firma";
-import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
+import { ErrorPublico, leerCuerpo, mensajePublico } from "@/lib/servidor/guardas";
 import { procesarMensaje } from "@/lib/agentes/flujo";
 import { proveedoresDesdeEntorno } from "@/lib/agentes/proveedor";
 import { pedidoRegistrar } from "@/lib/dominio/esquemas";
@@ -42,9 +42,8 @@ export async function POST(req: Request) {
     const datos = JSON.stringify({ propuestas: r.propuestas, hallazgos: r.hallazgos, cargadoPor: c.cargadoPor, hoy, emitidoEn: Date.now(), ...(evidenciaHash ? { evidenciaHash } : {}) });
     return NextResponse.json({ ...r, datos, marca: marcarTexto(datos) });
   } catch (e) {
-    if (e instanceof ErrorDeForma) return NextResponse.json({ error: e.message }, { status: 400 });
+    if (e instanceof ErrorPublico) return NextResponse.json({ error: e.message }, { status: 400 });
     registrarError("agentes/registrar", e);
-    const permitido = ["Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado", "El Agente"];
-    return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo procesar el mensaje" }, { status: 400 });
+    return NextResponse.json({ error: mensajePublico(e, ["El Agente"], "No se pudo procesar el mensaje") }, { status: 400 });
   }
 }

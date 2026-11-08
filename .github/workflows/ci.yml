@@ -28,7 +28,17 @@ jobs:
           tar -xzf "$ARCHIVO" -C /usr/local/bin stellar
           stellar --version
           stellar contract build --manifest-path contracts/escrow-entrega/Cargo.toml
-          sha256sum contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm
+          stellar contract build --manifest-path contracts/registro-lotes/Cargo.toml
+          sha256sum contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm contracts/registro-lotes/target/wasm32v1-none/release/registro_lotes.wasm
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Comparar el código desplegado en Testnet con el compilado (informativo)
+        # Informativo: si se corrige el contrato y todavía no se redespliega, no coincide y no es un error del código.
+        continue-on-error: true
+        run: |
+          npm ci --ignore-scripts
+          node scripts/comprobar-wasm.mjs contracts/registro-lotes/target/wasm32v1-none/release/registro_lotes.wasm contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
           name: escrow-entrega-wasm

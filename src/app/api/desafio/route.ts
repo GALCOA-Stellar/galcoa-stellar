@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { cuentaAutorizada, emitirDesafio } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 
@@ -17,8 +17,7 @@ export async function POST(req: Request) {
     if (!vista.memo) return NextResponse.json({ error: "Ningún documento pasó la verificación: no hay nada para sellar" }, { status: 400 });
     return NextResponse.json({ ...emitirDesafio(cuerpo.cuenta, vista.memo), memo: vista.memo });
   } catch (e) {
-    const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio", "Cuenta inválida", "Falta configurar"];
-    const msg = e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo emitir el mensaje a firmar";
+        const msg = mensajePublico(e, ["Mandá al menos un documento", "Máximo", "Cuenta inválida", "Falta configurar"], "No se pudo emitir el mensaje a firmar");
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

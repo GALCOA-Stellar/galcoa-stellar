@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
-import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
+import { leerCuerpo, mensajePublico } from "@/lib/servidor/guardas";
 import { pedidoPrevisualizar } from "@/lib/dominio/esquemas";
 
 export const runtime = "nodejs";
@@ -13,8 +13,7 @@ export async function POST(req: Request) {
     const cuerpo = await leerCuerpo(req, pedidoPrevisualizar);
     return NextResponse.json(previsualizarLote(cuerpo.documentos));
   } catch (e) {
-    const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio"];
-    const msg = e instanceof ErrorDeForma ? e.message : e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo revisar el lote";
+        const msg = mensajePublico(e, ["Mandá al menos un documento", "Máximo"], "No se pudo revisar el lote");
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

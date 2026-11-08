@@ -3,7 +3,7 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { armarTxSello } from "@/lib/stellar/multifirma";
 import { cuentaSelladora2de2, secuenciaDe } from "@/lib/stellar/stellar";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 
@@ -19,8 +19,7 @@ export async function POST(req: Request) {
     const xdr = armarTxSello(cuenta, await secuenciaDe(cuenta), vista.memo);
     return NextResponse.json({ xdr, memo: vista.memo, cuentaSelladora: cuenta, sellan: vista.sellan, afuera: vista.afuera });
   } catch (e) {
-    const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio"];
-    const msg = e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo preparar el sello";
+        const msg = mensajePublico(e, ["Mandá al menos un documento", "Máximo"], "No se pudo preparar el sello");
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

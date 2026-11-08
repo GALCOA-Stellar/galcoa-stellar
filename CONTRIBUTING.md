@@ -27,7 +27,7 @@ Frase corta en imperativo, en español, que diga el qué: `Corrige la renovació
 Ver [`SECURITY.md`](SECURITY.md). Un hallazgo de seguridad se reporta en privado al equipo, no en un issue público.
 
 ## Licencia
-Todavía sin licencia abierta: todos los derechos reservados hasta que el equipo decida (ver `docs/adr/`).
+Código bajo licencia **Apache-2.0** (ver [`LICENSE`](LICENSE)). Al contribuir aceptás que tu aporte se publique bajo esa misma licencia.
 
 ## Revisión automática antes de cada commit
 `npm install` activa un control (`.githooks/pre-commit`) que corre `lint`, `typecheck` y `test`, y frena si hay un archivo `.env` en el commit. Si falla, el commit no se hace: arreglá lo que muestra y repetí.

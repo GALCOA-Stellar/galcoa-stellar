@@ -34,3 +34,13 @@ describe("forma de los pedidos (Zod)", () => {
     await expect(leerCuerpo(texto, pedidoPrevisualizar)).rejects.toThrow("Se espera JSON");
   });
 });
+
+describe("mensajePublico", () => {
+  it("muestra el mensaje de un error público, el de un prefijo permitido y oculta todo lo demás", async () => {
+    const { ErrorPublico, mensajePublico } = await import("../src/lib/servidor/guardas");
+    expect(mensajePublico(new ErrorPublico("Se espera JSON"), [], "genérico")).toBe("Se espera JSON");
+    expect(mensajePublico(new Error("Máximo 50 documentos"), ["Máximo"], "genérico")).toBe("Máximo 50 documentos");
+    expect(mensajePublico(new Error("ECONNREFUSED 10.0.0.1:5432 clave=abc"), ["Máximo"], "genérico")).toBe("genérico");
+    expect(mensajePublico("texto", ["Máximo"], "genérico")).toBe("genérico");
+  });
+});

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { marcaDeTextoValida } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { leerJson, mensajePublico } from "@/lib/servidor/guardas";
 import { confirmarPropuestas } from "@/lib/agentes/flujo";
 import type { Propuesta } from "@/lib/agentes/registrador";
 import type { Hallazgo } from "@/lib/agentes/verificador";
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
     if (typeof estado.emitidoEn !== "number" || Date.now() - estado.emitidoEn > VIGENCIA_MS) return NextResponse.json({ error: "La carga venció. Volvé a cargarla para confirmarla." }, { status: 410 });
     return NextResponse.json(confirmarPropuestas(estado.propuestas, estado.hallazgos, estado.cargadoPor, c.confirmadoPor, estado.hoy, typeof estado.evidenciaHash === "string" ? estado.evidenciaHash : undefined));
   } catch (e) {
-    const permitido = ["Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"];
-    return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo confirmar" }, { status: 400 });
+        return NextResponse.json({ error: mensajePublico(e, [], "No se pudo confirmar") }, { status: 400 });
   }
 }

@@ -25,7 +25,7 @@ No prueba que la mercadería exista ni que un dato sea verdadero en el mundo: ve
 | Dos contratos Soroban en Testnet: un **registro** (exige tres firmas, una de ellas de un aprobador distinto de quien cargó) y una **custodia** de prueba que paga solo si el registro dice que el lote vale | Auditoría externa, dinero real o red principal |
 | Reglas con identificador (`ALC-…`), agentes con instrucciones probadas, defensa contra órdenes escondidas en el texto | Un motor de reglas completo: las reglas son **de demostración** |
 | Verificador público que falla cerrado: si la red no responde, no dice "verificado" | Usuarios reales ni demanda comprobada |
-| 362 pruebas automáticas e integración continua; cobertura medida de la lógica: 79,6 % de las líneas ([detalle](docs/evidencia/COBERTURA.md)) | Firma probada desde un celular real |
+| 382 pruebas automáticas e integración continua; cobertura medida de la lógica: 80,2 % de las líneas ([detalle](docs/evidencia/COBERTURA.md)) | Firma probada desde un celular real |
 
 ## Lo que aprendimos
 - Hablamos con roles de distribuidoras: el dolor de los remitos mal cargados existe, pero fue **interés declarado, no una validación**.
@@ -43,6 +43,7 @@ No prueba que la mercadería exista ni que un dato sea verdadero en el mundo: ve
 - Los contratos anteriores quedan como historial de prueba y no son la referencia. La testnet se reinicia periódicamente (próxima: 16/12/2026), así que estos identificadores pueden dejar de existir.
 - **Semántica:** `existe(huella)` significa "registrada y vigente"; una huella revocada sigue en el historial pero `existe` da falso. La custodia libera solo con la huella vigente; si se revoca, no paga y el depósito vuelve al pagador al vencer el plazo.
 - **Fuente de verdad:** el estado y los eventos de esos contratos en la red. La web es una comodidad.
+- **Comprobar que el código desplegado es el de este repositorio:** `node scripts/comprobar-wasm.mjs <registro.wasm> <escrow.wasm>` compara la huella del WASM en la red con el compilado (`stellar contract build`). La integración continua lo corre como informe en cada cambio ([resultado](docs/evidencia/CODIGO-DESPLEGADO.md)).
 
 ### Cómo funciona
 0. **Carga con palabras (`/agentes`):** un agente registrador ordena lo que cuenta la persona y un agente verificador independiente lo compara con el mensaje; solo pueden proponer y frenar. Requiere claves de IA (ver `.env.example`); sin ellas queda apagado. No cargar datos reales. Decisión: [`ADR 0009`](docs/adr/0009-dos-agentes-de-ia-que-proponen-y-frenan.md).
@@ -83,4 +84,4 @@ tests/ evals/ scripts/ public/ docs/
 
 </details>
 
-Proyecto independiente que usa la red Stellar; no cuenta con respaldo de la Stellar Development Foundation. Reglas de demostración, solo Testnet.
+Licencia: [Apache-2.0](LICENSE). Proyecto independiente que usa la red Stellar; no cuenta con respaldo de la Stellar Development Foundation. Reglas de demostración, solo Testnet.

@@ -20,4 +20,4 @@
 
 **Stack?** Next.js 16, React 19, TypeScript, `@stellar/stellar-sdk` 17, Rust with Soroban SDK 28, OpenZeppelin Stellar contracts 0.8.0, Vitest.
 
-**License?** None yet: all rights reserved while the repository is private ([`../../LICENSE-NOTICE.md`](../../LICENSE-NOTICE.md)).
+**License?** Apache-2.0 ([`../../LICENSE`](../../LICENSE)).

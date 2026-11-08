@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { armarArchivo, cargadoresDelLote, previsualizarLote, sellarLote } from "@/lib/aplicacion/lote";
 import { comisionCobrada, enviarMemo, urlExplorador } from "@/lib/stellar/stellar";
-import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
+import { leerCuerpo, mensajePublico } from "@/lib/servidor/guardas";
 import { pedidoSellar } from "@/lib/dominio/esquemas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { identidadDe, verificarAcceso } from "@/lib/stellar/firma";
@@ -52,8 +52,7 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     // Mensajes controlados: no se devuelven detalles internos de la red ni de la configuración.
-    const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio"];
-    const msg = e instanceof ErrorDeForma ? e.message : e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo completar el sellado";
+        const msg = mensajePublico(e, ["Mandá al menos un documento", "Máximo"], "No se pudo completar el sellado");
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }
