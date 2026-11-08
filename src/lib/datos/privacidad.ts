@@ -1,3 +1,4 @@
+import "server-only";
 import { createHash } from "node:crypto";
 import { borrar, guardar, listar, nuevoId } from "./almacen";
 import type { Confirmacion } from "./confirmacion";

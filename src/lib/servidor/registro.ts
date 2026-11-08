@@ -2,6 +2,7 @@
  * Registro único del servidor: una línea JSON por evento, sin objetos de error completos
  * (que podrían arrastrar datos de personas). Solo el mensaje, recortado.
  */
+import "server-only";
 const MAX = 300;
 
 function mensaje(e: unknown): string {

@@ -4,6 +4,7 @@
  * se entrega lo guardado al instante y se actualiza por detrás; pasado `maxEdad` se espera una lectura nueva.
  * Un fallo (null) no se guarda. Es memoria de cada instancia del servidor: sirve para repeticiones, no reemplaza la red.
  */
+import "server-only";
 const memoria = new Map<string, { t: number; v: unknown }>();
 const enCurso = new Map<string, Promise<unknown>>();
 

@@ -1,3 +1,4 @@
+import "server-only";
 import { conRespaldo, jsonDeRespuesta } from "./proveedor";
 import { validarInforme, type InformePerito } from "../dominio/multimedia";
 

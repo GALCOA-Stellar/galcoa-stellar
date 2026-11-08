@@ -1,3 +1,4 @@
+import "server-only";
 import { createHash } from "node:crypto";
 import { procesarMensaje } from "./flujo";
 import type { ConfigAgentes } from "./proveedor";

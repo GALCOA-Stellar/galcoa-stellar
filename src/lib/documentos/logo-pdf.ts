@@ -1,3 +1,4 @@
+import "server-only";
 
 // Logo de GALCOA+ para fondo claro (public/galcoa.svg convertido a PNG), embebido para que el PDF
 // no dependa de archivos ni de la red al renderizar y salga siempre con los mismos bytes.

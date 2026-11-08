@@ -1,3 +1,4 @@
+import "server-only";
 import { borrar, guardar, leer } from "./almacen";
 
 /**

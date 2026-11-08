@@ -1,3 +1,4 @@
+import { conCitas } from "./soporte/citas";
 import { describe, expect, it } from "vitest";
 import { evaluar } from "../src/lib/dominio/rules";
 import { confirmarPropuestas, procesarMensaje, entradaDe } from "../src/lib/agentes/flujo";
@@ -87,7 +88,7 @@ describe("flujo completo", () => {
     expect(confirmarPropuestas(r.propuestas, r.hallazgos, "ana", "luis", HOY).documentos).toHaveLength(1);
   });
   it("si falla el verificador, el dato no se da por verificado", async () => {
-    const cfg: ConfigAgentes = { ...config({ entregas: [buena] }, {}), verificador: async () => { throw new Error("caído"); } };
+    const cfg: ConfigAgentes = { ...config({ entregas: [conCitas(buena, "Llegaron 10 cajas")] }, {}), verificador: async () => { throw new Error("caído"); } };
     const r = await procesarMensaje(cfg, "Llegaron 10 cajas", "ana", HOY);
     expect(r.hallazgos).toBeNull();
     expect(r.vistas[0].evaluacion.veredicto).not.toBe("verde");

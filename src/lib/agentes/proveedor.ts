@@ -1,5 +1,6 @@
 // Acceso a los modelos de IA. Sin dependencias nuevas: solo fetch. Los modelos son configurables.
 // Regla del proyecto: la IA no decide el veredicto; estos proveedores solo devuelven texto JSON que se valida después.
+import "server-only";
 export type Pedido = {
   sistema: string;
   usuario: string;

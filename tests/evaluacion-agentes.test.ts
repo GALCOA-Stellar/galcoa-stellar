@@ -1,3 +1,4 @@
+import { conCitas } from "./soporte/citas";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { calcularMetricas, correrEvaluacion, huellaDeEtiquetas, informe, type Caso, type Etiquetas } from "../src/lib/agentes/evaluacion";
@@ -12,7 +13,7 @@ const modelos = { registrador: "a", verificador: "b" };
 /** Modelo "ideal": conoce la respuesta correcta y frena lo que debe frenarse. */
 function ideal(): ConfigAgentes {
   const id = (u: string) => casos.find((c) => u.includes(c.mensaje.slice(0, 40)))?.id ?? "";
-  const registrador: Proveedor = async ({ usuario }) => JSON.stringify({ entregas: (etiquetas[id(usuario)]?.entregas ?? []).map((e) => ({ remito: e.remito, producto: "x", unidad: "cajas", cantidadPedida: e.cantidadRecibida, cantidadRecibida: e.cantidadRecibida, fechaEntrega: "2026-11-05" })) });
+  const registrador: Proveedor = async ({ usuario }) => JSON.stringify({ entregas: (etiquetas[id(usuario)]?.entregas ?? []).map((e) => conCitas({ remito: e.remito, producto: "x", unidad: "cajas", cantidadPedida: e.cantidadRecibida, cantidadRecibida: e.cantidadRecibida, fechaEntrega: "2026-11-05" }, (casos.find((c) => c.id === id(usuario))?.mensaje ?? "").slice(0, 40))) });
   const verificador: Proveedor = async ({ usuario }) => {
     const e = etiquetas[id(usuario)];
     return JSON.stringify({ hallazgos: e?.debeFrenar && e.entregas.length > 0 ? [{ indice: 0, campo: "mensaje", severidad: "critica", mensaje: "no fiel" }] : [] });

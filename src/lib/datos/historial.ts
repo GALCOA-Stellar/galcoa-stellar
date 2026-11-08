@@ -1,3 +1,4 @@
+import "server-only";
 import { guardar, leer, listar, nuevoId } from "./almacen";
 import { demoActivo } from "../servidor/demo";
 import { leerSesion } from "../stellar/firma";

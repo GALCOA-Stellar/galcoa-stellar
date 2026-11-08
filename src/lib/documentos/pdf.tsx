@@ -1,3 +1,4 @@
+import "server-only";
 import { Document, Image, Page, renderToBuffer, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { create as crearQr } from "qrcode";
 import { GALCOA_LOGO_PNG } from "./logo-pdf";

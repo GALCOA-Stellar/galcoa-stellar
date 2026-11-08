@@ -1,3 +1,4 @@
+import "server-only";
 import { evaluar, type Evaluacion } from "../dominio/rules";
 import { AVISO_FUENTES, delimitarFuente } from "./fuentes";
 import { jsonDeRespuesta, type Proveedor } from "./proveedor";

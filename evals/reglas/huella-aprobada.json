@@ -5,7 +5,7 @@
     "casos": "faebff07f7725075ef475a883296beaf1b99ebdd13ef26317ae4a8bbda0217dd",
     "medicion": "0175015ee94b5dcb52d6d94f02e757ba43346e6682f33185430eb3ee870ffcf0"
   },
-  "aprobadaPor": "Claude (reorganización mecánica; falta revisión de una persona del equipo)",
-  "motivo": "Reorganización en capas: rules.ts se movió a src/lib/dominio y medir.ts cambió un import; las reglas y los casos son idénticos.",
-  "fecha": "2026-11-07T10:07:13.108Z"
+  "aprobadaPor": "Juan Facundo Ayala (con examen 30/30 corrido el 08/11/2026)",
+  "motivo": "Revisión por una persona del equipo del examen de reglas: 30 casos, sensibilidad, especificidad y exactitud al 100 %; las reglas y los casos no cambiaron desde la reorganización en capas.",
+  "fecha": "2026-11-08T12:14:59.298Z"
 }

@@ -1,3 +1,4 @@
+import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { randomBytes } from "node:crypto";
 import { evaluar } from "../dominio/rules";

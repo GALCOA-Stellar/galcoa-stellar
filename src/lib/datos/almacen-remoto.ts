@@ -4,6 +4,7 @@
  * La clave de servicio vive solo en variables de entorno y nunca llega al navegador. Tablas y RLS: supabase/migraciones/.
  * Estado: escrito y probado con un servidor simulado; NO probado todavía contra un proyecto real de Supabase.
  */
+import "server-only";
 export const remotoActivo = (env: Record<string, string | undefined> = process.env) => Boolean(env.SUPABASE_URL && env.SUPABASE_SERVICE_KEY);
 
 /** Las claves nuevas (sb_...) no son JWT: solo van en apikey. Las viejas (JWT) también en authorization. */

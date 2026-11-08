@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { marcarTexto } from "@/lib/stellar/firma";
-import { leerJson } from "@/lib/servidor/guardas";
+import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
 import { procesarMensaje } from "@/lib/agentes/flujo";
 import { proveedoresDesdeEntorno } from "@/lib/agentes/proveedor";
-import { MAX_MENSAJE } from "@/lib/agentes/registrador";
+import { pedidoRegistrar } from "@/lib/dominio/esquemas";
 import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const ID_INTERNO = /^[A-Za-z0-9._-]{1,60}$/;
 const hoyUTC = () => new Date().toISOString().slice(0, 10);
 
 // Tope global por día (mejor esfuerzo en un servidor sin estado): cada pedido cuesta dos llamadas a un modelo.
@@ -34,18 +33,16 @@ export async function POST(req: Request) {
   const config = proveedoresDesdeEntorno();
   if (!config) return NextResponse.json({ error: "Los agentes de IA no están configurados en este entorno" }, { status: 503 });
   try {
-    const c = (await leerJson(req, 10_000)) as { mensaje?: unknown; cargadoPor?: unknown; evidenciaHash?: unknown };
-    if (typeof c.mensaje !== "string" || c.mensaje.trim() === "") return NextResponse.json({ error: "Escribí qué entrega querés cargar" }, { status: 400 });
-    if (c.mensaje.length > MAX_MENSAJE) return NextResponse.json({ error: `El mensaje es demasiado largo (máximo ${MAX_MENSAJE} caracteres)` }, { status: 400 });
-    if (typeof c.cargadoPor !== "string" || !ID_INTERNO.test(c.cargadoPor)) return NextResponse.json({ error: "Falta quién carga (un identificador interno, sin datos personales)" }, { status: 400 });
+    const c = await leerCuerpo(req, pedidoRegistrar, 10_000);
     if (!hayCupo()) return NextResponse.json({ error: "Se alcanzó el tope diario de uso de los agentes" }, { status: 429 });
     const hoy = hoyUTC();
-    const evidenciaHash = typeof c.evidenciaHash === "string" && /^[0-9a-f]{64}$/.test(c.evidenciaHash) ? c.evidenciaHash : undefined;
+    const evidenciaHash = c.evidenciaHash;
     const r = await procesarMensaje(config, c.mensaje, c.cargadoPor, hoy, evidenciaHash);
     // El estado del chat se devuelve firmado por el servidor: así la confirmación no puede cambiar lo que dijeron los agentes.
     const datos = JSON.stringify({ propuestas: r.propuestas, hallazgos: r.hallazgos, cargadoPor: c.cargadoPor, hoy, emitidoEn: Date.now(), ...(evidenciaHash ? { evidenciaHash } : {}) });
     return NextResponse.json({ ...r, datos, marca: marcarTexto(datos) });
   } catch (e) {
+    if (e instanceof ErrorDeForma) return NextResponse.json({ error: e.message }, { status: 400 });
     registrarError("agentes/registrar", e);
     const permitido = ["Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado", "El Agente"];
     return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo procesar el mensaje" }, { status: 400 });

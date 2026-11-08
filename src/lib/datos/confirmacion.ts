@@ -1,3 +1,4 @@
+import "server-only";
 import { createHash } from "node:crypto";
 import { canonical } from "../dominio/canonical";
 import { guardar, leer, nuevoId } from "./almacen";

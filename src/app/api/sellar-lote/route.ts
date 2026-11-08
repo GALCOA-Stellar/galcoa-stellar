@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { armarArchivo, cargadoresDelLote, previsualizarLote, sellarLote } from "@/lib/aplicacion/lote";
 import { comisionCobrada, enviarMemo, urlExplorador } from "@/lib/stellar/stellar";
-import { leerJson } from "@/lib/servidor/guardas";
+import { ErrorDeForma, leerCuerpo } from "@/lib/servidor/guardas";
+import { pedidoSellar } from "@/lib/dominio/esquemas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { identidadDe, verificarAcceso } from "@/lib/stellar/firma";
 import { operacionPorMemo, registrarOperacion } from "@/lib/datos/historial";
@@ -17,12 +18,12 @@ export async function POST(req: Request) {
   // Este modo no puede asegurar los cuatro ojos: quien manda los datos escribe `cargadoPor`. En producción queda apagado (se usa el sello 2 de 2).
   if (process.env.NODE_ENV === "production" && process.env.PERMITIR_UNA_FIRMA !== "1") return NextResponse.json({ error: "Este modo no está habilitado: usá la aprobación de dos personas" }, { status: 403 });
   try {
-    const cuerpo = (await leerJson(req)) as { documentos?: unknown; acceso?: unknown };
+    const cuerpo = await leerCuerpo(req, pedidoSellar);
     // La firma está atada a la huella exacta de este lote: se recalcula acá, sin confiar en lo que diga el navegador.
-    const vista = previsualizarLote(cuerpo.documentos as unknown[]);
+    const vista = previsualizarLote(cuerpo.documentos);
     const acceso = verificarAcceso(cuerpo.acceso, vista.memo);
     if (!acceso.ok) return NextResponse.json({ error: acceso.motivo }, { status: 401 });
-    if (cargadoresDelLote(cuerpo.documentos as unknown[]).includes(identidadDe(acceso.cuenta)))
+    if (cargadoresDelLote(cuerpo.documentos).includes(identidadDe(acceso.cuenta)))
       return NextResponse.json({ error: "Cuatro ojos: quien aprueba el sello no puede haber cargado documentos de este lote" }, { status: 403 });
     // Un reintento no sella dos veces (ni paga dos comisiones).
     const previa = await operacionPorMemo(vista.memo!);
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
     if (rev.tipo === "espera") return NextResponse.json({ error: "Un envío anterior de este lote todavía no se confirmó en la red. Esperá un minuto y volvé a intentar: no se envía otra transacción mientras tanto." }, { status: 409 });
     if (rev.tipo === "ninguno" && !(await reclamar("sellos", clave, "enviando", 10 * 60_000))) return NextResponse.json({ error: "Ya hay un envío en curso para este lote. Esperá unos segundos y revisá el historial." }, { status: 409 });
     let r: Awaited<ReturnType<typeof sellarLote>>;
-    try { r = await sellarLote(cuerpo.documentos as unknown[], rev.tipo === "exito" ? async () => rev.tx : enviarMemo); }
+    try { r = await sellarLote(cuerpo.documentos, rev.tipo === "exito" ? async () => rev.tx : enviarMemo); }
     catch (e) {
       if (await anotarSiQuedoPendiente(e, vista.memo!, "una-firma")) return NextResponse.json({ error: "La red tardó en confirmar. No se perdió nada: volvé a intentar en un minuto y se completa sin enviar otra transacción." }, { status: 202 });
       await liberar("sellos", clave, "enviando"); throw e;
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
   } catch (e) {
     // Mensajes controlados: no se devuelven detalles internos de la red ni de la configuración.
     const permitido = ["Mandá al menos un documento", "Máximo", "Se espera JSON", "Cuerpo demasiado grande", "Pedido de otro sitio"];
-    const msg = e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo completar el sellado";
+    const msg = e instanceof ErrorDeForma ? e.message : e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo completar el sellado";
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

@@ -1,3 +1,4 @@
+import "server-only";
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { borrar, guardar, leer, liberar, nuevoId, reclamar } from "./almacen";
 import { huellaDe } from "./confirmacion";
