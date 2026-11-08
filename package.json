@@ -23,6 +23,7 @@
     "extension:demo": "node scripts/servir-demo-extension.mjs"
   },
   "dependencies": {
+    "@cosmosapp/pay_sdk": "^2.4.0",
     "@react-pdf/renderer": "^4.9.0",
     "@reown/appkit": "^1.8.24",
     "@stellar/stellar-sdk": "^17.4.0",
