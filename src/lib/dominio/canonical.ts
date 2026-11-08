@@ -3,13 +3,13 @@ import { createHash } from "node:crypto";
 /** Canonización simplificada: claves en orden alfabético, sin espacios. Suficiente para objetos planos y anidados del demo. */
 export function canonical(v: unknown): string {
   if (v === null || typeof v !== "object") return JSON.stringify(v);
-  if (Array.isArray(v)) return "[" + v.map(canonical).join(",") + "]";
+  if (Array.isArray(v)) return `[${v.map(canonical).join(",")}]`;
   const o = v as Record<string, unknown>;
   return (
     "{" +
     Object.keys(o)
       .sort()
-      .map((k) => JSON.stringify(k) + ":" + canonical(o[k]))
+      .map((k) => `${JSON.stringify(k)}:${canonical(o[k])}`)
       .join(",") +
     "}"
   );

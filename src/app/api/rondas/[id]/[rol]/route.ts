@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { idValido } from "@/lib/datos/almacen";
-import { ipDe, verificarOrigen } from "@/lib/servidor/guardas";
+import { verificarOrigen } from "@/lib/servidor/guardas";
 import { puedeVerHistorial } from "@/lib/datos/historial";
 import { reemitirInvitacion, revocarInvitacion, ROLES, type Rol } from "@/lib/datos/ronda";
+import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 type Ctx = { params: Promise<{ id: string; rol: string }> };
@@ -25,7 +26,7 @@ async function accion(req: Request, { params }: Ctx, que: "revocar" | "reemitir"
     return NextResponse.json({ enlace: `/invitacion/${n.token}`, vence: n.vence }, { headers: { "cache-control": "no-store" } });
   } catch (e) {
     const ok = e instanceof Error && ["Esa ronda", "Ese participante", "Pedido de otro sitio"].some((p) => e.message.startsWith(p));
-    if (!ok) console.error("rondas/accion:", e);
+    if (!ok) registrarError("rondas/accion", e);
     return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo completar la acción" }, { status: 400 });
   }
 }

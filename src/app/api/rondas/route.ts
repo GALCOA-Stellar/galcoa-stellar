@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { crearRonda } from "@/lib/datos/ronda";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 import { puedeVerHistorial } from "@/lib/datos/historial";
 import { limpiarSiToca } from "@/lib/datos/privacidad";
+import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ id: ronda.id, enlaces, vence: ronda.vence, huella: ronda.huella }, { headers: { "cache-control": "no-store" } });
   } catch (e) {
     const ok = e instanceof Error && ["Los datos del documento", "Los participantes", "Tienen que confirmar", "Elegí quiénes", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"].some((p) => e.message.startsWith(p));
-    if (!ok) console.error("rondas/crear:", e);
+    if (!ok) registrarError("rondas/crear", e);
     return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo crear la ronda" }, { status: 400 });
   }
 }

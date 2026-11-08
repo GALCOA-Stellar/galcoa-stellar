@@ -43,7 +43,8 @@ function secretoDeMarca(): Buffer | null {
   const configurado = process.env.DESAFIO_SECRETO;
   if (configurado) return Buffer.from(configurado, "utf8");
   if (process.env.NODE_ENV === "production") return null; // en producción es obligatorio
-  return (secretoLocal ??= randomBytes(32)); // desarrollo local: secreto efímero
+  secretoLocal ??= randomBytes(32);
+  return secretoLocal; // desarrollo local: secreto efímero
 }
 
 const marcaDe = (mensaje: string, secreto: Buffer) => createHmac("sha256", secreto).update(mensaje).digest("hex");
@@ -52,19 +53,19 @@ const marcaDe = (mensaje: string, secreto: Buffer) => createHmac("sha256", secre
 export function marcarTexto(texto: string): string {
   const secreto = secretoDeMarca();
   if (!secreto) throw new Error("Falta configurar DESAFIO_SECRETO");
-  return marcaDe("datos:" + texto, secreto);
+  return marcaDe(`datos:${texto}`, secreto);
 }
 export function marcaDeTextoValida(texto: string, marca: unknown): boolean {
   const secreto = secretoDeMarca();
   if (!secreto || typeof marca !== "string") return false;
-  const esperada = marcaDe("datos:" + texto, secreto);
+  const esperada = marcaDe(`datos:${texto}`, secreto);
   return igualConstante(marca, esperada);
 }
 
 /** Cuentas autorizadas a confirmar sellos (variable CUENTAS_AUTORIZADAS, separadas por coma). */
 export function cuentasAutorizadas(): string[] | null {
   const crudo = process.env.CUENTAS_AUTORIZADAS;
-  if (!crudo || !crudo.trim()) return null;
+  if (!crudo?.trim()) return null;
   return crudo.split(",").map((c) => c.trim().split("=")[0].trim()).filter(Boolean);
 }
 
@@ -95,7 +96,7 @@ export function emitirDesafio(cuenta: string, memo: string, ahora = Date.now()):
   if (!StrKey.isValidEd25519PublicKey(cuenta)) throw new Error("Cuenta inválida");
   if (!/^[0-9a-f]{64}$/.test(memo)) throw new Error("Huella inválida");
   const mensaje = mensajeDeConfirmacion({ cuenta, memo, vence: new Date(ahora + VIGENCIA_MS).toISOString(), codigo: randomBytes(16).toString("hex") });
-  return { mensaje, marca: marcaDe("desafio:" + mensaje, secreto) };
+  return { mensaje, marca: marcaDe(`desafio:${mensaje}`, secreto) };
 }
 
 export type Acceso = { cuenta: string; mensaje: string; marca: string; firma: string };
@@ -111,7 +112,7 @@ export function verificarAcceso(acceso: unknown, memoEsperado: string | null, ah
   const a = acceso as Partial<Acceso> | null;
   if (!a || typeof a.cuenta !== "string" || typeof a.mensaje !== "string" || typeof a.marca !== "string" || typeof a.firma !== "string")
     return { ok: false, motivo: "Falta la firma de una cuenta autorizada" };
-  const esperada = marcaDe("desafio:" + a.mensaje, secreto);
+  const esperada = marcaDe(`desafio:${a.mensaje}`, secreto);
   if (!igualConstante(a.marca, esperada))
     return { ok: false, motivo: "El mensaje firmado no fue emitido por este servidor" };
   const campos = new Map(a.mensaje.split("\n").map((l) => { const i = l.indexOf(": "); return i > 0 ? [l.slice(0, i), l.slice(i + 2)] as [string, string] : ["", ""] as [string, string]; }));
@@ -139,7 +140,7 @@ export function emitirDesafioSesion(cuenta: string, ahora = Date.now()): { mensa
   if (!secreto) throw new Error("Falta configurar DESAFIO_SECRETO");
   if (!StrKey.isValidEd25519PublicKey(cuenta)) throw new Error("Cuenta inválida");
   const mensaje = [ENCABEZADO, `Acción: ${ACCION_SESION}`, `Cuenta: ${cuenta}`, `Red: ${RED}`, `Vence: ${new Date(ahora + VIGENCIA_MS).toISOString()}`, `Código: ${randomBytes(16).toString("hex")}`].join("\n");
-  return { mensaje, marca: marcaDe("desafio:" + mensaje, secreto) };
+  return { mensaje, marca: marcaDe(`desafio:${mensaje}`, secreto) };
 }
 
 /** Verifica el inicio de sesión y devuelve el pase "cuenta|identidad|vence.marca". */
@@ -148,7 +149,7 @@ export function abrirSesion(acceso: unknown, ahora = Date.now()): { ok: true; pa
   if (!secreto) return { ok: false, motivo: "El servidor no está configurado" };
   const a = acceso as Partial<Acceso> | null;
   if (!a || typeof a.cuenta !== "string" || typeof a.mensaje !== "string" || typeof a.marca !== "string" || typeof a.firma !== "string") return { ok: false, motivo: "Falta la firma" };
-  const esperada = marcaDe("desafio:" + a.mensaje, secreto);
+  const esperada = marcaDe(`desafio:${a.mensaje}`, secreto);
   if (!igualConstante(a.marca, esperada)) return { ok: false, motivo: "El mensaje no fue emitido por este servidor" };
   const campos = new Map(a.mensaje.split("\n").map((l) => { const i = l.indexOf(": "); return i > 0 ? [l.slice(0, i), l.slice(i + 2)] as [string, string] : ["", ""] as [string, string]; }));
   if (campos.get("Acción") !== ACCION_SESION) return { ok: false, motivo: "El mensaje no es de inicio de sesión" };
@@ -159,7 +160,7 @@ export function abrirSesion(acceso: unknown, ahora = Date.now()): { ok: true; pa
   if (!verificarFirmaSep53(a.cuenta, a.mensaje, a.firma)) return { ok: false, motivo: "La firma no es válida" };
   const identidad = identidadDe(a.cuenta);
   const cuerpo = `${a.cuenta}|${identidad}|${ahora + VIGENCIA_SESION_MS}`;
-  return { ok: true, pase: `${Buffer.from(cuerpo).toString("base64url")}.${marcaDe("sesion:" + cuerpo, secreto)}`, cuenta: a.cuenta, identidad };
+  return { ok: true, pase: `${Buffer.from(cuerpo).toString("base64url")}.${marcaDe(`sesion:${cuerpo}`, secreto)}`, cuenta: a.cuenta, identidad };
 }
 
 /** Comprueba un pase de sesión. */
@@ -169,7 +170,7 @@ export function leerSesion(pase: unknown, ahora = Date.now()): { cuenta: string;
   const [b64, marca] = pase.split(".");
   if (!b64 || !marca) return null;
   const cuerpo = Buffer.from(b64, "base64url").toString("utf8");
-  const esperada = marcaDe("sesion:" + cuerpo, secreto);
+  const esperada = marcaDe(`sesion:${cuerpo}`, secreto);
   if (!igualConstante(marca, esperada)) return null;
   const [cuenta, identidad, vence] = cuerpo.split("|");
   if (!cuenta || !identidad || !(Number(vence) > ahora) || !cuentaAutorizada(cuenta)) return null;
@@ -186,7 +187,7 @@ export function emitirDesafioEvidencia(cuenta: string, huella: string, ahora = D
   if (!StrKey.isValidEd25519PublicKey(cuenta)) throw new Error("Cuenta inválida");
   if (!/^[0-9a-f]{64}$/.test(huella)) throw new Error("Huella inválida");
   const mensaje = [ENCABEZADO, `Acción: ${ACCION_EVIDENCIA}`, `Cuenta: ${cuenta}`, `Huella de la evidencia: ${huella}`, `Red: ${RED}`, `Vence: ${new Date(ahora + VIGENCIA_MS).toISOString()}`, `Código: ${randomBytes(16).toString("hex")}`].join("\n");
-  return { mensaje, marca: marcaDe("desafio:" + mensaje, secreto) };
+  return { mensaje, marca: marcaDe(`desafio:${mensaje}`, secreto) };
 }
 
 /** Dice si una cuenta autorizada firmó, con un mensaje emitido por este servidor y vigente, la huella esperada. */
@@ -195,7 +196,7 @@ export function evidenciaRespaldada(acceso: unknown, huellaEsperada: string, aho
   const a = acceso as Partial<Acceso> | null;
   if (!secreto || !a || typeof a.cuenta !== "string" || typeof a.mensaje !== "string" || typeof a.marca !== "string" || typeof a.firma !== "string") return { cuentaAutorizada: false, firmaValida: false };
   const autorizada = cuentaAutorizada(a.cuenta);
-  if (!igualConstante(a.marca, marcaDe("desafio:" + a.mensaje, secreto))) return { cuentaAutorizada: autorizada, firmaValida: false };
+  if (!igualConstante(a.marca, marcaDe(`desafio:${a.mensaje}`, secreto))) return { cuentaAutorizada: autorizada, firmaValida: false };
   const campos = new Map(a.mensaje.split("\n").map((l) => { const i = l.indexOf(": "); return i > 0 ? [l.slice(0, i), l.slice(i + 2)] as [string, string] : ["", ""] as [string, string]; }));
   const vence = Date.parse(campos.get("Vence") ?? "");
   const coincide = campos.get("Acción") === ACCION_EVIDENCIA && campos.get("Cuenta") === a.cuenta && campos.get("Huella de la evidencia") === huellaEsperada && campos.get("Red") === RED && Number.isFinite(vence) && ahora <= vence;

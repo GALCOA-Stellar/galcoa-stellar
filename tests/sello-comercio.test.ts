@@ -12,7 +12,7 @@ describe("sello de la confirmación del comercio", () => {
   });
   it("escribir 'comercio-...' a mano no sirve (rojo)", () => {
     expect(veredicto({ ...doc, confirmadoPor: "comercio-12345678" })).toBe("rojo");
-    expect(veredicto({ ...doc, confirmadoPor: "comercio-12345678-" + "0".repeat(32) })).toBe("rojo");
+    expect(veredicto({ ...doc, confirmadoPor: `comercio-12345678-${"0".repeat(32)}` })).toBe("rojo");
   });
   it("cambiar un dato después de la confirmación invalida el sello (rojo)", () => {
     expect(veredicto({ ...doc, confirmadoPor: sello, cantidadRecibida: 9, observacion: "x" })).toBe("rojo");

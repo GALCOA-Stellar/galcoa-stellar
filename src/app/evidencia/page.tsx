@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { LogoGalcoa } from "@/app/logos";
 
 type Regla = { id: string; atributo: string; ok: boolean; gravedad: "critica" | "advertencia"; detalle: string };
 type Resultado = { tipo: "foto" | "voz"; huella: string; bytes: number; veredicto: "verde" | "amarillo" | "rojo"; reglas: Regla[]; transcripcion?: string; aviso: string; cuentaQueRespalda?: string; error?: string };
@@ -80,9 +81,9 @@ export default function Evidencia() {
       const trozos: Blob[] = [];
       rec.ondataavailable = (ev) => trozos.push(ev.data);
       rec.onstop = () => {
-        flujo.getTracks().forEach((t) => t.stop());
+        for (const t of flujo.getTracks()) t.stop();
         const tipo = rec.mimeType.split(";")[0] || "audio/webm";
-        setAudio(new File(trozos, "grabacion." + (tipo.split("/")[1] ?? "webm"), { type: tipo }));
+        setAudio(new File(trozos, `grabacion.${tipo.split("/")[1] ?? "webm"}`, { type: tipo }));
         setMensaje(null);
         setGrabando(false);
       };
@@ -125,8 +126,7 @@ export default function Evidencia() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div><h1>Evidencia: fotos y voz</h1><p className="lema">Revisamos si una foto o un audio muestra señales de edición, repetición o falta de respaldo.</p></div>
         <span className="etiqueta-red">Testnet · prototipo</span>
       </header>
@@ -140,7 +140,7 @@ export default function Evidencia() {
             <label>Fecha de entrega <input type="date" value={fechaEntrega} onChange={(e) => setFechaEntrega(e.target.value)} /></label>{" "}
             <label>Fecha de registro <input type="date" value={fechaRegistro} onChange={(e) => setFechaRegistro(e.target.value)} /></label>
           </p>
-          <div className="acciones"><button className="boton" disabled={!foto || cargandoFoto}>{cargandoFoto ? "Revisando la foto…" : "Revisar foto"}</button></div>
+          <div className="acciones"><button type="submit" className="boton" disabled={!foto || cargandoFoto}>{cargandoFoto ? "Revisando la foto…" : "Revisar foto"}</button></div>
         </form>
         {resFoto?.error && <p className="error" role="alert">{resFoto.error}</p>}
       </section>
@@ -171,7 +171,7 @@ export default function Evidencia() {
                 </>
               )}
             </details>
-            <div className="acciones"><button className="boton" disabled={!audio || cargandoVoz} onClick={analizarVoz}>{cargandoVoz ? "Revisando el audio…" : "Revisar audio"}</button></div>
+            <div className="acciones"><button type="button" className="boton" disabled={!audio || cargandoVoz} onClick={analizarVoz}>{cargandoVoz ? "Revisando el audio…" : "Revisar audio"}</button></div>
           </>
         )}
         {resVoz?.error && <p className="error" role="alert">{resVoz.error}</p>}

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { ipDe, limitar } from "./guardas";
 import { cabeceraClave, remotoActivo } from "../datos/almacen-remoto";
+import { registrarError } from "./registro";
 
 /**
  * Límite de pedidos en dos capas:
@@ -42,7 +43,7 @@ export async function limitarPedido(req: Request, max = 8): Promise<NextResponse
     return null;
   } catch (e) {
     if (process.env.GALCOA_LIMITE_FALLA === "abierto") return null;
-    console.error("limite:", e instanceof Error ? e.message : e);
+    registrarError("limite", e);
     return NextResponse.json({ error: "El control de pedidos no responde. Probá en un minuto." }, { status: 503, headers: { "retry-after": "60" } });
   }
 }

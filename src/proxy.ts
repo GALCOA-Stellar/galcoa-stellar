@@ -18,7 +18,7 @@ export function proxy(request: NextRequest) {
     "style-src 'self' 'unsafe-inline'", // React usa estilos en línea; los scripts son lo que más importa cerrar
     `img-src 'self' data: blob:${wc ? " https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com https://*.web3modal.org" : ""}`,
     `font-src 'self'${wc ? " https://fonts.reown.com" : ""}`,
-    `connect-src 'self'${wc ? " " + WC_RED : ""}`,
+    `connect-src 'self'${wc ? ` ${WC_RED}` : ""}`,
     wc ? "frame-src https://verify.walletconnect.org https://verify.walletconnect.com https://secure.walletconnect.org https://secure.walletconnect.com" : "frame-src 'none'",
     "frame-ancestors 'none'",
     "base-uri 'self'",

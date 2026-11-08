@@ -20,14 +20,14 @@ export const idValido = (id: unknown): id is string => typeof id === "string" &&
 
 function ruta(coleccion: string, id: string): string {
   if (!COLECCION.test(coleccion) || !ID.test(id)) throw new Error("Registro inválido");
-  return join(RAIZ(), coleccion, id + ".json");
+  return join(RAIZ(), coleccion, `${id}.json`);
 }
 
 export async function guardar<T extends object>(coleccion: string, id: string, dato: T): Promise<void> {
   if (remotoActivo()) { ruta(coleccion, id); return guardarRemoto(coleccion, id, dato); }
   const destino = ruta(coleccion, id);
   await mkdir(join(RAIZ(), coleccion), { recursive: true });
-  const tmp = destino + "." + randomBytes(4).toString("hex") + ".tmp";
+  const tmp = `${destino}.${randomBytes(4).toString("hex")}.tmp`;
   await writeFile(tmp, JSON.stringify(dato), "utf8");
   await rename(tmp, destino); // escritura atómica: nunca queda un archivo a medias
 }
@@ -36,7 +36,7 @@ export async function guardar<T extends object>(coleccion: string, id: string, d
 export async function reclamar(coleccion: string, id: string, motivo: string, caducaMs?: number): Promise<boolean> {
   if (!/^[a-z]{3,20}$/.test(motivo)) throw new Error("Registro inválido");
   if (remotoActivo()) { ruta(coleccion, id); return reclamarRemoto(coleccion, id, motivo, caducaMs); }
-  const destino = ruta(coleccion, id) + "." + motivo + ".lock";
+  const destino = `${ruta(coleccion, id)}.${motivo}.lock`;
   await mkdir(join(RAIZ(), coleccion), { recursive: true });
   try { await writeFile(destino, "", { flag: "wx" }); return true; } catch { /* ya existe: ¿está vencido? */ }
   if (caducaMs !== undefined) {
@@ -55,7 +55,7 @@ export async function reclamar(coleccion: string, id: string, motivo: string, ca
 export async function liberar(coleccion: string, id: string, motivo: string): Promise<void> {
   if (!/^[a-z]{3,20}$/.test(motivo)) throw new Error("Registro inválido");
   if (remotoActivo()) { ruta(coleccion, id); return liberarRemoto(coleccion, id, motivo); }
-  try { await unlink(ruta(coleccion, id) + "." + motivo + ".lock"); } catch { /* ya no estaba */ }
+  try { await unlink(`${ruta(coleccion, id)}.${motivo}.lock`); } catch { /* ya no estaba */ }
 }
 
 /** Borra el registro y sus archivos de reclamo. Devuelve true si existía. */
@@ -66,7 +66,7 @@ export async function borrar(coleccion: string, id: string): Promise<boolean> {
   try { await unlink(archivo); } catch { existia = false; }
   try {
     const carpeta = join(RAIZ(), coleccion);
-    for (const n of await readdir(carpeta)) if (n.startsWith(id + ".") && n.endsWith(".lock")) await unlink(join(carpeta, n)).catch(() => {});
+    for (const n of await readdir(carpeta)) if (n.startsWith(`${id}.`) && n.endsWith(".lock")) await unlink(join(carpeta, n)).catch(() => {});
   } catch { /* la carpeta no existe */ }
   return existia;
 }

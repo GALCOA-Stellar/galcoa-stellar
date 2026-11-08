@@ -1,3 +1,4 @@
+import { LogoGalcoa } from "@/app/logos";
 export const metadata = { title: "Privacidad · GALCOA+ en Stellar" };
 
 /** Aviso de privacidad (Ley 25.326). Borrador técnico: no reemplaza la revisión de un abogado. */
@@ -5,8 +6,7 @@ export default function Privacidad() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div><h1>Privacidad</h1><p className="lema">Qué datos guardamos, para qué y cómo los podés borrar.</p></div>
         <a className="enlace-cab" href="/demo">Volver</a>
       </header>

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { LogoGalcoa } from "@/app/logos";
 
 type Vista = {
   rol: "proveedor" | "comprador" | "transportista";
@@ -50,8 +51,7 @@ export default function Invitacion({ params }: { params: Promise<{ token: string
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div>
           <h1>Confirmá esta entrega</h1>
           <p className="lema">Sin crear cuenta. Tarda un minuto.</p>
@@ -77,8 +77,8 @@ export default function Invitacion({ params }: { params: Promise<{ token: string
               <p><label>Comentario (opcional, sin datos personales): <input value={nota} maxLength={300} onChange={(e) => setNota(e.target.value)} size={40} /></label></p>
               <p className="aviso">Guardamos tu nombre, tu respuesta, la fecha y hora y tu comentario por 30 días después de que venza el enlace, solo para dejar constancia de esta entrega. <a href="/privacidad" target="_blank" rel="noopener">Más información</a>.</p>
               <p>
-                <button onClick={() => responder("confirmada")} disabled={enviando || !nombreOk}>Sí, coincide</button>{" "}
-                <button className="sec" onClick={() => responder("no_coincide")} disabled={enviando || !nombreOk}>No coincide</button>
+                <button type="button" onClick={() => responder("confirmada")} disabled={enviando || !nombreOk}>Sí, coincide</button>{" "}
+                <button type="button" className="sec" onClick={() => responder("no_coincide")} disabled={enviando || !nombreOk}>No coincide</button>
               </p>
               <p className="aviso">Tu respuesta queda registrada con fecha y hora. Declarás lo que viste; GALCOA+ no verifica quién sos ni que la mercadería exista.</p>
             </>

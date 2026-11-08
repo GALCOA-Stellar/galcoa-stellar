@@ -6,63 +6,9 @@ import { ConfirmacionComercio } from "../confirmacion-comercio";
 import { conectarBilletera, firmarAutorizacion, firmarMensaje, firmarTransaccion, type Via } from "@/lib/stellar/billetera";
 
 import { REGISTRO_ID as CONTRATO_REGISTRO, ESCROW_ID as CONTRATO_ESCROW } from "@/lib/config/contratos";
-const H = "ab".repeat(32); // huella de ejemplo (64 caracteres hexadecimales) del documento original
-const base = { unidad: "caja", fechaEntrega: "2026-11-02", fechaRegistro: "2026-11-02", cargadoPor: "operador-01", confirmadoPor: "receptor-01", evidenciaHash: H };
-const EJEMPLO = [
-  { ...base, remito: "R-0001", producto: "Aceite 900 ml", cantidadPedida: 200, cantidadRecibida: 200 },
-  { ...base, remito: "R-0002", producto: "Yerba 1 kg", cantidadPedida: 120, cantidadRecibida: 120 },
-  { ...base, remito: "R-0003", producto: "Fideos 500 g", cantidadPedida: 300, cantidadRecibida: 298, observacion: "2 cajas dañadas en el flete" },
-  { ...base, remito: "R-0004", producto: "Arroz 1 kg", cantidadPedida: 200, cantidadRecibida: 198 },
-  { ...base, remito: "R-0005", producto: "Azúcar 1 kg", cantidadPedida: 80, cantidadRecibida: 80, evidenciaHash: undefined },
-  { ...base, remito: "R-0006", producto: "Harina 1 kg", cantidadPedida: 50, cantidadRecibida: 50, confirmadoPor: "operador-01" },
-  { ...base, remito: "R-0007", producto: "Sal 500 g", cantidadPedida: 60, cantidadRecibida: 60, fechaRegistro: "2026-11-08" },
-];
-
-type Veredicto = "verde" | "amarillo" | "rojo";
-type Resultado = { posicion: number; veredicto: Veredicto; reglas: { id: string; ok: boolean; detalle: string }[]; enLote: boolean };
-type Respuesta = {
-  resultados: Resultado[];
-  sellado: { raiz: string; memo: string; cantidadHojas: number; txHash: string; ledger: number } | null;
-  comprobantes: Record<string, unknown>[];
-  explorador: string | null;
-  archivo?: unknown;
-  error?: string;
-  firmadoPor?: string | string[];
-  comisionPagadaPor?: string | null;
-};
-type Vista = {
-  reglasVersion: string; red: string; sellan: number; afuera: number; raiz: string | null; memo: string | null;
-  documentos: { posicion: number; remito: string | null; veredicto: Veredicto; enLote: boolean; avisos: { id: string; detalle: string }[] }[];
-  error?: string;
-};
-
-const ETIQUETA: Record<Veredicto, { icono: string; texto: string }> = {
-  verde: { icono: "✔", texto: "Verificado" },
-  amarillo: { icono: "▲", texto: "Declarado" },
-  rojo: { icono: "✖", texto: "Requiere revisión" },
-};
-const Pill = ({ v }: { v: Veredicto }) => <span className={`pill ${v}`}>{ETIQUETA[v].icono} {ETIQUETA[v].texto}</span>;
-const corta = (g: string) => `${g.slice(0, 5)}…${g.slice(-4)}`;
-const PLANTILLA_CSV = "remito,producto,unidad,cantidadPedida,cantidadRecibida,fechaEntrega,fechaRegistro,cargadoPor,confirmadoPor,evidenciaHash,observacion\n";
-
-/** Convierte un error técnico en un mensaje claro que dice qué pasó y qué hacer. */
-function explicar(e: unknown): string {
-  const m = e instanceof Error ? e.message : String(e ?? "");
-  if (e instanceof SyntaxError) return "Los datos no tienen el formato esperado. Revisá la planilla o volvé a cargarla.";
-  if (/User declined|rejected|denied|declin/i.test(m)) return "Rechazaste la firma en la billetera. Si fue sin querer, volvé a intentar.";
-  if (/not installed|Varial|wallet/i.test(m) && !/firma|cuenta/i.test(m)) return "No encontramos la billetera Varial. Instalala en tu navegador, ponela en Testnet y recargá la página.";
-  if (/passphrase|network mismatch|wrong network|Public Global|Futurenet/i.test(m)) return "La billetera está en otra red. Cambiala a Testnet (Test SDF Network) en Varial y volvé a intentar.";
-  if (/BUSY|TRY_AGAIN_LATER|timeout|timed out|504|503/i.test(m)) return "La red de prueba está ocupada o tardó en responder. Esperá unos segundos y volvé a intentar: no se registró nada dos veces.";
-  if (/MismaPersona|same person|misma persona/i.test(m)) return "Quien carga y quien aprueba tienen que ser personas distintas. Usá dos cuentas diferentes.";
-  if (/insufficient|tx_insufficient|underfunded|no existe la cuenta|account not found|op_no_source/i.test(m)) return "La cuenta no existe o no tiene saldo de prueba en Testnet. Fondeala con Friendbot y volvé a intentar.";
-  if (/ya (fue )?registrad|already|YaRegistrad|Duplicad/i.test(m)) return "Este lote ya figura registrado en la red: no se puede registrar dos veces. Verificalo en /verificar.";
-  return m || "Algo salió mal. Probá de nuevo.";
-}
-const TAREAS: Record<string, string> = {
-  revisando: "Revisando los documentos…", preparando: "Preparando el paquete para firmar…", enviando: "Confirmando en Stellar (unos 10 segundos)…",
-  firmando: "Esperando tu firma en la billetera… (mirá la ventana de Varial)", confirmando: "Confirmando en la red…",
-  contrato: "Confirmando el registro en el contrato (unos 10 segundos)…", "contrato-prep": "Preparando el registro…",
-};
+import { LogoGalcoa } from "@/app/logos";
+import { EJEMPLO, PLANTILLA_CSV, TAREAS, corta, explicar, type Respuesta, type Vista } from "./datos";
+import { DetalleResultados, VistaPrevia } from "./vistas";
 
 export default function Pagina() {
   const [texto, setTexto] = useState(JSON.stringify(EJEMPLO, null, 2));
@@ -120,7 +66,7 @@ export default function Pagina() {
     try {
       setCuenta(await conectarBilletera(como));
       setVia(como);
-    } catch (e) { setError(como === "celular" ? "No pude conectar Varial del celular. Abrí Varial, elegí Testnet y escaneá el código de nuevo. " + (e instanceof Error ? e.message : "") : "No pude conectar Varial (¿está instalada y en Testnet?). También podés pegar tu cuenta. " + (e instanceof Error ? e.message : "")); }
+    } catch (e) { setError(como === "celular" ? `No pude conectar Varial del celular. Abrí Varial, elegí Testnet y escaneá el código de nuevo. ${e instanceof Error ? e.message : ""}` : `No pude conectar Varial (¿está instalada y en Testnet?). También podés pegar tu cuenta. ${e instanceof Error ? e.message : ""}`); }
   }
 
   async function ingresar() {
@@ -234,8 +180,7 @@ export default function Pagina() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div>
           <h1>GALCOA+ en Stellar</h1>
           <p className="lema">Registros que la red se niega a sellar sin la segunda firma.</p>
@@ -259,43 +204,21 @@ export default function Pagina() {
       </ol>
 
       {ocupado && <p className="trabajando" role="status"><span className="spinner" aria-hidden="true" /> {TAREAS[cargando] ?? "Trabajando…"}</p>}
-      {error && <p className="error" role="alert">{error} <button className="sec chico" onClick={() => setError("")}>Cerrar</button></p>}
+      {error && <p className="error" role="alert">{error} <button type="button" className="sec chico" onClick={() => setError("")}>Cerrar</button></p>}
       {aviso && <p className="info" role="status">{aviso}</p>}
 
       <section className="card" aria-labelledby="h1">
         <h2 id="h1">1. Cargar las entregas</h2>
-        <p className="aviso">Subí una planilla (CSV) con un remito por fila. <a href="#plantilla" onClick={(e) => { e.preventDefault(); descargar("plantilla-remitos.csv", PLANTILLA_CSV, "text/csv"); }}>Descargar plantilla</a>. Abajo hay un ejemplo con 7 remitos para probar.</p>
+        <p className="aviso">Subí una planilla (CSV) con un remito por fila. <button type="button" className="enlace" onClick={() => descargar("plantilla-remitos.csv", PLANTILLA_CSV, "text/csv")}>Descargar plantilla</button>. Abajo hay un ejemplo con 7 remitos para probar.</p>
         <p><input type="file" accept=".csv,text/csv" onChange={(e) => cargarPlanilla(e.target.files?.[0])} aria-label="Planilla de remitos en CSV" /></p>
         <details><summary>Ver o editar los datos (avanzado)</summary>
           <textarea value={texto} onChange={(e) => setTexto(e.target.value)} spellCheck={false} aria-label="Datos de los remitos" />
         </details>
-        <p><button onClick={revisar} disabled={ocupado}>{cargando === "revisando" ? "Revisando…" : "Revisar qué se va a sellar"}</button></p>
+        <p><button type="button" onClick={revisar} disabled={ocupado}>{cargando === "revisando" ? "Revisando…" : "Revisar qué se va a sellar"}</button></p>
         <p className="aviso">Las reglas de esta demostración (completo, atribuible, consistente, a tiempo, con original y exacto) son un subconjunto del motor completo y no lo reemplazan.</p>
       </section>
 
-      {vista && (
-        <section className="card" aria-labelledby="h2">
-          <h2 id="h2">2. Qué se va a sellar</h2>
-          <div className="cifras">
-            <div><b className="verde">{vista.sellan}</b><span>entran al lote</span></div>
-            <div><b className={vista.afuera ? "rojo" : ""}>{vista.afuera}</b><span>quedan afuera, a revisión de una persona</span></div>
-          </div>
-          <table>
-            <thead><tr><th scope="col">Remito</th><th scope="col">Estado</th><th scope="col">Qué pasó</th></tr></thead>
-            <tbody>
-              {vista.documentos.map((d) => (
-                <tr key={d.posicion}>
-                  <td><b>{d.remito ?? `Documento ${d.posicion + 1}`}</b></td>
-                  <td><Pill v={d.veredicto} /></td>
-                  <td>{d.avisos.length ? d.avisos.map((a) => a.detalle).join("; ") : "Pasó todas las reglas"}{!d.enLote && " · no se sella"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {vista.memo ? <p className="aviso">A la red solo viaja una huella de 32 bytes (<code>{vista.memo}</code>): ningún dato de los documentos ni de las personas.</p> : <p>Ningún documento pasó: no se enviaría nada.</p>}
-          {vistaTexto !== texto && <p className="info">Cambiaste los datos: volvé a revisar antes de firmar.</p>}
-        </section>
-      )}
+      {vista && <VistaPrevia vista={vista} desactualizada={vistaTexto !== texto} />}
 
       {vista && !resp?.sellado && <ConfirmacionComercio texto={texto} setTexto={setTexto} />}
 
@@ -305,10 +228,10 @@ export default function Pagina() {
           <p className="aviso">La cuenta de sellado está configurada en Stellar para <b>no aceptar ningún sello con menos de dos firmas</b>. Una persona firma, la segunda revisa y firma, y recién ahí se envía. El servicio paga la comisión.</p>
 
           {!xdr2 ? (
-            <p><button onClick={preparar2} disabled={ocupado}>{cargando === "preparando" ? "Preparando…" : "Preparar el paquete para firmar"}</button></p>
+            <p><button type="button" onClick={preparar2} disabled={ocupado}>{cargando === "preparando" ? "Preparando…" : "Preparar el paquete para firmar"}</button></p>
           ) : (
             <>
-              <div className="estado-red" aria-label="Simulación previa">
+              <div className="estado-red">
                 <dl><dt>Simulación previa</dt><dd>✔ Hecha por el servidor antes de pedirte la firma: si fallara, no llegarías a este paso.</dd>
                   <dt>Red</dt><dd>Stellar testnet (Test SDF Network)</dd>
                   <dt>Qué vas a firmar</dt><dd>Autorizar un sello de lote con dos firmas (la comisión la paga el servicio)</dd>
@@ -320,20 +243,20 @@ export default function Pagina() {
               </div>
               {demo && (
                 <p className="demo"><b>Modo demostración</b> (claves de prueba del servidor, no son personas reales)<br />
-                  <button className="sec" onClick={() => firmarDemo("cargador")} disabled={ocupado}>Firmar como cargador</button>{" "}
-                  <button className="sec" onClick={() => firmarDemo("aprobador")} disabled={ocupado}>Firmar como aprobador</button></p>
+                  <button type="button" className="sec" onClick={() => firmarDemo("cargador")} disabled={ocupado}>Firmar como cargador</button>{" "}
+                  <button type="button" className="sec" onClick={() => firmarDemo("aprobador")} disabled={ocupado}>Firmar como aprobador</button></p>
               )}
               <details open={!demo}><summary>Firmar con mi billetera</summary>
                 <p><label>Mi cuenta: <input value={cuenta} onChange={(e) => setCuenta(e.target.value.trim())} placeholder="G…" size={50} spellCheck={false} /></label>{" "}
-                  <button className="sec" onClick={() => conectar("extension")} disabled={ocupado}>Conectar Varial (navegador)</button>{" "}
-                  <button className="sec" onClick={() => conectar("celular")} disabled={ocupado}>Conectar Varial del celular</button></p>
-                <p><button className="sec" onClick={firmarConBilletera} disabled={ocupado || !cuenta}>Firmar con Varial</button>
+                  <button type="button" className="sec" onClick={() => conectar("extension")} disabled={ocupado}>Conectar Varial (navegador)</button>{" "}
+                  <button type="button" className="sec" onClick={() => conectar("celular")} disabled={ocupado}>Conectar Varial del celular</button></p>
+                <p><button type="button" className="sec" onClick={firmarConBilletera} disabled={ocupado || !cuenta}>Firmar con Varial</button>
                   <span className="aviso"> Para la segunda persona, cambiá de cuenta en Varial y firmá de nuevo, o pasale el paquete.</span></p>
                 <details><summary>Paquete para firmar (se puede copiar y pasar a la otra persona)</summary>
                   <textarea value={xdr2} onChange={(e) => setXdr2(e.target.value.trim())} spellCheck={false} aria-label="Paquete para firmar" />
                 </details>
               </details>
-              <p><button onClick={enviar2} disabled={ocupado}>{cargando === "enviando" ? "Enviando a Stellar… (unos 10 s)" : "Enviar con las dos firmas"}</button>
+              <p><button type="button" onClick={enviar2} disabled={ocupado}>{cargando === "enviando" ? "Enviando a Stellar… (unos 10 s)" : "Enviar con las dos firmas"}</button>
                 {firmas2.length < 2 && <span className="aviso"> Con menos de dos firmas, Stellar lo rechaza.</span>}</p>
             </>
           )}
@@ -341,13 +264,13 @@ export default function Pagina() {
           <details><summary>Alternativa de prototipo: una sola persona confirma</summary>
             <p className="aviso">Firmás un mensaje que nombra la huella exacta del lote. Solo pueden confirmar las cuentas autorizadas y quien confirma no puede haber cargado los documentos.</p>
             <p><label>Mi cuenta: <input value={cuenta} onChange={(e) => setCuenta(e.target.value.trim())} placeholder="G…" size={50} spellCheck={false} /></label>{" "}
-              <button className="sec" onClick={ingresar} disabled={ocupado || !cuenta}>Ingresar (firmar)</button>{yo && <> · Ingresaste como <b>{yo.identidad}</b></>}</p>
-            <p><button className="sec" onClick={firmarYSellarUna} disabled={ocupado || !cuenta}>Firmar y sellar</button></p>
+              <button type="button" className="sec" onClick={ingresar} disabled={ocupado || !cuenta}>Ingresar (firmar)</button>{yo && <> · Ingresaste como <b>{yo.identidad}</b></>}</p>
+            <p><button type="button" className="sec" onClick={firmarYSellarUna} disabled={ocupado || !cuenta}>Firmar y sellar</button></p>
             <details><summary>Firmar a mano (otra billetera)</summary>
-              <p><button className="sec" onClick={() => pedirMensaje().catch(fallo)} disabled={ocupado || !cuenta}>Pedir mensaje a firmar</button></p>
+              <p><button type="button" className="sec" onClick={() => pedirMensaje().catch(fallo)} disabled={ocupado || !cuenta}>Pedir mensaje a firmar</button></p>
               {pendiente && <><pre style={{ whiteSpace: "pre-wrap" }}>{pendiente.mensaje}</pre>
                 <p><input aria-label="Firma en base64" value={firmaManual} onChange={(e) => setFirmaManual(e.target.value.trim())} placeholder="Firma en base64" size={60} spellCheck={false} />{" "}
-                  <button className="sec" onClick={() => sellarUnaFirma(pendiente, firmaManual)} disabled={ocupado || !firmaManual}>Sellar con esta firma</button></p></>}
+                  <button type="button" className="sec" onClick={() => sellarUnaFirma(pendiente, firmaManual)} disabled={ocupado || !firmaManual}>Sellar con esta firma</button></p></>}
             </details>
           </details>
         </section>
@@ -361,7 +284,7 @@ export default function Pagina() {
               <p className="gran"><span className="verde">✔</span> {resp.sellado.cantidadHojas} documento(s) sellados con una sola transacción (ledger {resp.sellado.ledger}).</p>
               {resp.firmadoPor && <p>Aprobado por {Array.isArray(resp.firmadoPor) ? resp.firmadoPor.map(corta).join(" + ") : corta(resp.firmadoPor)}.{resp.comisionPagadaPor && " La comisión la pagó el servicio."}</p>}
               <p><a href={resp.explorador ?? "#"} target="_blank" rel="noreferrer">Ver la transacción en el explorador</a></p>
-              <div className="estado-red" aria-label="Estado en la red">
+              <div className="estado-red">
                 <h3>Estado en la red</h3>
                 <dl>
                   <dt>Red</dt><dd>Stellar testnet (sin dinero real)</dd>
@@ -373,12 +296,12 @@ export default function Pagina() {
                 </dl>
               </div>
               <p>
-                <button onClick={() => descargar(`galcoa-lote-${resp.sellado!.txHash.slice(0, 8)}.json`, JSON.stringify(resp.archivo, null, 2), "application/json")}>Descargar el archivo del lote</button>{" "}
+                <button type="button" onClick={() => descargar(`galcoa-lote-${resp.sellado!.txHash.slice(0, 8)}.json`, JSON.stringify(resp.archivo, null, 2), "application/json")}>Descargar el archivo del lote</button>{" "}
                 <a href="/verificar" target="_blank" rel="noopener">Abrir el verificador</a>
               </p>
               <p className="aviso">Guardá el archivo: lleva la transacción firmada y la hora del ledger, así la prueba se puede revisar aunque la red olvide el historial.</p>
               {demo && (
-                <p className="demo">Modo demostración: <button className="sec" onClick={registrarContrato} disabled={ocupado || !!contrato}>{cargando === "contrato" ? "Registrando…" : "Registrar también en el contrato"}</button>
+                <p className="demo">Modo demostración: <button type="button" className="sec" onClick={registrarContrato} disabled={ocupado || !!contrato}>{cargando === "contrato" ? "Registrando…" : "Registrar también en el contrato"}</button>
                   {contrato && <> ✔ Registrado en el contrato (ledger {contrato.ledger}, comisión {(contrato.comisionStroops / 1e7).toFixed(4)} XLM)</>}</p>
               )}
               <details><summary>Registrar también en el contrato con las billeteras de las dos personas</summary>
@@ -386,10 +309,10 @@ export default function Pagina() {
                 <p><label>Cargador (mi cuenta): <input value={cuenta} onChange={(e) => setCuenta(e.target.value.trim())} placeholder="G…" size={50} spellCheck={false} /></label></p>
                 <p><label>Aprobador: <input value={cuentaAprobador} onChange={(e) => setCuentaAprobador(e.target.value.trim())} placeholder="G…" size={50} spellCheck={false} /></label></p>
                 {!paqueteC ? (
-                  <p><button className="sec" onClick={prepararContrato} disabled={ocupado || !cuenta || !cuentaAprobador}>{cargando === "contrato-prep" ? "Preparando…" : "Preparar el registro"}</button></p>
+                  <p><button type="button" className="sec" onClick={prepararContrato} disabled={ocupado || !cuenta || !cuentaAprobador}>{cargando === "contrato-prep" ? "Preparando…" : "Preparar el registro"}</button></p>
                 ) : (
                   <>
-                    <div className="estado-red" aria-label="Simulación previa">
+                    <div className="estado-red">
                 <dl><dt>Simulación previa</dt><dd>✔ Hecha por el servidor antes de pedirte la firma: si fallara, no llegarías a este paso.</dd>
                   <dt>Red</dt><dd>Stellar testnet (Test SDF Network)</dd>
                   <dt>Qué vas a firmar</dt><dd>Autorizar el registro de la huella del lote en el contrato (cada persona firma su autorización)</dd>
@@ -398,8 +321,8 @@ export default function Pagina() {
                     <div className="firmas" aria-live="polite">
                       {paqueteC.porFirmar.map((x) => { const ya = firmasC.some((y) => y.cuenta === x.cuenta); return <div key={x.cuenta} className={ya ? "firma ok" : "firma"}><span>{ya ? "✔" : "…"}</span> {corta(x.cuenta)}</div>; })}
                     </div>
-                    <p><button className="sec" onClick={firmarContrato} disabled={ocupado}>Firmar con Varial (cuenta conectada)</button>{" "}
-                      <button onClick={enviarContrato} disabled={ocupado || firmasC.length < 2 || !!contrato}>{cargando === "contrato" ? "Registrando…" : "Registrar con las dos firmas"}</button></p>
+                    <p><button type="button" className="sec" onClick={firmarContrato} disabled={ocupado}>Firmar con Varial (cuenta conectada)</button>{" "}
+                      <button type="button" onClick={enviarContrato} disabled={ocupado || firmasC.length < 2 || !!contrato}>{cargando === "contrato" ? "Registrando…" : "Registrar con las dos firmas"}</button></p>
                     <p className="aviso">Para la segunda persona: cambiá de cuenta en Varial, poné su cuenta arriba y volvé a firmar.</p>
                   </>
                 )}
@@ -407,20 +330,7 @@ export default function Pagina() {
               </details>
             </>
           ) : <p>Ningún documento pasó la verificación: no se envió nada a la red.</p>}
-          <details><summary>Detalle por documento</summary>
-            <table>
-              <thead><tr><th scope="col">#</th><th scope="col">Estado</th><th scope="col">Reglas</th><th scope="col">Sellado</th></tr></thead>
-              <tbody>
-                {resp.resultados.map((r) => (
-                  <tr key={r.posicion}>
-                    <td>{r.posicion + 1}</td><td><Pill v={r.veredicto} /></td>
-                    <td>{r.reglas.map((x) => `${x.id}: ${x.detalle}`).join(" · ")}</td>
-                    <td>{r.enLote ? <>sí<br /><button className="sec chico" onClick={() => descargarConstancia(r.posicion)} disabled={ocupado}>Constancia PDF</button></> : "no (revisión)"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
+          <DetalleResultados resultados={resp.resultados} ocupado={ocupado} alConstancia={descargarConstancia} />
         </section>
       )}
 

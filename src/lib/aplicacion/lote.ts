@@ -94,7 +94,7 @@ export function verificarComprobante(c: Comprobante): { coherente: boolean; memo
   try {
     hash = v2 ? manifestHashDe(c.manifiesto) : manifestHashV1(c.manifiesto);
   } catch (e) {
-    return { coherente: false, memoEsperado: "", motivo: "El manifiesto no tiene la forma esperada: " + (e instanceof Error ? e.message : "inválido") };
+    return { coherente: false, memoEsperado: "", motivo: `El manifiesto no tiene la forma esperada: ${e instanceof Error ? e.message : "inválido"}` };
   }
   if (hash !== c.manifestHash) return { coherente: false, memoEsperado: "", motivo: "El contenido no coincide con su huella (fue alterado)" };
   if (!verificarCamino(c.manifestHash, c.camino, c.raiz)) return { coherente: false, memoEsperado: "", motivo: "El comprobante no lleva a la raíz del lote" };

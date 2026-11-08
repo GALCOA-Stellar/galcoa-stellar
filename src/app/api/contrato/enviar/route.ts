@@ -3,7 +3,8 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { enviarRegistro, type DatosRegistro } from "@/lib/stellar/contrato";
 import { marcaDeTextoValida } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
+import { registrarError, registrarEvento } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -20,11 +21,11 @@ export async function POST(req: Request) {
     const firmas = Array.isArray(c.firmas) ? (c.firmas as { cuenta?: unknown; firma?: unknown }[]).filter((f) => typeof f.cuenta === "string" && typeof f.firma === "string") as { cuenta: string; firma: string }[] : [];
     if (!firmas.some((f) => f.cuenta === datos.cargador) || !firmas.some((f) => f.cuenta === datos.aprobador)) return NextResponse.json({ error: "Faltan las firmas de las dos personas" }, { status: 403 });
     const reg = await enviarRegistro(datos, firmas);
-    console.log(JSON.stringify({ flujo: datos.memo, paso: "registro-enviado", ...reg })); // la huella es el identificador común del flujo
+    registrarEvento({ flujo: datos.memo, paso: "registro-enviado", ...reg }); // la huella es el identificador común del flujo
     return NextResponse.json({ memo: datos.memo, cargador: datos.cargador, aprobador: datos.aprobador, ...reg });
   } catch (e) {
     const permitido = ["El contrato rechazó", "Stellar rechazó", "La red no confirmó", "Falta la firma", "La firma de", "Mandá al menos", "Máximo", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"];
-    console.error("contrato/enviar:", e);
+    registrarError("contrato/enviar", e);
     return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo registrar" }, { status: 400 });
   }
 }

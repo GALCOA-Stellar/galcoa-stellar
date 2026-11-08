@@ -4,7 +4,7 @@ import { verificarComprobante, type Comprobante } from "@/lib/aplicacion/lote";
 import { cuentasSelladoras, leerMemo, motivoSinRed, urlExplorador, verificarPruebaLocal } from "@/lib/stellar/stellar";
 import { consultarRegistro, consultarConsumo } from "@/lib/stellar/contrato";
 import { cuentasAutorizadas } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
           verificado: false,
           coherenteSinRed: true,
           paso: "prueba-guardada",
-          motivo: guardada.motivo + (caida ? ". No pudimos consultar la red" : ". La red no tiene esa transacción (puede ser un reinicio de la testnet)") + ": esto NO confirma que la red haya incluido la transacción.",
+          motivo: `${guardada.motivo + (caida ? ". No pudimos consultar la red" : ". La red no tiene esa transacción (puede ser un reinicio de la testnet)")}: esto NO confirma que la red haya incluido la transacción.`,
           ledger: c.prueba?.ledger,
           cierreLedger: c.prueba?.cierreLedger ?? null,
         });

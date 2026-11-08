@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import QR from "qrcode";
+import { ImagenQr } from "@/app/logos";
 
 type Estado = "pendiente" | "confirmada" | "no_coincide";
 type Enlace = { id: string; url: string; qr: string; estado: Estado; nota?: string; sello?: string };
@@ -63,16 +64,16 @@ export function ConfirmacionComercio({ texto, setTexto }: { texto: string; setTe
               <tr key={i}>
                 <td>{String(d.remito ?? i + 1)}</td>
                 <td>
-                  {!e ? <button className="sec chico" onClick={() => crear(i)} disabled={ocupado}>Crear enlace</button> : (
+                  {!e ? <button type="button" className="sec chico" onClick={() => crear(i)} disabled={ocupado}>Crear enlace</button> : (
                     <>
-                      {e.qr && /* eslint-disable-next-line @next/next/no-img-element */ <img src={e.qr} alt="QR para que el comercio confirme" width={96} height={96} />}
+                      {e.qr && <ImagenQr src={e.qr} alt="QR para que el comercio confirme" tamano={96} />}
                       <br /><code>{e.url}</code><br />
-                      <button className="sec chico" onClick={() => navigator.clipboard?.writeText(e.url)}>Copiar enlace</button>
+                      <button type="button" className="sec chico" onClick={() => navigator.clipboard?.writeText(e.url)}>Copiar enlace</button>
                       <a className="boton sec chico" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent(`Hola, confirmá por favor la entrega (remito ${String(d.remito ?? i + 1)}) en este enlace: ${e.url}`)}`}>Mandar por WhatsApp</a>
-                      <button className="sec chico" onClick={() => ver(i)} disabled={ocupado}>Ver respuesta</button>
+                      <button type="button" className="sec chico" onClick={() => ver(i)} disabled={ocupado}>Ver respuesta</button>
                       <br />
                       {e.estado === "pendiente" && <span className="aviso">Esperando al comercio…</span>}
-                      {e.estado === "confirmada" && <><span className="verde">✔ El comercio confirmó.</span> <button className="chico" onClick={() => aplicar(i)}>Aplicar al documento</button></>}
+                      {e.estado === "confirmada" && <><span className="verde">✔ El comercio confirmó.</span> <button type="button" className="chico" onClick={() => aplicar(i)}>Aplicar al documento</button></>}
                       {e.estado === "no_coincide" && <span className="amarillo">▲ El comercio avisó que no coincide{e.nota ? `: “${e.nota}”` : ""}. Revisá antes de sellar.</span>}
                     </>
                   )}

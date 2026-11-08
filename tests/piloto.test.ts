@@ -3,7 +3,7 @@ import { evaluar } from "../src/lib/dominio/rules";
 import { previsualizarLote } from "../src/lib/aplicacion/lote";
 
 // Set de 50 remitos con errores sembrados (separado de los ejemplos con los que se ajustaron las reglas).
-const H = "cd".repeat(32);
+const _H = "cd".repeat(32);
 const limpio = (n: number) => ({ unidad: "caja", fechaEntrega: "2026-11-02", fechaRegistro: "2026-11-02", cargadoPor: "operador-02", confirmadoPor: "receptor-02", evidenciaHash: n.toString(16).padStart(64, "0"), remito: `P-${n}`, producto: "Gaseosa 2 l", cantidadPedida: 40, cantidadRecibida: 40 });
 const sembrados: Record<number, { esperado: "rojo" | "amarillo"; cambio: object }> = {
   3: { esperado: "rojo", cambio: { confirmadoPor: "operador-02" } },                 // quien carga confirma

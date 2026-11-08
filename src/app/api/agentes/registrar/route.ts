@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { marcarTexto } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 import { procesarMensaje } from "@/lib/agentes/flujo";
 import { proveedoresDesdeEntorno } from "@/lib/agentes/proveedor";
 import { MAX_MENSAJE } from "@/lib/agentes/registrador";
+import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
     const datos = JSON.stringify({ propuestas: r.propuestas, hallazgos: r.hallazgos, cargadoPor: c.cargadoPor, hoy, emitidoEn: Date.now(), ...(evidenciaHash ? { evidenciaHash } : {}) });
     return NextResponse.json({ ...r, datos, marca: marcarTexto(datos) });
   } catch (e) {
-    console.error("agentes/registrar:", e instanceof Error ? e.message : e);
+    registrarError("agentes/registrar", e);
     const permitido = ["Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado", "El Agente"];
     return NextResponse.json({ error: e instanceof Error && permitido.some((p) => e.message.startsWith(p)) ? e.message : "No se pudo procesar el mensaje" }, { status: 400 });
   }

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { armarArchivo, cargadoresDelLote, previsualizarLote, sellarLote } from "@/lib/aplicacion/lote";
 import { comisionCobrada, enviarMemo, urlExplorador } from "@/lib/stellar/stellar";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { identidadDe, verificarAcceso } from "@/lib/stellar/firma";
 import { operacionPorMemo, registrarOperacion } from "@/lib/datos/historial";

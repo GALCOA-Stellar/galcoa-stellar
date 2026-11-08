@@ -151,7 +151,7 @@ export async function responderInvitacion(token: unknown, respuesta: unknown, no
 /** La distribuidora anula el enlace de un participante que todavía no respondió. */
 export async function revocarInvitacion(rondaId: string, rol: Rol): Promise<void> {
   const ronda = await leer<Ronda>(COL_RONDAS, rondaId);
-  if (!ronda || !ronda.roles.includes(rol)) throw new Error("Esa ronda no existe");
+  if (!ronda?.roles.includes(rol)) throw new Error("Esa ronda no existe");
   const inv = (await vigentes(ronda)).get(rol);
   if (!inv) throw new Error("Ese participante ya no tiene un enlace vigente");
   if (inv.estado !== "pendiente") throw new Error("Ese participante ya respondió");
@@ -161,7 +161,7 @@ export async function revocarInvitacion(rondaId: string, rol: Rol): Promise<void
 /** Reemite el enlace de un participante que no respondió: anula el anterior y entrega uno nuevo (en claro, una sola vez). */
 export async function reemitirInvitacion(rondaId: string, rol: Rol, ahora = Date.now()): Promise<{ token: string; vence: string }> {
   const ronda = await leer<Ronda>(COL_RONDAS, rondaId);
-  if (!ronda || !ronda.roles.includes(rol)) throw new Error("Esa ronda no existe");
+  if (!ronda?.roles.includes(rol)) throw new Error("Esa ronda no existe");
   const actual = (await vigentes(ronda)).get(rol);
   if (actual && actual.estado !== "pendiente") throw new Error("Ese participante ya respondió");
   if (actual) await guardar(COL_INVITACIONES, actual.id, { ...actual, revocada: true });

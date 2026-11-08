@@ -13,3 +13,4 @@ playwright-report/
 
 # Coordinador: marca local de la última consulta de cada uno
 .equipo/.local/
+coverage/

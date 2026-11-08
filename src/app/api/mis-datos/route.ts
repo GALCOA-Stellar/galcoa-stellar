@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { leerSesion } from "@/lib/stellar/firma";
 import { borrarDatosDe, DIAS_CONSERVACION, operacionesDe } from "@/lib/datos/privacidad";
-import { ipDe, verificarOrigen } from "@/lib/servidor/guardas";
+import { verificarOrigen } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 

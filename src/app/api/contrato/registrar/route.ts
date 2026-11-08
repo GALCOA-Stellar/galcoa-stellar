@@ -3,7 +3,8 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { registrarConClavesDeDemo } from "@/lib/stellar/contrato";
 import { demoActivo } from "@/lib/servidor/demo";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
+import { registrarEvento } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
     const vista = previsualizarLote(c.documentos as unknown[]);
     if (!vista.memo) return NextResponse.json({ error: "No hay nada para registrar" }, { status: 400 });
     const reg = await registrarConClavesDeDemo(vista.memo);
-    console.log(JSON.stringify({ flujo: vista.memo, paso: "registro-demo", ...reg })); // la huella es el identificador común del flujo
+    registrarEvento({ flujo: vista.memo, paso: "registro-demo", ...reg }); // la huella es el identificador común del flujo
     return NextResponse.json({ memo: vista.memo, ...reg });
   } catch (e) {
     const permitido = ["El contrato rechazó", "Stellar rechazó", "La red no confirmó", "Mandá al menos", "Máximo", "Falta configurar", "Se espera JSON", "Pedido de otro sitio"];

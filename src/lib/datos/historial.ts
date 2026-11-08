@@ -1,6 +1,7 @@
 import { guardar, leer, listar, nuevoId } from "./almacen";
 import { demoActivo } from "../servidor/demo";
 import { leerSesion } from "../stellar/firma";
+import { registrarError } from "../servidor/registro";
 
 /**
  * Historial de operaciones selladas. Guarda el archivo del lote (que es la prueba que la persona también se descarga)
@@ -36,7 +37,7 @@ export async function registrarOperacion(o: Omit<Operacion, "id" | "fecha">, aho
     await guardar(IDX_TX, op.txHash.slice(0, 32), { id: op.id });
     return op.id;
   } catch (e) {
-    console.error("historial:", e instanceof Error ? e.message : e);
+    registrarError("historial", e);
     return null;
   }
 }

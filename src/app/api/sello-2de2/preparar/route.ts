@@ -3,7 +3,7 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { previsualizarLote } from "@/lib/aplicacion/lote";
 import { armarTxSello } from "@/lib/stellar/multifirma";
 import { cuentaSelladora2de2, secuenciaDe } from "@/lib/stellar/stellar";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 

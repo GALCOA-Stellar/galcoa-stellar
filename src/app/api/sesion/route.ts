@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { abrirSesion, emitirDesafioSesion, cuentaAutorizada, leerSesion } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 

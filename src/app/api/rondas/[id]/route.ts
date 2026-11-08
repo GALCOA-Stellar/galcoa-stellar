@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { idValido } from "@/lib/datos/almacen";
-import { ipDe } from "@/lib/servidor/guardas";
 import { puedeVerHistorial } from "@/lib/datos/historial";
 import { resumenDe } from "@/lib/datos/ronda";
 

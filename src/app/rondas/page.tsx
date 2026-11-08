@@ -54,7 +54,7 @@ export default function Rondas() {
           {campo("fechaEntrega", "Fecha de entrega", "date")}{campo("observacion", "Observación (si hubo diferencia)")}
           <p><label><input type="checkbox" checked={transporte} onChange={(e) => setTransporte(e.target.checked)} /> Sumar al transportista (opcional)</label></p>
           <p className="aviso">Proveedor y comprador siempre confirman. Se necesita haber ingresado con la billetera (o estar en modo demostración).</p>
-          <button onClick={crear} disabled={ocupado || !completo}>Crear los enlaces</button>
+          <button type="button" onClick={crear} disabled={ocupado || !completo}>Crear los enlaces</button>
         </section>
       )}
       {creada && (
@@ -66,7 +66,7 @@ export default function Rondas() {
               <li key={rol}><b>{rol}</b>: <input readOnly size={50} value={`${location.origin}${e}`} onFocus={(ev) => ev.currentTarget.select()} /> <a className="boton sec" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent(`Hola, confirmá por favor los datos de la entrega (remito ${f.remito}) en este enlace: ${location.origin}${e}`)}`}>Mandar por WhatsApp</a></li>
             ))}
           </ul>
-          <p><button className="sec" onClick={actualizar}>Ver quién confirmó</button></p>
+          <p><button type="button" className="sec" onClick={actualizar}>Ver quién confirmó</button></p>
           {resumen && (
             <>
               <p className={resumen.estado === "completa" ? "gran verde" : resumen.estado === "rechazada" ? "gran amarillo" : "info"}>{ESTADOS[resumen.estado] ?? resumen.estado} ({resumen.confirmaron} de {resumen.requeridos})</p>

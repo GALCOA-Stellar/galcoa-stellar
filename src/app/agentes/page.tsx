@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LogoGalcoa } from "@/app/logos";
 
 type Veredicto = "verde" | "amarillo" | "rojo";
 type Regla = { id: string; ok: boolean; detalle: string };
@@ -49,8 +50,7 @@ export default function Agentes() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div>
           <h1>Cargá una entrega con tus palabras</h1>
           <p className="lema">Un agente de IA ordena el dato, otro lo controla y unas reglas fijas deciden. La IA no aprueba nada.</p>
@@ -58,7 +58,7 @@ export default function Agentes() {
       </header>
 
       <section className="card">
-        <div className="agentes-esquema" aria-label="Cómo funciona">
+        <div className="agentes-esquema">
           <p><b>1. Agente registrador:</b> lee tu mensaje y arma la ficha de la entrega. Solo propone.</p>
           <p><b>2. Agente verificador:</b> la compara con tu mensaje. Solo puede frenar.</p>
           <p><b>3. Reglas fijas</b> deciden: verde (verificado), amarillo (declarado) o rojo (requiere revisión). <b>4. Otra persona</b> confirma: quien carga no puede aprobar.</p>
@@ -75,7 +75,7 @@ export default function Agentes() {
         </label>
         <p className="aviso">Si el mensaje cuenta una sola entrega y tenés la huella de su foto o su audio, pegala acá: la regla de original la usa. <a href="/evidencia">Revisar una foto o un audio</a>.</p>
         <div className="acciones">
-          <button className="boton" disabled={cargando || mensaje.trim() === ""} onClick={cargar}>{cargando ? "Los agentes están trabajando…" : "Cargar"}</button>
+          <button type="button" className="boton" disabled={cargando || mensaje.trim() === ""} onClick={cargar}>{cargando ? "Los agentes están trabajando…" : "Cargar"}</button>
           <button className="boton sec" type="button" onClick={() => setMensaje(EJEMPLO)}>Usar un ejemplo</button>
         </div>
         {reg?.error && <p className="error" role="alert">{reg.error}</p>}
@@ -113,7 +113,7 @@ export default function Agentes() {
               <label>Confirma (otra persona)
                 <select value={confirma} onChange={(e) => setConfirma(e.target.value)}>{PERSONAS.map((p) => <option key={p}>{p}</option>)}</select>
               </label>
-              <button className="boton" onClick={confirmar}>Confirmar como {confirma}</button>
+              <button type="button" className="boton" onClick={confirmar}>Confirmar como {confirma}</button>
             </div>
           )}
           {conf?.error && <p className="error" role="alert">{conf.error}</p>}

@@ -1,3 +1,4 @@
+import { LogoGalcoa } from "@/app/logos";
 export const metadata = { title: "Términos · GALCOA+ en Stellar" };
 
 /** Términos de uso del prototipo. Borrador técnico: no reemplaza la revisión de un abogado. */
@@ -5,8 +6,7 @@ export default function Terminos() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div><h1>Términos de uso</h1><p className="lema">Qué es este sitio y qué no es.</p></div>
         <a className="enlace-cab" href="/demo">Volver</a>
       </header>

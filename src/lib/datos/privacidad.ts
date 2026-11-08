@@ -3,6 +3,7 @@ import { borrar, guardar, listar, nuevoId } from "./almacen";
 import type { Confirmacion } from "./confirmacion";
 import type { Operacion } from "./historial";
 import { borrarRondaVencida, type Ronda } from "./ronda";
+import { registrarError } from "../servidor/registro";
 
 /**
  * Datos personales (Ley 25.326): acceso (descarga), supresión (borrado) y plazo de conservación.
@@ -35,7 +36,7 @@ let ultimaLimpieza = 0;
 export async function limpiarSiToca(ahora = Date.now()): Promise<void> {
   if (ahora - ultimaLimpieza < 3_600_000) return;
   ultimaLimpieza = ahora;
-  try { await limpiarVencidos(ahora); } catch (e) { console.error("limpieza:", e instanceof Error ? e.message : e); }
+  try { await limpiarVencidos(ahora); } catch (e) { registrarError("limpieza", e); }
 }
 
 /** Operaciones donde figura esta persona (por su identificador interno): firmó o cargó documentos. */

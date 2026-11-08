@@ -3,7 +3,6 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { listarOperaciones, listarOperacionesDe, puedeVerHistorial, resumenComisiones } from "@/lib/datos/historial";
 import { demoActivo } from "@/lib/servidor/demo";
 import { leerSesion } from "@/lib/stellar/firma";
-import { ipDe } from "@/lib/servidor/guardas";
 import { limpiarSiToca } from "@/lib/datos/privacidad";
 
 export const runtime = "nodejs";

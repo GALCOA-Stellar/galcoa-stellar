@@ -12,9 +12,13 @@ import { verificarComprobante } from "../src/lib/aplicacion/lote";
 // @ts-expect-error paquete JS sin tipos
 import * as pkg from "../packages/galcoa-comprobante/index.js";
 
-let s = 12345; const rnd = () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+let s = 12345;
+const rnd = () => {
+  s = (s * 1103515245 + 12345) & 0x7fffffff;
+  return s / 0x7fffffff;
+};
 const elegir = <T,>(a: T[]): T => a[Math.floor(rnd() * a.length)];
-const textos = ["R-1", "", " ", "Yerba Mate", "Café", "Cafe\u0301", "ñandú", "😀", "\uD83D", "\uDE00x", "a".repeat(65536), "a".repeat(65537), "ア", "\u0000", "línea\nnueva", "x".repeat(21846) + "€"];
+const textos = ["R-1", "", " ", "Yerba Mate", "Café", "Cafe\u0301", "ñandú", "😀", "\uD83D", "\uDE00x", "a".repeat(65536), "a".repeat(65537), "ア", "\u0000", "línea\nnueva", `${"x".repeat(21846)}€`];
 const valores = (): unknown => elegir<unknown>([elegir(textos), elegir(textos), 0, -0, 1, -1, 2 ** 53 - 1, 2 ** 53, 1.5, Number.NaN, Infinity, null, undefined, true, "0".repeat(64), "A".repeat(64), "g".repeat(64), [], {}, "10"]);
 const CAMPOS = ["remito", "producto", "unidad", "cantidadPedida", "cantidadRecibida", "fechaEntrega", "fechaRegistro", "cargadoPor", "confirmadoPor", "evidenciaHash", "observacion"];
 const valido = () => ({ remito: "R-1", producto: "Yerba", unidad: "caja", cantidadPedida: 10, cantidadRecibida: 10, fechaEntrega: "2026-11-02", fechaRegistro: "2026-11-02", cargadoPor: "a", confirmadoPor: "b" });

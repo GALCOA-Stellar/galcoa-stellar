@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { LogoGalcoa } from "@/app/logos";
 
 type Vista = { estado: "pendiente" | "confirmada" | "no_coincide"; vencida: boolean; vence: string; respondida?: string; documento: Record<string, string | number> };
 const ROTULOS: [string, string][] = [["remito", "Remito"], ["producto", "Producto"], ["unidad", "Unidad"], ["cantidadPedida", "Cantidad pedida"], ["cantidadRecibida", "Cantidad recibida"], ["fechaEntrega", "Fecha de entrega"], ["observacion", "Observación"]];
@@ -31,8 +32,7 @@ export default function Confirmar({ params }: { params: Promise<{ id: string }> 
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div><h1>Confirmá tu entrega</h1><p className="lema">Sin crear cuenta. Tarda un minuto.</p></div>
       </header>
       {error && <p className="error" role="alert">{error}</p>}
@@ -45,8 +45,8 @@ export default function Confirmar({ params }: { params: Promise<{ id: string }> 
               <p>¿Lo que recibiste coincide con estos datos?</p>
               <p><label>Comentario (opcional, sin datos personales): <input value={nota} maxLength={300} onChange={(e) => setNota(e.target.value)} size={40} /></label></p>
               <p className="aviso">Guardamos tu respuesta, la fecha y hora y tu comentario por 30 días después de que venza el enlace, solo para dejar constancia de esta entrega. <a href="/privacidad" target="_blank" rel="noopener">Más información</a>.</p>
-              <p><button onClick={() => responder("confirmada")} disabled={enviando}>Sí, lo recibí así</button>{" "}
-                <button className="sec" onClick={() => responder("no_coincide")} disabled={enviando}>No coincide</button></p>
+              <p><button type="button" onClick={() => responder("confirmada")} disabled={enviando}>Sí, lo recibí así</button>{" "}
+                <button type="button" className="sec" onClick={() => responder("no_coincide")} disabled={enviando}>No coincide</button></p>
               <p className="aviso">Tu respuesta queda registrada con fecha y hora. Declarás lo que recibiste; GALCOA+ no verifica quién sos ni que la mercadería exista.</p>
             </>
           ) : v.estado === "pendiente" ? <p className="info">Este enlace venció. Pedile a la distribuidora uno nuevo.</p>

@@ -1,4 +1,4 @@
-import { Asset, FeeBumpTransaction, Keypair, Memo, Networks, Operation, StrKey, Transaction, TransactionBuilder, BASE_FEE, rpc, xdr } from "@stellar/stellar-sdk";
+import { Asset, FeeBumpTransaction, Keypair, Memo, Networks, Operation, StrKey, Transaction, TransactionBuilder, rpc, xdr } from "@stellar/stellar-sdk";
 import type { Comprobante, Enviador, Prueba } from "../aplicacion/lote";
 import { internaDe } from "./multifirma";
 import { comisionActual, subirComision, topeDeComision } from "../dominio/comision";
@@ -126,8 +126,8 @@ export const horizonProboAusencia = (status: number): boolean => status === 404;
 
 /** Texto cuando la verificación no encontró el lote en la red. Si no se pudo preguntar, no se dice que "no figura". */
 export function motivoSinRed(indisponible: boolean, motivoPruebaGuardada: string): string {
-  if (indisponible) return "No pudimos consultar la red en este momento. Eso no significa que el lote no exista: probá de nuevo en unos minutos. " + motivoPruebaGuardada;
-  return "Todavía no figura en la red. Si lo acabás de enviar, está pendiente: esperá unos segundos y volvé a verificar. Si pasó mucho tiempo, puede que la testnet se haya reiniciado. " + motivoPruebaGuardada;
+  if (indisponible) return `No pudimos consultar la red en este momento. Eso no significa que el lote no exista: probá de nuevo en unos minutos. ${motivoPruebaGuardada}`;
+  return `Todavía no figura en la red. Si lo acabás de enviar, está pendiente: esperá unos segundos y volvé a verificar. Si pasó mucho tiempo, puede que la testnet se haya reiniciado. ${motivoPruebaGuardada}`;
 }
 
 /** Lee de la red el memo (hash) de una transacción: primero por RPC y, si ya no está en su ventana, por Horizon. */

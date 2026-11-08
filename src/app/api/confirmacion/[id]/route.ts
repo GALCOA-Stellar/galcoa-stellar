@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { responder, vistaPublica, type Confirmacion } from "@/lib/datos/confirmacion";
 import { idValido, leer } from "@/lib/datos/almacen";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
+import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 type Ctx = { params: Promise<{ id: string }> };
@@ -27,7 +28,7 @@ export async function POST(req: Request, { params }: Ctx) {
     return NextResponse.json({ estado: r.estado, respondida: r.respondida });
   } catch (e) {
     const ok = e instanceof Error && ["Este enlace", "Respuesta no válida", "Se espera JSON", "Pedido de otro sitio", "Cuerpo demasiado"].some((p) => e.message.startsWith(p));
-    if (!ok) console.error("confirmacion/responder:", e);
+    if (!ok) registrarError("confirmacion/responder", e);
     return NextResponse.json({ error: ok ? (e as Error).message : "No se pudo registrar la respuesta" }, { status: 400 });
   }
 }

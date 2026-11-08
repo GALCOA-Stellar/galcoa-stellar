@@ -3,7 +3,8 @@ import { limitarPedido } from "@/lib/servidor/limite";
 import { verificarComprobante, type Comprobante } from "@/lib/aplicacion/lote";
 import { pdfDeComprobante } from "@/lib/documentos/pdf";
 import { comprobanteRegistrado } from "@/lib/datos/historial";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
+import { registrarError } from "@/lib/servidor/registro";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -20,7 +21,7 @@ export async function POST(req: Request) {
     const pdf = await pdfDeComprobante(c);
     return new Response(new Uint8Array(pdf), { headers: { "content-type": "application/pdf", "content-disposition": `attachment; filename="constancia-${c.txHash.slice(0, 8)}-${c.indice + 1}.pdf"` } });
   } catch (e) {
-    console.error("constancia:", e);
+    registrarError("constancia", e);
     return NextResponse.json({ error: "No se pudo generar la constancia" }, { status: 400 });
   }
 }

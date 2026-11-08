@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import QR from "qrcode";
 import { leerLote } from "@/lib/stellar/estado-vivo";
 import { EXPLORADOR_CONTRATO, REGISTRO_ID } from "@/lib/config/contratos";
+import { ImagenQr, LogoGalcoa } from "@/app/logos";
 
 export const dynamic = "force-dynamic";
 const corta = (g: string) => `${g.slice(0, 5)}…${g.slice(-4)}`;
@@ -23,8 +24,7 @@ export default async function Lote({ params }: { params: Promise<{ id: string }>
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div>
           <h1>Estado de un lote</h1>
           <p className="lema">Se lee directo del contrato en Stellar Testnet. No pide cuenta.</p>
@@ -46,8 +46,7 @@ export default async function Lote({ params }: { params: Promise<{ id: string }>
         <p><a href={`${EXPLORADOR_CONTRATO}${REGISTRO_ID}`} target="_blank" rel="noreferrer">Ver el contrato de registro en el explorador</a></p>
         {qr && (
           <p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={qr} width={192} height={192} alt="Código QR que lleva a esta página" />
+            <ImagenQr src={qr} alt="Código QR que lleva a esta página" tamano={192} />
             <br /><small>Escaneá para abrir este estado en el celular.</small>
           </p>
         )}

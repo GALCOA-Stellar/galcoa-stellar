@@ -19,7 +19,7 @@ describe("árbol de Merkle", () => {
     it(`todos los documentos de un lote de ${n} se verifican`, () => {
       const hs = hashes(n);
       const { niveles, raiz } = construir(hs);
-      hs.forEach((h, i) => expect(verificarCamino(h, camino(niveles, i), raiz)).toBe(true));
+      for (const [i, h] of hs.entries()) expect(verificarCamino(h, camino(niveles, i), raiz)).toBe(true);
     });
   }
   it("un documento alterado no verifica", () => {
@@ -81,7 +81,7 @@ describe("sellado por lotes", () => {
     expect(r.sellado?.cantidadHojas).toBe(3);
     expect(r.resultados.map((x) => x.enLote)).toEqual([true, false, true, true]);
     expect(enviar).toHaveBeenCalledWith(memoDelLote(r.sellado!.raiz, 3));
-    r.comprobantes.forEach((c) => expect(verificarComprobante(c).coherente).toBe(true));
+    for (const c of r.comprobantes) expect(verificarComprobante(c).coherente).toBe(true);
   });
   it("un comprobante con el contenido alterado se detecta", async () => {
     const enviar = vi.fn().mockResolvedValue({ txHash: "b".repeat(64), ledger: 2 });
@@ -251,14 +251,14 @@ describe("RF-02 cuatro ojos completo: quien aprueba no pudo haber cargado", () =
   });
   it("la identidad de una cuenta sale de CUENTAS_AUTORIZADAS (G...=id) o es la cuenta misma", () => {
     const g = Keypair.random().publicKey();
-    vi.stubEnv("CUENTAS_AUTORIZADAS", g + "=aprobador-01");
+    vi.stubEnv("CUENTAS_AUTORIZADAS", `${g}=aprobador-01`);
     expect(identidadDe(g)).toBe("aprobador-01");
     vi.stubEnv("CUENTAS_AUTORIZADAS", g);
     expect(identidadDe(g)).toBe(g);
   });
   it("la lista de cuentas ignora el sufijo de identidad", () => {
     const g = Keypair.random().publicKey();
-    vi.stubEnv("CUENTAS_AUTORIZADAS", g + "=aprobador-01");
+    vi.stubEnv("CUENTAS_AUTORIZADAS", `${g}=aprobador-01`);
     expect(cuentasAutorizadas()).toEqual([g]);
   });
 });
@@ -294,7 +294,7 @@ describe("D1 sello 2 de 2: la transacción se revisa antes de enviarla", () => {
   });
   const firmada = (...ks: Keypair[]) => {
     const tx = TransactionBuilder.fromXDR(armarTxSello(sel, "100", memo), Networks.TESTNET);
-    ks.forEach((k) => tx.sign(k));
+    for (const k of ks) tx.sign(k);
     return tx.toXDR();
   };
   let armarTxSello: (c: string, s: string, m: string) => string;
@@ -348,7 +348,7 @@ describe("D2 sesión por firma de cuenta", () => {
   it("firmando el mensaje se obtiene un pase con la identidad; sin firma válida no", async () => {
     const { emitirDesafioSesion, abrirSesion, leerSesion, hashSep53 } = await import("../src/lib/stellar/firma");
     const kp = Keypair.random();
-    vi.stubEnv("CUENTAS_AUTORIZADAS", kp.publicKey() + "=aprobador-01");
+    vi.stubEnv("CUENTAS_AUTORIZADAS", `${kp.publicKey()}=aprobador-01`);
     vi.stubEnv("DESAFIO_SECRETO", "x".repeat(32));
     const d = emitirDesafioSesion(kp.publicKey());
     const firma = Buffer.from(kp.sign(hashSep53(d.mensaje))).toString("base64");
@@ -356,7 +356,7 @@ describe("D2 sesión por firma de cuenta", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(leerSesion(r.pase)?.identidad).toBe("aprobador-01");
-      expect(leerSesion(r.pase + "x")).toBeNull();
+      expect(leerSesion(`${r.pase}x`)).toBeNull();
       expect(leerSesion(r.pase, Date.now() + 9 * 3_600_000)).toBeNull();
     }
     expect(abrirSesion({ cuenta: kp.publicKey(), ...d, firma: Buffer.alloc(64).toString("base64") }).ok).toBe(false);

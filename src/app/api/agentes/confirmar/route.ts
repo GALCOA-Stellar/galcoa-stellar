@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { marcaDeTextoValida } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 import { confirmarPropuestas } from "@/lib/agentes/flujo";
 import type { Propuesta } from "@/lib/agentes/registrador";
 import type { Hallazgo } from "@/lib/agentes/verificador";

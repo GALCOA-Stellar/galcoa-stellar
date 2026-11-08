@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { limitarPedido } from "@/lib/servidor/limite";
 import { Keypair, Networks, TransactionBuilder } from "@stellar/stellar-sdk";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 

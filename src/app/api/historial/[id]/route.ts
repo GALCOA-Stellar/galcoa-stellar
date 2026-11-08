@@ -4,7 +4,7 @@ import { esDeLaSesion, leerOperacion, puedeVerHistorial } from "@/lib/datos/hist
 import { demoActivo } from "@/lib/servidor/demo";
 import { borrar, idValido } from "@/lib/datos/almacen";
 import { leerSesion } from "@/lib/stellar/firma";
-import { ipDe, verificarOrigen } from "@/lib/servidor/guardas";
+import { verificarOrigen } from "@/lib/servidor/guardas";
 
 export const runtime = "nodejs";
 

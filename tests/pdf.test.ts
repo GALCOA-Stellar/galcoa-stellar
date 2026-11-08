@@ -15,7 +15,7 @@ describe("constancia en PDF", () => {
     const pdf = await pdfDeComprobante(c);
     expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
     expect(pdf.length).toBeGreaterThan(5000);
-    expect(urlExplorador(c)).toContain("/testnet/tx/" + "c".repeat(64));
+    expect(urlExplorador(c)).toContain(`/testnet/tx/${"c".repeat(64)}`);
   });
   it("es reproducible: el mismo comprobante da los mismos bytes", async () => {
     const r = await sellarLote([doc], async () => ({ txHash: "d".repeat(64), ledger: 1 }));

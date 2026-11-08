@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { LogoGalcoa } from "@/app/logos";
 
 type Contrato = { registrado: boolean; estado?: "vigente" | "revocado" | "archivado" | "no-figura"; ledgerRevocacion?: number; motivoHash?: string; cargador?: string; aprobador?: string; ledger?: number; cuentasConocidas?: boolean | null } | null;
 type Verif = { verificado?: boolean; motivo?: string; paso?: string; explorador?: string; ledger?: number; cierreLedger?: string | null; contrato?: Contrato; consumo?: { estado: "liberado" | "reembolsado" | "sin-pagos-recientes"; ledger?: number } | null; pendiente?: boolean; error?: string };
@@ -41,8 +42,7 @@ export default function Verificar() {
   return (
     <main>
       <header className="marca">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/galcoa-on-navy.svg" alt="GALCOA+" />
+        <LogoGalcoa />
         <div>
           <h1>Verificar un comprobante</h1>
           <p className="lema">Abierto a cualquier persona. No pide cuenta y no guarda nada.</p>
@@ -54,7 +54,7 @@ export default function Verificar() {
         <details><summary>O pegar el texto del comprobante</summary>
           <textarea value={texto} onChange={(e) => setTexto(e.target.value)} spellCheck={false} aria-label="Comprobante en JSON" placeholder="Pegá acá el comprobante o el archivo del lote" />
         </details>
-        <p><button onClick={verificar} disabled={!texto.trim() || cargando}>{cargando ? "Verificando…" : "Verificar"}</button></p>
+        <p><button type="button" onClick={verificar} disabled={!texto.trim() || cargando}>{cargando ? "Verificando…" : "Verificar"}</button></p>
 
         {verif?.error && <p className="error" role="alert">{verif.error}</p>}
         {verif && !verif.error && (

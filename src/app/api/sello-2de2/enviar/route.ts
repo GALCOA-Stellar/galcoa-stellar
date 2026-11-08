@@ -4,7 +4,7 @@ import { armarArchivo, cargadoresDelLote, previsualizarLote, sellarLote } from "
 import { evaluarSello } from "@/lib/stellar/multifirma";
 import { comisionCobrada, cuentaSelladora2de2, enviarSelloFirmado, urlExplorador } from "@/lib/stellar/stellar";
 import { cuentasAutorizadas, identidadDe } from "@/lib/stellar/firma";
-import { ipDe, leerJson } from "@/lib/servidor/guardas";
+import { leerJson } from "@/lib/servidor/guardas";
 import { usarCupo } from "@/lib/datos/cupos";
 import { operacionPorMemo, registrarOperacion } from "@/lib/datos/historial";
 import { liberar, reclamar } from "@/lib/datos/almacen";

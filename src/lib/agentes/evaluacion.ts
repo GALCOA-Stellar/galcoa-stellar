@@ -66,7 +66,8 @@ export function calcularMetricas(corridas: ResultadoCaso[][]): Metricas {
   const repetidos = corridas.filter((c) => c.length > 1 && c.every((r) => !r.falloTecnico));
   const cuentas: Record<string, { casos: number; ok: number }> = {};
   for (const r of validas) {
-    const c = (cuentas[r.categoria] ??= { casos: 0, ok: 0 });
+    cuentas[r.categoria] ??= { casos: 0, ok: 0 };
+    const c = cuentas[r.categoria];
     c.casos++;
     if (r.frenado === r.debeFrenar) c.ok++;
   }

@@ -16,7 +16,8 @@ function secreto(): Buffer | null {
   const s = process.env.DESAFIO_SECRETO;
   if (s) return Buffer.from(s, "utf8");
   if (process.env.NODE_ENV === "production") return null;
-  return (efimero ??= randomBytes(32)); // desarrollo local: secreto efímero
+  efimero ??= randomBytes(32);
+  return efimero; // desarrollo local: secreto efímero
 }
 
 /** Texto canónico de lo que el comercio ve y confirma (orden fijo, solo datos públicos). */

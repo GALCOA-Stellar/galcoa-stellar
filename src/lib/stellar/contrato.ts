@@ -1,6 +1,7 @@
 import { Account, Address, BASE_FEE, Contract, Keypair, Networks, Operation, StrKey, Transaction, TransactionBuilder, authorizeEntry, nativeToScVal, rpc, scValToNative } from "@stellar/stellar-sdk";
 import { conCache } from "../servidor/cache-corto";
 import { ESCROW_ID, ESCROW_DESDE_LEDGER, RPC_URL } from "../config/contratos";
+import { registrarError } from "../servidor/registro";
 
 /**
  * Contrato `registro-lotes` (Soroban, testnet): guarda la huella de cada lote con quién lo cargó y quién lo aprobó.
@@ -174,7 +175,7 @@ export async function enviarRegistro(d: DatosRegistro, firmas: { cuenta: string;
   final.sign(pagador());
   const envio = await s.sendTransaction(final);
   if (envio.status === "ERROR") {
-    console.error("sendTransaction:", JSON.stringify(envio.errorResult?.toXdrObject(), (_k, v) => (typeof v === "bigint" ? String(v) : v)));
+    registrarError("sendTransaction", JSON.stringify(envio.errorResult?.toXdrObject(), (_k, v) => (typeof v === "bigint" ? String(v) : v)));
     throw new Error("Stellar rechazó el registro");
   }
   for (let i = 0; i < 30; i++) {
