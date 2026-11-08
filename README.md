@@ -18,6 +18,7 @@ No prueba que la mercadería exista ni que un dato sea verdadero en el mundo: ve
 ## Probalo (sin instalar nada)
 - Sitio: https://galcoa-stellar.vercel.app/ · [cargar una entrega](https://galcoa-stellar.vercel.app/agentes) · [verificar un comprobante](https://galcoa-stellar.vercel.app/verificar)
 - Es una demostración en red de prueba, con datos de ejemplo.
+- Ruta a la red principal, con fechas: [`RUTA-A-MAINNET`](docs/producto/RUTA-A-MAINNET.md).
 - Qué se avanzó durante el evento (track Scale): [`AVANCE-DURANTE-EL-EVENTO`](docs/evidencia/AVANCE-DURANTE-EL-EVENTO.md).
 
 ## Qué hay hecho y qué no
