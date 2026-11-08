@@ -1,0 +1,114 @@
+{
+  "corrida": "3fd7bce9",
+  "fecha": "2026-11-08T21:55:44.304Z",
+  "red": "stellar:testnet",
+  "contratos": {
+    "registro": "CCNUNX6W7MPIPABZQOWOCBF46G4HDWQT6YW3OPKNT7ZGRA5MZKTRK5JV",
+    "escrow": "CDLP7XWLU6QU6JA6O4RCYPGKRA5UHQTHAAM7PYRGM5EWWJNLCK4T5GAX"
+  },
+  "aviso": "Datos de prueba generados por el guion: no son datos reales de ninguna empresa. Testnet, sin dinero real.",
+  "criterios": {
+    "lotesRegistrados": {
+      "objetivo": "10 a 20",
+      "logrado": 3,
+      "ok": true
+    },
+    "comprobantesEmitidos": {
+      "logrado": 9,
+      "ok": true
+    },
+    "verificacionPorTercero": {
+      "objetivo": "al menos 3 sin el servidor de GALCOA",
+      "logrado": 3,
+      "detalle": [
+        {
+          "lote": 1,
+          "ok": true,
+          "tx": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873"
+        },
+        {
+          "lote": 2,
+          "ok": true,
+          "tx": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7"
+        },
+        {
+          "lote": 3,
+          "ok": true,
+          "tx": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c"
+        }
+      ],
+      "ok": true
+    },
+    "escrowDePuntaAPunta": {
+      "objetivo": "1 a 2 flujos",
+      "logrado": 2,
+      "ok": true
+    }
+  },
+  "lotes": [
+    {
+      "n": 1,
+      "memo": "722046ba201846c0d96bcc7925e425e32da2f43a26c43e3f48762a063320a499",
+      "raiz": "4c86c1d4122b57214068b4d275aa6cf82d39b9e253acd72d56c047db2b8e5b65",
+      "tx": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+      "ledger": 5630269,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+      "comprobantes": 3
+    },
+    {
+      "n": 2,
+      "memo": "57b1e328635be3f23aee66bda8d6a9e1080b3d215305f28d88312a989430c248",
+      "raiz": "75dd09399497e664e56729c36c70639aeff5bbad258d542f6629f81dff1a262a",
+      "tx": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+      "ledger": 5630273,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+      "comprobantes": 3
+    },
+    {
+      "n": 3,
+      "memo": "1bf922924aa4e869eb2465e2d5ccbb08e4663daa9d95e8d9b2e5036a19f5b957",
+      "raiz": "9e04ea918e2e8172db4c607e16945f3b4d558efaebf68ff92b1fc84e0df61ea2",
+      "tx": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+      "ledger": 5630276,
+      "fee": 200509,
+      "explorador": "https://stellar.expert/explorer/testnet/tx/a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+      "comprobantes": 3
+    }
+  ],
+  "escrow": {
+    "asset": "GALCOAT (GD7TEHDZRXOCELRVJQVZIKE2AGBPNE7MFLUNYAPJIXZPH3KMUTJ7ECOJ)",
+    "tokenContrato": "CBOCIL6NPSKVFNIMKPUMLWLNW2KBKLXUBWLKYRGLDEIYJBWUBWJAK5OE",
+    "flujos": [
+      {
+        "flujo": 1,
+        "descripcion": "Pago liberado por lote verificado",
+        "ok": true,
+        "txDeposito": "e5b6b53ecfdf3af9773dec0012a199eef6f468f32a37f0d511c5f9fbd35acf43",
+        "txLiberacion": "c880d68b8a1057ad819333c3eb185cde9fcd1256db8d482f718d16e5184ed0ab"
+      },
+      {
+        "flujo": 2,
+        "descripcion": "Lote revocado: sin pago y reembolso al vencer",
+        "ok": true,
+        "txRevocacion": "661dfa6f466240f11fac41a91e61d91c1010b77e0899f96678a4d2a92166eaa5",
+        "txReembolso": "b7cf66db9feab5276b6aaa485b54c6f05ad018f1fd248a8c99b5e95164566686"
+      }
+    ],
+    "historialFlujo1": [
+      "Depositado",
+      "Liberado"
+    ]
+  },
+  "cuentas": {
+    "servicio": "GCRTRAAGPQJSP444J5QSIBM5MILRUI4XKL36Z4UW7OEE43TAC6X3EI3Y",
+    "cargador": "GAIA5J75K4OU73SZVLXE4KXEVAO5PB7ILJ6WBBXMOJSWTVFCK2UJXWE6",
+    "aprobador": "GBZBPUCZEEIZNVDGXDBGXNFU3XITSZ45FABY4SMOSAPEDLROEEJDU667"
+  },
+  "costos": {
+    "registroPorLoteStroops": 200509,
+    "nota": "Promedio medido en testnet; no equivale a mainnet."
+  },
+  "fallos": 0
+}

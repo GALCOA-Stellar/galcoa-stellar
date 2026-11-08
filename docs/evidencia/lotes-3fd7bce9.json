@@ -1,0 +1,404 @@
+[
+ {
+  "memo": "722046ba201846c0d96bcc7925e425e32da2f43a26c43e3f48762a063320a499",
+  "tx": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+  "comprobantes": [
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-1-0",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 10,
+      "cantidadRecibida": 10,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "4913c61a6403195654d9751205e123c5056f41d5c9f53348eb0766751a45edaf"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "4f4d2b96edac5998d7cee9081c64d63e24bfdd61d9196cc52ce0b892b4d00ac5",
+    "indice": 0,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "R",
+      "hash": "59316de17295002c80053c1adaa71a5f75b9291533a65d10ac19e92edbc73a00"
+     },
+     {
+      "lado": "R",
+      "hash": "8daba10c6fa06a40513db996cd2a584d5556c890242e13a9091cbb8b8710540f"
+     }
+    ],
+    "raiz": "4c86c1d4122b57214068b4d275aa6cf82d39b9e253acd72d56c047db2b8e5b65"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-1-1",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 11,
+      "cantidadRecibida": 11,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "a3a7b64322e06ccdb2d17a023677bef7ef6d18d8af07d39310ef2440893e5e77"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "baee6881ed47def88e0f1a9d4b5a1458f4689a5dba2f77ea3500a05c45458bc8",
+    "indice": 1,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "0f941ba27abf124c267cff1953f1211440f06bc3f55f1e687ddca723246f9f26"
+     },
+     {
+      "lado": "R",
+      "hash": "8daba10c6fa06a40513db996cd2a584d5556c890242e13a9091cbb8b8710540f"
+     }
+    ],
+    "raiz": "4c86c1d4122b57214068b4d275aa6cf82d39b9e253acd72d56c047db2b8e5b65"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "47fb8f75950da0d4d1faa3e969c02c8dc786bcdc70498e81adafa05e2ce19873",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-1-2",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 12,
+      "cantidadRecibida": 12,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "d0e7cc89e515cab3d1cd46b0637661a42386109b7121c9063cde79caa7887c16"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "977dd33f05eb0c5723145f74956023eaf57f8e892082b7d32750c76a1cf8980f",
+    "indice": 2,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "beec82da21cbed4f2dd1ca03049e7eaa6fd4639277158887e59e930dd5f8adce"
+     }
+    ],
+    "raiz": "4c86c1d4122b57214068b4d275aa6cf82d39b9e253acd72d56c047db2b8e5b65"
+   }
+  ]
+ },
+ {
+  "memo": "57b1e328635be3f23aee66bda8d6a9e1080b3d215305f28d88312a989430c248",
+  "tx": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+  "comprobantes": [
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-2-0",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 10,
+      "cantidadRecibida": 10,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "d9b08cf9435a1b15e635e64d810ea3a3a30d28b394f944c9c91f98b7a1bb5764"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "0b9a14db9815c99823ca20f3e73221b9190d1323365274553912ddb9132ae61c",
+    "indice": 0,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "R",
+      "hash": "714b6fe2e0f1c16480acbe81f756f8861e0eb9f05b5c4dfa5164cf05859de410"
+     },
+     {
+      "lado": "R",
+      "hash": "3be85d13562a440033b835f4e3ad4624a1c2709ea91d08c9994c45ab0191b30d"
+     }
+    ],
+    "raiz": "75dd09399497e664e56729c36c70639aeff5bbad258d542f6629f81dff1a262a"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-2-1",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 11,
+      "cantidadRecibida": 11,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "053c918c1151432430e908c667af9e46fde688d5335631533bd9d33952178b69"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "9168e036d2e0100ae89b5f3852bb7336b8afdecdb3d49d9211b72f130bc2fffa",
+    "indice": 1,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "b794de727f4451da245abd8de90084201a2966f23877326aec3c89896b68c078"
+     },
+     {
+      "lado": "R",
+      "hash": "3be85d13562a440033b835f4e3ad4624a1c2709ea91d08c9994c45ab0191b30d"
+     }
+    ],
+    "raiz": "75dd09399497e664e56729c36c70639aeff5bbad258d542f6629f81dff1a262a"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "308aaa0bd6d5bbecd977b732ca89fb3e199c6cfa094c9d9216228f28a95b82b7",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-2-2",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 12,
+      "cantidadRecibida": 12,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "e646e36dd2abed0770ba358457f01698b971ecfb4746475b7de1ec91229e144e"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "f3cfc39fa44069757d076cb23b0a07f2f6ada8dfee6c888d20ce5667d26f17bb",
+    "indice": 2,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "db2e2e0f36b31a7c9d4844e859d7649e76c7bea510e83ba0f91f864e2053fb6a"
+     }
+    ],
+    "raiz": "75dd09399497e664e56729c36c70639aeff5bbad258d542f6629f81dff1a262a"
+   }
+  ]
+ },
+ {
+  "memo": "1bf922924aa4e869eb2465e2d5ccbb08e4663daa9d95e8d9b2e5036a19f5b957",
+  "tx": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+  "comprobantes": [
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-3-0",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 10,
+      "cantidadRecibida": 10,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "6c412f2ccbeca85a62ed6ac12b00f3322493d1cfccd7c08c901f3c3ab2fb5c30"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "aba1f3702a33f44a22a041bfdf2bb375111900c2a3c8a99c5bd4c81634596934",
+    "indice": 0,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "R",
+      "hash": "9ca72b0bc976157a2643775604b82a05a0c6f611c039993d8b54f6e555fa4aa1"
+     },
+     {
+      "lado": "R",
+      "hash": "a239ca51be4565b57786086f2ca1305a609a0167b83f1a1086822a86c308d9b3"
+     }
+    ],
+    "raiz": "9e04ea918e2e8172db4c607e16945f3b4d558efaebf68ff92b1fc84e0df61ea2"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-3-1",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 11,
+      "cantidadRecibida": 11,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "c1da6349569ffbedd0148365091f1374784c8b1c2f9a4104596d14a136e4d6f4"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "885652d922ad36a2f0146476fb02b1d0375f4e6e6f51d3177f8a4b6b7a5337b1",
+    "indice": 1,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "fc659783d7701017b558ee11c5f5d63e3b54b98dc703cf7d0379b1cd535fea18"
+     },
+     {
+      "lado": "R",
+      "hash": "a239ca51be4565b57786086f2ca1305a609a0167b83f1a1086822a86c308d9b3"
+     }
+    ],
+    "raiz": "9e04ea918e2e8172db4c607e16945f3b4d558efaebf68ff92b1fc84e0df61ea2"
+   },
+   {
+    "schemaVersion": "galcoa.stellar.comprobante.v2",
+    "red": "stellar:testnet",
+    "txHash": "a0eca68aec441bb57c51990f32856062a5b3397ec38ad52541d1ed459e48961c",
+    "manifiesto": {
+     "documento": {
+      "remito": "CE-3fd7bce9-3-2",
+      "producto": "Yerba mate 1 kg",
+      "unidad": "caja",
+      "cantidadPedida": 12,
+      "cantidadRecibida": 12,
+      "fechaEntrega": "2026-11-02",
+      "fechaRegistro": "2026-11-03",
+      "cargadoPor": "operador-01",
+      "confirmadoPor": "aprobador-01",
+      "evidenciaHash": "787710df9f2ff7468df65d67c3cb261c2c1c2373d3b627512dca310c2b9416e8"
+     },
+     "reglasVersion": "reglas-demo-0.2",
+     "reglasIds": [
+      "ALC-COM-01",
+      "ALC-LEG-01",
+      "ALC-ATR-01",
+      "ALC-COH-01",
+      "ALC-CTE-01",
+      "ALC-ORI-01",
+      "ALC-EXA-01"
+     ],
+     "veredicto": "verde"
+    },
+    "manifestHash": "7c53140a18306eb2232aa74eec51d50de17105100cbd97b00ad69fc3cd81ccbd",
+    "indice": 2,
+    "cantidadHojas": 3,
+    "camino": [
+     {
+      "lado": "L",
+      "hash": "10af7fbd613ba6b79c8ff466243c5285d1c1b53c636e71e2f931d4ac75ede019"
+     }
+    ],
+    "raiz": "9e04ea918e2e8172db4c607e16945f3b4d558efaebf68ff92b1fc84e0df61ea2"
+   }
+  ]
+ }
+]

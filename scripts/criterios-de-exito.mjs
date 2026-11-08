@@ -155,24 +155,29 @@ const liberar = (idTrato) => invocar(servicio, ESCROW, "liberar", [bytes32(sha(i
 const reembolsar = (idTrato) => invocar(servicio, ESCROW, "reembolsar", [bytes32(sha(idTrato)), addr(pagador)]);
 const flujos = [];
 
-// Flujo 1: el pago se libera porque el lote ya está verificado en el registro.
-const L1 = lotes[0];
+// La custodia v4 no admite depositar contra un lote ya verificado: se deposita primero y el lote se registra después.
+const registrarDespues = async (memo) => invocar(servicio, REGISTRO, "registrar", [bytes32(memo), addr(cargador), addr(aprobador)], [cargador, aprobador]);
+
+// Flujo 1: el pago se libera porque el lote se verifica en el registro.
+const L1 = armarLote(manifiestosDe(101));
 const t1 = `trato-1-${CORRIDA}`;
 let r = await depositar(t1, L1.memo, (await ledger()) + 5000);
 const dep1 = marca(!!r.ok, `Flujo 1: el pagador deposita 100 de prueba atados al lote 1${r.ok ? "" : " (error " + r.error + ")"}`);
 const txDep1 = r.hash;
+const reg1 = marca(!!(await registrarDespues(L1.memo)).ok, "Flujo 1: el lote se registra (queda verificado)");
 r = await liberar(t1);
 const lib1 = marca(!!r.ok, `Flujo 1: se libera el pago porque el lote está verificado${r.ok ? "" : " (error " + r.error + ")"}`);
 const pagado1 = (await saldo(TOKEN, benef)) === 100_0000000;
 marca(pagado1, "Flujo 1: el beneficiario cobró 100");
-flujos.push({ flujo: 1, descripcion: "Pago liberado por lote verificado", ok: dep1 && lib1 && pagado1, txDeposito: txDep1, txLiberacion: r.hash });
+flujos.push({ flujo: 1, descripcion: "Pago liberado por lote verificado", ok: dep1 && reg1 && lib1 && pagado1, txDeposito: txDep1, txLiberacion: r.hash });
 
 // Flujo 2: el lote se revoca; no se paga; al vencer el plazo el dinero vuelve al pagador.
-const L2 = lotes[1];
+const L2 = armarLote(manifiestosDe(102));
 const t2 = `trato-2-${CORRIDA}`;
-const vence2 = (await ledger()) + 8;
+const vence2 = (await ledger()) + 30;
 r = await depositar(t2, L2.memo, vence2);
 const dep2 = marca(!!r.ok, `Flujo 2: el pagador deposita 100 de prueba atados al lote 2${r.ok ? "" : " (error " + r.error + ")"}`);
+const reg2 = marca(!!(await registrarDespues(L2.memo)).ok, "Flujo 2: el lote se registra");
 r = await invocar(servicio, REGISTRO, "revocar", [bytes32(L2.memo), bytes32(sha("motivo-" + CORRIDA)), addr(aprobador)], [aprobador]);
 const rev2 = marca(!!r.ok, `Flujo 2: el aprobador revoca el lote${r.ok ? "" : " (error " + r.error + ")"}`);
 const txRev = r.hash;
@@ -184,7 +189,7 @@ const reemb = marca(!!r.ok, `Flujo 2: vencido el plazo, el dinero vuelve al paga
 const txReemb = r.hash;
 const saldoFinal = await saldo(TOKEN, pagador);
 marca(saldoFinal === 900_0000000, "Flujo 2: el pagador queda con 900 (100 se pagaron en el flujo 1)");
-flujos.push({ flujo: 2, descripcion: "Lote revocado: sin pago y reembolso al vencer", ok: dep2 && rev2 && negado && reemb && saldoFinal === 900_0000000, txRevocacion: txRev, txReembolso: txReemb });
+flujos.push({ flujo: 2, descripcion: "Lote revocado: sin pago y reembolso al vencer", ok: dep2 && reg2 && rev2 && negado && reemb && saldoFinal === 900_0000000, txRevocacion: txRev, txReembolso: txReemb });
 const h = await invocar(servicio, ESCROW, "historial", [bytes32(sha(t1)), addr(pagador)]);
 evidencia.escrow = { asset: `GALCOAT (${emisor.publicKey()})`, tokenContrato: TOKEN, flujos, historialFlujo1: h.ok ? h.valor.map((e) => e.accion?.tag ?? String(e.accion)) : null };
 evidencia.criterios.escrowDePuntaAPunta = { objetivo: "1 a 2 flujos", logrado: flujos.filter((f) => f.ok).length, ok: flujos.filter((f) => f.ok).length >= 1 };
