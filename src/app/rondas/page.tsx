@@ -37,8 +37,8 @@ export default function Rondas() {
     const j = await r.json();
     if (!r.ok) setError(j.error); else setResumen(j);
   }
-  const campo = (k: keyof typeof f, rotulo: string, tipo = "text") => (
-    <p><label>{rotulo}: <input type={tipo} value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></label></p>
+  const campo = (k: keyof typeof f, rotulo: string, tipo = "text", ejemplo?: string) => (
+    <p><label>{rotulo}: <input type={tipo} value={f[k]} placeholder={ejemplo} inputMode={tipo === "number" ? "numeric" : undefined} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></label></p>
   );
   const completo = f.remito && f.producto && f.cantidadPedida && f.cantidadRecibida;
 
@@ -49,9 +49,9 @@ export default function Rondas() {
       {!creada && (
         <section className="card">
           <h2>Datos de la entrega</h2>
-          {campo("remito", "Remito")}{campo("producto", "Producto")}{campo("unidad", "Unidad")}
-          {campo("cantidadPedida", "Cantidad pedida", "number")}{campo("cantidadRecibida", "Cantidad recibida", "number")}
-          {campo("fechaEntrega", "Fecha de entrega", "date")}{campo("observacion", "Observación (si hubo diferencia)")}
+          {campo("remito", "Remito", "text", "Ej.: A-0012")}{campo("producto", "Producto", "text", "Ej.: Aceite de girasol 900 ml")}{campo("unidad", "Tipo de envase", "text", "Ej.: cajas, bidones, pallets")}
+          {campo("cantidadPedida", "Cantidad pedida (número)", "number", "Ej.: 10")}{campo("cantidadRecibida", "Cantidad recibida (número)", "number", "Ej.: 8")}
+          {campo("fechaEntrega", "Fecha de entrega", "date")}{campo("observacion", "Observación (si hubo diferencia)", "text", "Ej.: faltaron 2 cajas")}
           <p><label><input type="checkbox" checked={transporte} onChange={(e) => setTransporte(e.target.checked)} /> Sumar al transportista (opcional)</label></p>
           <p className="aviso">Proveedor y comprador siempre confirman. Se necesita haber ingresado con la billetera (o estar en modo demostración).</p>
           <button type="button" onClick={crear} disabled={ocupado || !completo}>Crear los enlaces</button>
