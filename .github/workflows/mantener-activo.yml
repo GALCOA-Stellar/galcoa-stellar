@@ -1,0 +1,24 @@
+name: mantener-activo
+
+# La base gratis de Supabase se pausa tras unos días sin uso. Este pedido liviano
+# pasa por el control de pedidos (que escribe en la base) y la mantiene activa.
+# Responde 401 (pide billetera): es lo esperado y no cambia ningún dato del producto.
+on:
+  schedule:
+    - cron: "17 9 */3 * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  pedir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Tocar el sitio y la base
+        run: |
+          curl -sS -m 30 https://galcoa-stellar.vercel.app/api/health
+          code=$(curl -sS -m 30 -o /dev/null -w "%{http_code}" -X POST https://galcoa-stellar.vercel.app/api/confirmacion \
+            -H "content-type: application/json" -H "origin: https://galcoa-stellar.vercel.app" -d '{}')
+          echo "confirmacion: $code"
+          if [ "$code" = "503" ]; then echo "La base no responde (¿pausada?)"; exit 1; fi
