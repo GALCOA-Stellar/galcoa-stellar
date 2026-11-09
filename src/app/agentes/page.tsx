@@ -21,6 +21,14 @@ const ETIQUETA: Record<Veredicto, { icono: string; texto: string }> = {
 };
 const EJEMPLO = "Hoy 6 de noviembre llegó el remito R-2041: pedimos 40 cajas de aceite 900 ml y recibimos 38, dos venían rotas. Entrega del 5 de noviembre.";
 
+/** Huella de un remito de muestra (SHA-256 de un texto fijo). Solo para el ejemplo de la demostración. */
+const HUELLA_EJEMPLO = "1c2a96b5b3df445e2a53af849f4535520dcd6c2c8a79bf20d7dc8ab3855da2ae";
+/** Ejemplo de una entrega correcta, con la fecha de hoy (hora de Argentina) y lo recibido igual a lo pedido. */
+function ejemploExitoso(): string {
+  const hoy = new Date().toLocaleDateString("es-AR", { day: "numeric", month: "long", timeZone: "America/Argentina/Buenos_Aires" });
+  return `Hoy ${hoy} llegó el remito R-2041: pedimos 40 cajas de aceite 900 ml y recibimos 40. Entrega del ${hoy}.`;
+}
+
 async function post<T>(url: string, cuerpo: unknown): Promise<T> {
   const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo) });
   return (await r.json()) as T;
@@ -73,10 +81,10 @@ export default function Agentes() {
         <label>Huella de la evidencia (opcional)
           <input value={huella} onChange={(e) => setHuella(e.target.value.trim().toLowerCase())} placeholder="64 caracteres, la da la pantalla de Evidencia" spellCheck={false} maxLength={64} />
         </label>
-        <p className="aviso">Si el mensaje cuenta una sola entrega y tenés la huella de su foto o su audio, pegala acá: la regla de original la usa. <a href="/evidencia">Revisar una foto o un audio</a>.</p>
+        <p className="aviso">Si el mensaje cuenta una sola entrega y tenés la huella de su foto o su audio, pegala acá: la regla de original la usa. <a href="/evidencia">Revisar una foto o un audio</a>. "Usar un ejemplo" completa una entrega correcta con la huella de un remito de muestra.</p>
         <div className="acciones">
           <button type="button" className="boton" disabled={cargando || mensaje.trim() === ""} onClick={cargar}>{cargando ? "Los agentes están trabajando…" : "Cargar"}</button>
-          <button className="boton sec" type="button" onClick={() => setMensaje(EJEMPLO)}>Usar un ejemplo</button>
+          <button className="boton sec" type="button" onClick={() => { setMensaje(ejemploExitoso()); setHuella(HUELLA_EJEMPLO); }}>Usar un ejemplo</button>
         </div>
         {reg?.error && <p className="error" role="alert">{reg.error}</p>}
       </section>
