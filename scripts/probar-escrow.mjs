@@ -64,8 +64,9 @@ let fallos = 0;
 const esperarQue = (cond, texto) => { marca(cond, texto); if (!cond) fallos++; };
 
 console.log("Creando cuentas y asset de prueba…");
-const emisor = Keypair.random(), pagador = Keypair.random(), benef = Keypair.random(), cargador = Keypair.random(), aprobador = Keypair.random();
-await Promise.all([emisor, pagador, benef, cargador, aprobador].map(fondear));
+// El token de prueba lo emite la cuenta del servicio: su contrato tiene dirección fija y figura en la lista blanca de la custodia (#56).
+const emisor = servicio, pagador = Keypair.random(), benef = Keypair.random(), cargador = Keypair.random(), aprobador = Keypair.random();
+await Promise.all([pagador, benef, cargador, aprobador].map(fondear));
 const ACTIVO = new Asset("GALCOAT", emisor.publicKey());
 await claseico(pagador, [Operation.changeTrust({ asset: ACTIVO })]);
 await claseico(benef, [Operation.changeTrust({ asset: ACTIVO })]);

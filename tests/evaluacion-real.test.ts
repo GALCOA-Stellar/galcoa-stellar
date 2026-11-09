@@ -39,12 +39,12 @@ describe.skipIf(!process.env.EVALUAR_REAL)("evaluación con modelos reales", () 
     const etiquetas = JSON.parse(readFileSync("evals/agentes/etiquetas.json", "utf8")) as Etiquetas;
     const hoy = new Date().toISOString().slice(0, 10);
     const { corridas, metricas } = await correrEvaluacion(config!, casos, etiquetas, hoy, 2, 1);
-    const filas = corridas.map((c) => `| ${c[0].id} | ${c[0].categoria} | ${c[0].debeFrenar ? "sí" : "no"} | ${c.map((r) => (r.falloTecnico ? "caída" : r.frenado ? "frenó" : "pasó")).join(" / ")} | ${c[0].omisiones} | ${c[0].erroresDeDato} |`);
+    const filas = corridas.map((c) => `| ${c[0].id} | ${c[0].categoria} | ${c[0].debeFrenar ? "sí" : "no"} | ${c.map((r) => (r.falloTecnico ? "caída" : r.frenado ? "frenó" : "pasó")).join(" / ")} | ${c.map((r) => r.omisiones).join(" / ")} | ${c.map((r) => r.erroresDeDato).join(" / ")} |`);
     writeFileSync("docs/evidencia/EVALUACION-AGENTES.md", [
       "# Evaluación de los agentes con modelos reales", "",
       `Fecha: ${hoy}. Casos inventados de \`evals/agentes/\` (${casos.length} casos, 2 repeticiones cada uno). Sin datos de personas.`, "",
       "```", informe(metricas, config!.modelos), "```", "",
-      "| Caso | Categoría | Debía frenarse | Resultado (rep. 1 / rep. 2) | Omisiones | Datos mal pasados |", "|---|---|---|---|---|---|", ...filas, "",
+      "| Caso | Categoría | Debía frenarse | Resultado (rep. 1 / rep. 2) | Omisiones (rep. 1 / rep. 2) | Datos mal pasados (rep. 1 / rep. 2) |", "|---|---|---|---|---|---|", ...filas, "",
       "Esto mide a la IA con pocos casos nuestros; sirve para comparar versiones del prompt, no para prometer una tasa de acierto. Las reglas en código siguen decidiendo el veredicto.",
     ].join("\n"));
     console.log(informe(metricas, config!.modelos));

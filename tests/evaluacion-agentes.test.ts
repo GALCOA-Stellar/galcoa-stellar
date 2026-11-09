@@ -75,6 +75,19 @@ describe("métricas", () => {
     const m = (await correrEvaluacion(inestable, casos, etiquetas, HOY, 2)).metricas;
     expect(m.variacion).toBeGreaterThan(0);
   });
+  it("un caso limpio que frena en la segunda repetición cuenta como falso positivo (evaluación v4, faltante-31)", () => {
+    const r = (frenado: boolean, debeFrenar: boolean, id: string) => ({ id, categoria: (debeFrenar ? "ambiguo" : "limpio") as "ambiguo" | "limpio", falloTecnico: false, omisiones: 0, erroresDeDato: 0, frenado, debeFrenar, firma: String(frenado) });
+    const m = calcularMetricas([
+      [r(false, false, "faltante-31"), r(true, false, "faltante-31")],
+      [r(false, false, "limpio-01"), r(false, false, "limpio-01")],
+      [r(true, true, "ambiguo-04"), r(true, true, "ambiguo-04")],
+    ]);
+    expect(m.corridasEvaluadas).toBe(6);
+    expect(m.falsosPositivos).toBe(1 / 4);
+    expect(m.acuerdoDeEstado).toBe(5 / 6);
+    expect(m.deteccion).toBe(1);
+    expect(m.evaluados).toBe(3);
+  });
   it("sin repeticiones no inventa una variación", () => {
     expect(calcularMetricas([[{ id: "a", categoria: "limpio", falloTecnico: false, omisiones: 0, erroresDeDato: 0, frenado: false, debeFrenar: false, firma: "x" }]]).variacion).toBeNull();
   });

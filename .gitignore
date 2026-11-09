@@ -17,3 +17,4 @@ coverage/
 
 # extensión (se genera con npm run extension:construir)
 extension/dist/
+video/

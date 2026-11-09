@@ -138,8 +138,9 @@ marca(evidencia.criterios.verificacionPorTercero.ok, `Verificados por un tercero
 
 // ---------- Criterio 4: escrow de punta a punta ----------
 console.log("\n4) Dos flujos de escrow de punta a punta (asset de prueba)");
-const emisor = Keypair.random(), pagador = Keypair.random(), benef = Keypair.random();
-await Promise.all([emisor, pagador, benef].map(fondear));
+// El token de prueba lo emite la cuenta del servicio: su contrato tiene dirección fija y figura en la lista blanca de la custodia (#56).
+const emisor = servicio, pagador = Keypair.random(), benef = Keypair.random();
+await Promise.all([pagador, benef].map(fondear));
 const ACTIVO = new Asset("GALCOAT", emisor.publicKey());
 await clasica(pagador, [Operation.changeTrust({ asset: ACTIVO })]);
 await clasica(benef, [Operation.changeTrust({ asset: ACTIVO })]);

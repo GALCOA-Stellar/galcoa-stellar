@@ -45,17 +45,19 @@ export type Metricas = {
   casos: number;
   fallosTecnicos: number;
   evaluados: number;
-  /** Casos evaluados donde el verificador no respondió (cuentan como "no frenado" si debían frenarse). */
+  /** Repeticiones sin fallo técnico: sobre ellas se calculan las tasas y se suman los conteos. */
+  corridasEvaluadas: number;
+  /** Corridas evaluadas donde el verificador no respondió (cuentan como "no frenado" si debían frenarse). */
   verificadorCaido: number;
   /** Cuántas veces respondió cada modelo, por agente (de la lista con respaldo). */
   modelosUsados: { registrador: Record<string, number>; verificador: Record<string, number> };
-  /** De los casos que debían frenarse, cuántos se frenaron. null si no había ninguno. */
+  /** De las corridas que debían frenarse, cuántas se frenaron (todas las repeticiones). null si no había ninguna. */
   deteccion: number | null;
-  /** De los casos que no debían frenarse, cuántos se frenaron sin motivo. */
+  /** De las corridas que no debían frenarse, cuántas se frenaron sin motivo (todas las repeticiones). */
   falsosPositivos: number | null;
   omisiones: number;
   erroresDeDato: number;
-  /** Casos donde frenar o no frenar coincide con lo esperado. */
+  /** Corridas donde frenar o no frenar coincide con lo esperado (todas las repeticiones). */
   acuerdoDeEstado: number | null;
   /** Casos cuyo resultado cambió entre repeticiones (solo si se repitió). */
   variacion: number | null;
@@ -66,7 +68,10 @@ const razon = (a: number, b: number) => (b === 0 ? null : a / b);
 
 export function calcularMetricas(corridas: ResultadoCaso[][]): Metricas {
   const primeras = corridas.map((c) => c[0]);
-  const validas = primeras.filter((r) => !r.falloTecnico);
+  const casosValidos = primeras.filter((r) => !r.falloTecnico);
+  // Las tasas se calculan sobre TODAS las repeticiones: mirar solo la primera escondía un falso positivo de la segunda
+  // (caso limpio que una vez pasó y otra frenó, informado como "0 % de falsos positivos").
+  const validas = corridas.flat().filter((r) => !r.falloTecnico);
   const debian = validas.filter((r) => r.debeFrenar);
   const limpios = validas.filter((r) => !r.debeFrenar);
   const repetidos = corridas.filter((c) => c.length > 1 && c.every((r) => !r.falloTecnico));
@@ -88,8 +93,9 @@ export function calcularMetricas(corridas: ResultadoCaso[][]): Metricas {
   return {
     modelosUsados,
     casos: primeras.length,
-    fallosTecnicos: primeras.length - validas.length,
-    evaluados: validas.length,
+    fallosTecnicos: primeras.length - casosValidos.length,
+    evaluados: casosValidos.length,
+    corridasEvaluadas: validas.length,
     verificadorCaido: validas.filter((r) => r.verificadorCaido).length,
     deteccion: razon(debian.filter((r) => r.frenado).length, debian.length),
     falsosPositivos: razon(limpios.filter((r) => r.frenado).length, limpios.length),
@@ -125,10 +131,10 @@ const conteo = (c: Record<string, number>) => (Object.keys(c).length === 0 ? "si
 export function informe(m: Metricas, modelos: ConfigAgentes["modelos"]): string {
   return [
     `Evaluación de agentes (modelos: ${modelos.registrador} / ${modelos.verificador})`,
-    `Casos: ${m.casos}. Evaluados: ${m.evaluados}. Fallos técnicos del registrador (excluidos): ${m.fallosTecnicos}. Verificador caído (incluidos, cuentan como no frenados): ${m.verificadorCaido}.`,
+    `Casos: ${m.casos}. Evaluados: ${m.evaluados}. Fallos técnicos del registrador (excluidos): ${m.fallosTecnicos}. Corridas evaluadas (todas las repeticiones): ${m.corridasEvaluadas}. Verificador caído (incluidas, cuentan como no frenadas): ${m.verificadorCaido}.`,
     `Modelos que respondieron de verdad: registrador ${conteo(m.modelosUsados.registrador)}; verificador ${conteo(m.modelosUsados.verificador)}.`,
     `Detección de lo que debía frenarse: ${pct(m.deteccion)}. Falsos positivos sobre casos limpios: ${pct(m.falsosPositivos)}.`,
-    `Entregas omitidas: ${m.omisiones}. Datos mal pasados: ${m.erroresDeDato}. Acuerdo de estado: ${pct(m.acuerdoDeEstado)}. Variación entre repeticiones: ${pct(m.variacion)}.`,
+    `Entregas omitidas (suma de repeticiones): ${m.omisiones}. Datos mal pasados (suma de repeticiones): ${m.erroresDeDato}. Acuerdo de estado: ${pct(m.acuerdoDeEstado)}. Variación entre repeticiones: ${pct(m.variacion)}.`,
     "Límites: pocos casos sembrados por nosotros, no una muestra real; sirve para comparar versiones del prompt y detectar regresiones, no para prometer una tasa de acierto.",
   ].join("\n");
 }

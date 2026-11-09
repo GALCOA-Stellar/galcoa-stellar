@@ -4,7 +4,8 @@
 //! tiene registrada la huella del lote. Si la huella nunca aparece y vence el plazo, el monto vuelve al pagador.
 //! Reglas: el contrato de registro queda FIJO al crear el escrow; la clave del trato incluye al pagador (nadie
 //! puede ocupar un trato ajeno); si la huella ya está verificada, el reembolso no corre: solo se puede liberar.
-use soroban_sdk::{contract, contractclient, contracterror, contractevent, contractimpl, contracttype, token, Address, BytesN, Env, Vec};
+//! Solo se aceptan depósitos en los tokens de una lista FIJA que se decide al crear el contrato (#56).
+use soroban_sdk::{contract, contractclient, contracterror, contractevent, contractimpl, contracttype, panic_with_error, token, Address, BytesN, Env, Vec};
 use stellar_access::ownable;
 use stellar_contract_utils::pausable;
 
@@ -12,6 +13,8 @@ const TTL_MAXIMO: u32 = 518_400; // ~30 días
 const TTL_UMBRAL: u32 = 432_000;
 /// Plazo máximo de un depósito, en ledgers (~30 días).
 const PLAZO_MAXIMO: u32 = 518_400;
+/// Cuántos tokens puede tener la lista fija (acota el almacenamiento y el costo de cada depósito).
+const TOKENS_MAXIMOS: u32 = 10;
 
 /// Lo único que este contrato necesita saber del contrato de registro.
 #[contractclient(name = "RegistroClient")]
@@ -27,6 +30,7 @@ enum Clave {
     Trato(BytesN<32>, Address), // (id del trato, pagador)
     Historial(BytesN<32>, Address),
     HuellaEnUso(BytesN<32>), // una huella respalda UN solo trato a la vez; tras liberar queda consumida para siempre
+    TokensPermitidos,        // lista fija de tokens aceptados, decidida al crear el contrato
 }
 
 #[contracttype]
@@ -73,6 +77,8 @@ pub enum Error {
     Pausado = 9,
     HuellaEnUso = 10,
     PlazoDemasiadoLargo = 11,
+    TokenNoPermitido = 12,
+    ListaDeTokensInvalida = 13,
 }
 
 #[contractevent]
@@ -120,6 +126,9 @@ fn anotar(env: &Env, id: &BytesN<32>, pagador: &Address, accion: Accion, monto: 
     env.storage().persistent().set(&k, &h);
     env.storage().persistent().extend_ttl(&k, TTL_UMBRAL, TTL_MAXIMO);
 }
+fn tokens(env: &Env) -> Vec<Address> {
+    env.storage().instance().get(&Clave::TokensPermitidos).unwrap_or(Vec::new(env))
+}
 fn esta_pausado(env: &Env) -> bool {
     pausable::paused(env)
 }
@@ -129,7 +138,20 @@ impl EscrowEntrega {
     /// Fija el contrato de registro y quién puede pausar depósitos nuevos. Nadie puede cambiar el registro después ni elegir otro al depositar.
     /// `admin` solo puede pausar y reanudar DEPÓSITOS NUEVOS: no puede mover ni retener dinero ya depositado, ni cambiar el código.
     /// Recomendación para mainnet: que `admin` sea una cuenta multifirma, no una clave sola.
-    pub fn __constructor(env: Env, registro: Address, admin: Address) {
+    /// `tokens`: los únicos tokens que se pueden depositar (1 a 10, sin repetir). Queda fija: nadie la cambia después.
+    /// Sin lista, quien deposita elegía cualquier contrato de token, incluso uno con un `transfer` malicioso.
+    pub fn __constructor(env: Env, registro: Address, admin: Address, tokens: Vec<Address>) {
+        if tokens.is_empty() || tokens.len() > TOKENS_MAXIMOS {
+            panic_with_error!(&env, Error::ListaDeTokensInvalida);
+        }
+        for i in 0..tokens.len() {
+            for j in (i + 1)..tokens.len() {
+                if tokens.get_unchecked(i) == tokens.get_unchecked(j) {
+                    panic_with_error!(&env, Error::ListaDeTokensInvalida);
+                }
+            }
+        }
+        env.storage().instance().set(&Clave::TokensPermitidos, &tokens);
         env.storage().instance().set(&Clave::Registro, &registro);
         ownable::set_owner(&env, &admin);
         env.storage().instance().extend_ttl(TTL_UMBRAL, TTL_MAXIMO);
@@ -175,6 +197,11 @@ impl EscrowEntrega {
         env.storage().instance().get(&Clave::Registro).unwrap()
     }
 
+    /// Los únicos tokens que acepta este contrato (fijados al crearlo).
+    pub fn tokens_permitidos(env: Env) -> Vec<Address> {
+        tokens(&env)
+    }
+
     /// El pagador deja `monto` en custodia. Firma él. `vence_ledger` debe estar en el futuro.
     pub fn depositar(env: Env, id: BytesN<32>, pagador: Address, beneficiario: Address, token: Address, monto: i128, huella: BytesN<32>, vence_ledger: u32) -> Result<(), Error> {
         if esta_pausado(&env) {
@@ -182,6 +209,10 @@ impl EscrowEntrega {
         }
         if monto <= 0 {
             return Err(Error::MontoInvalido);
+        }
+        // Solo tokens de la lista fija: se controla ANTES de llamar a cualquier contrato de token.
+        if !tokens(&env).contains(&token) {
+            return Err(Error::TokenNoPermitido);
         }
         if vence_ledger <= env.ledger().sequence() {
             return Err(Error::PlazoInvalido);
@@ -310,8 +341,8 @@ mod test {
         env.ledger().with_mut(|l| l.min_persistent_entry_ttl = 1_000_000); // para poder "envejecer" sin que venzan los saldos
         let registro = RegistroFalsoClient::new(&env, &env.register(RegistroFalso, ()));
         let admin = Address::generate(&env);
-        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro.address.clone(), admin.clone())));
         let sac = env.register_stellar_asset_contract_v2(Address::generate(&env));
+        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro.address.clone(), admin.clone(), Vec::from_array(&env, [sac.address()]))));
         let (pagador, benef) = (Address::generate(&env), Address::generate(&env));
         StellarAssetClient::new(&env, &sac.address()).mint(&pagador, &1_000);
         let token = Tok::new(&env, &sac.address());
@@ -381,8 +412,8 @@ mod test {
     fn sin_la_firma_del_pagador_no_se_deposita() {
         let env = Env::default(); // sin mock_all_auths
         let registro = env.register(RegistroFalso, ());
-        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro, Address::generate(&env))));
         let sac = env.register_stellar_asset_contract_v2(Address::generate(&env));
+        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro, Address::generate(&env), Vec::from_array(&env, [sac.address()]))));
         let (p, b) = (Address::generate(&env), Address::generate(&env));
         assert!(escrow.try_depositar(&id(&env, 9), &p, &b, &sac.address(), &100, &id(&env, 10), &150).is_err());
     }
@@ -492,7 +523,8 @@ mod test {
     fn solo_el_admin_pausa() {
         let env = Env::default(); // sin mock_all_auths
         let registro = env.register(RegistroFalso, ());
-        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro, Address::generate(&env))));
+        let tok = env.register_stellar_asset_contract_v2(Address::generate(&env)).address();
+        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro, Address::generate(&env), Vec::from_array(&env, [tok]))));
         assert!(escrow.try_pausar().is_err());
         assert!(escrow.try_reanudar().is_err());
     }
@@ -551,13 +583,53 @@ mod test {
         // Con el tope de plazo, vencido el depósito cualquiera reembolsa y la huella queda libre para un pago nuevo.
         let m = mundo();
         let atacante = Address::generate(&m.env);
-        let basura = m.env.register_stellar_asset_contract_v2(atacante.clone());
-        StellarAssetClient::new(&m.env, &basura.address()).mint(&atacante, &1);
+        StellarAssetClient::new(&m.env, &m.token.address).mint(&atacante, &1);
         let vence = 100 + PLAZO_MAXIMO;
-        m.escrow.depositar(&id(&m.env, 99), &atacante, &atacante, &basura.address(), &1, &id(&m.env, 30), &vence);
+        m.escrow.depositar(&id(&m.env, 99), &atacante, &atacante, &m.token.address, &1, &id(&m.env, 30), &vence);
         assert_eq!(m.escrow.try_depositar(&id(&m.env, 1), &m.pagador, &m.benef, &m.token.address, &100, &id(&m.env, 30), &1000), Err(Ok(Error::HuellaEnUso)));
         ir_al_ledger(&m.env, vence + 1);
         m.escrow.reembolsar(&id(&m.env, 99), &atacante);
         assert!(m.escrow.try_depositar(&id(&m.env, 1), &m.pagador, &m.benef, &m.token.address, &100, &id(&m.env, 30), &(vence + 1000)).is_ok());
+    }
+    #[test]
+    fn un_token_fuera_de_la_lista_se_rechaza() {
+        let m = mundo();
+        let atacante = Address::generate(&m.env);
+        let basura = m.env.register_stellar_asset_contract_v2(atacante.clone());
+        StellarAssetClient::new(&m.env, &basura.address()).mint(&m.pagador, &100);
+        assert_eq!(m.escrow.try_depositar(&id(&m.env, 70), &m.pagador, &m.benef, &basura.address(), &100, &id(&m.env, 71), &150), Err(Ok(Error::TokenNoPermitido)));
+        assert_eq!(Tok::new(&m.env, &basura.address()).balance(&m.pagador), 100); // no se movió nada
+        // la huella no quedó tomada: con el token permitido se deposita
+        depositar(&m, 70, 71, 150);
+        assert_eq!(m.escrow.tokens_permitidos(), Vec::from_array(&m.env, [m.token.address.clone()]));
+    }
+    #[test]
+    fn varios_tokens_permitidos() {
+        let env = Env::default();
+        env.mock_all_auths();
+        ir_al_ledger(&env, 100);
+        let registro = env.register(RegistroFalso, ());
+        let a = env.register_stellar_asset_contract_v2(Address::generate(&env)).address();
+        let b = env.register_stellar_asset_contract_v2(Address::generate(&env)).address();
+        let escrow = EscrowEntregaClient::new(&env, &env.register(EscrowEntrega, (registro, Address::generate(&env), Vec::from_array(&env, [a.clone(), b.clone()]))));
+        let (p, benef) = (Address::generate(&env), Address::generate(&env));
+        StellarAssetClient::new(&env, &b).mint(&p, &10);
+        escrow.depositar(&id(&env, 1), &p, &benef, &b, &10, &id(&env, 2), &150);
+        assert_eq!(escrow.obtener(&id(&env, 1), &p).token, b);
+    }
+    #[test]
+    #[should_panic]
+    fn sin_tokens_no_se_crea() {
+        let env = Env::default();
+        let registro = env.register(RegistroFalso, ());
+        env.register(EscrowEntrega, (registro, Address::generate(&env), Vec::<Address>::new(&env)));
+    }
+    #[test]
+    #[should_panic]
+    fn tokens_repetidos_no_se_crea() {
+        let env = Env::default();
+        let registro = env.register(RegistroFalso, ());
+        let a = env.register_stellar_asset_contract_v2(Address::generate(&env)).address();
+        env.register(EscrowEntrega, (registro, Address::generate(&env), Vec::from_array(&env, [a.clone(), a])));
     }
 }

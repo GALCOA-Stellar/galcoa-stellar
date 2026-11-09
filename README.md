@@ -40,7 +40,7 @@ No prueba que la mercadería exista ni que un dato sea verdadero en el mundo: ve
 
 ### Despliegue canónico en Testnet (06/11/2026)
 - `registro-lotes`: `CCNUNX6W7MPIPABZQOWOCBF46G4HDWQT6YW3OPKNT7ZGRA5MZKTRK5JV`
-- `escrow-entrega`: `CDLP7XWLU6QU6JA6O4RCYPGKRA5UHQTHAAM7PYRGM5EWWJNLCK4T5GAX` (fija ese registro al crearse)
+- `escrow-entrega`: `CAQREI2NEMXVINPMJUPEPHBBNLW6HX3B4EJVXZLDSLMSTGRK6OKRUKIJ` (fija ese registro al crearse)
 - Cuenta del servicio (registro) y administradora (custodia): `GCRTRAAGPQJSP444J5QSIBM5MILRUI4XKL36Z4UW7OEE43TAC6X3EI3Y`
 - Los contratos anteriores quedan como historial de prueba y no son la referencia. La testnet se reinicia periódicamente (próxima: 16/12/2026), así que estos identificadores pueden dejar de existir.
 - **Semántica:** `existe(huella)` significa "registrada y vigente"; una huella revocada sigue en el historial pero `existe` da falso. La custodia libera solo con la huella vigente; si se revoca, no paga y el depósito vuelve al pagador al vencer el plazo.
