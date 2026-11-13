@@ -39,7 +39,7 @@ jobs:
         run: |
           npm ci --ignore-scripts
           node scripts/comprobar-wasm.mjs contracts/registro-lotes/target/wasm32v1-none/release/registro_lotes.wasm contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm | tee -a "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: escrow-entrega-wasm
           path: contracts/escrow-entrega/target/wasm32v1-none/release/escrow_entrega.wasm
