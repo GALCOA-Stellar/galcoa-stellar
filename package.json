@@ -30,7 +30,7 @@
     "@stellar/varial-sdk": "^7.0.0",
     "@vercel/speed-insights": "^2.1.0",
     "@walletconnect/universal-provider": "^2.26.0",
-    "next": "^16.4.5",
+    "next": "^16.4.6",
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
