@@ -25,7 +25,7 @@
   "dependencies": {
     "@cosmosapp/pay_sdk": "^2.4.0",
     "@react-pdf/renderer": "^4.9.0",
-    "@reown/appkit": "^1.8.24",
+    "@reown/appkit": "^2.0.0",
     "@stellar/stellar-sdk": "^17.4.0",
     "@stellar/varial-sdk": "^7.0.0",
     "@vercel/speed-insights": "^2.1.0",
